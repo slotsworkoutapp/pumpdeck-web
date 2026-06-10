@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/* PumpDeck brand tokens — mirror the app: periwinkle-blue primary with a
+   flame-orange accent. Tweak here and the whole site follows. */
+@theme {
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+
+  --color-flame-400: #fb923c;
+  --color-flame-500: #f97316;
+  --color-flame-600: #ea580c;
+
+  --color-ink: #0b1220;
+  --color-ink-soft: #475569;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

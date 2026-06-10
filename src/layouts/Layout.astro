@@ -1,0 +1,114 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'PumpDeck — Plan smarter. Train harder.',
+  description = 'PumpDeck is a workout planner that maps every set to the muscles it trains, keeps you on target each week, and turns consistency into a streak.',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const year = new Date().getFullYear();
+
+const nav = [
+  { href: '/#features', label: 'Features' },
+  { href: '/#how', label: 'How it works' },
+  { href: '/support', label: 'Support' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#3b82f6" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og.png', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/og.png', Astro.site)} />
+  </head>
+  <body class="bg-white text-ink font-sans antialiased">
+    <header
+      class="sticky top-0 z-50 border-b border-slate-100 bg-white/80 backdrop-blur"
+    >
+      <div
+        class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5"
+      >
+        <a href="/" class="flex items-center gap-2 font-bold tracking-tight">
+          <span
+            class="grid size-8 place-items-center rounded-lg bg-brand-500 text-white"
+          >
+            <!-- flame mark -->
+            <svg viewBox="0 0 24 24" class="size-5" fill="currentColor">
+              <path
+                d="M12 2c1 3-1 4.5-2.5 6S7 11.5 7 14a5 5 0 0 0 10 0c0-2-1-3.5-2-5-1.2 1-2 .5-2-1 0-2 .5-4-1-6Z"
+              ></path>
+            </svg>
+          </span>
+          <span class="text-lg">PumpDeck</span>
+        </a>
+
+        <nav class="hidden items-center gap-7 text-sm font-medium text-ink-soft sm:flex">
+          {
+            nav.map((item) => (
+              <a class="transition hover:text-ink" href={item.href}>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+
+        <a
+          href="#download"
+          class="rounded-full bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600"
+        >
+          Get the app
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="border-t border-slate-100 bg-slate-50">
+      <div
+        class="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 text-sm text-ink-soft sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div class="flex items-center gap-2 font-semibold text-ink">
+          <span class="grid size-6 place-items-center rounded-md bg-brand-500 text-white">
+            <svg viewBox="0 0 24 24" class="size-4" fill="currentColor">
+              <path
+                d="M12 2c1 3-1 4.5-2.5 6S7 11.5 7 14a5 5 0 0 0 10 0c0-2-1-3.5-2-5-1.2 1-2 .5-2-1 0-2 .5-4-1-6Z"
+              ></path>
+            </svg>
+          </span>
+          PumpDeck
+        </div>
+        <nav class="flex flex-wrap gap-x-6 gap-y-2">
+          <a class="transition hover:text-ink" href="/support">Support</a>
+          <a class="transition hover:text-ink" href="/privacy">Privacy</a>
+          <a class="transition hover:text-ink" href="/terms">Terms</a>
+        </nav>
+        <p>&copy; {year} PumpDeck. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

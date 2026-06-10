@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const contactEmail = 'support@pumpdeck.app';
+const lastUpdated = 'June 10, 2026';
+---
+
+<Layout
+  title="Terms of Service — PumpDeck"
+  description="The terms that govern your use of PumpDeck."
+>
+  <article class="mx-auto max-w-3xl px-5 py-16">
+    <p class="text-sm font-semibold text-brand-600">Legal</p>
+    <h1 class="mt-2 text-4xl font-extrabold tracking-tight">Terms of Service</h1>
+    <p class="mt-3 text-ink-soft">Last updated: {lastUpdated}</p>
+
+    <div
+      class="mt-10 space-y-8 text-ink-soft [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-ink [&_a]:text-brand-600 [&_a]:underline"
+    >
+      <section class="space-y-3">
+        <p>
+          By downloading or using PumpDeck (the "app"), you agree to these Terms
+          of Service. If you do not agree, please do not use the app.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2>Use of the app</h2>
+        <p>
+          PumpDeck grants you a personal, non-transferable, non-exclusive license
+          to use the app on devices you own or control, for your own
+          fitness-tracking purposes.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2>Health disclaimer</h2>
+        <p>
+          PumpDeck is a fitness-tracking tool, not medical advice. Consult a
+          qualified professional before beginning any exercise program. You are
+          responsible for training safely and within your limits.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2>Your account and content</h2>
+        <p>
+          You are responsible for activity under your account and for the data you
+          enter. You retain ownership of the content you create in the app.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2>Availability</h2>
+        <p>
+          We aim to keep the app and sync service available, but we provide them
+          "as is" without warranty of uninterrupted operation. Features may change
+          over time.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2>Limitation of liability</h2>
+        <p>
+          To the fullest extent permitted by law, PumpDeck is not liable for any
+          indirect, incidental, or consequential damages arising from your use of
+          the app.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2>Changes to these terms</h2>
+        <p>
+          We may update these terms from time to time. Continued use of the app
+          after changes take effect constitutes acceptance of the revised terms.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2>Contact</h2>
+        <p>
+          Questions about these terms? Email
+          <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
+        </p>
+      </section>
+    </div>
+  </article>
+</Layout>
