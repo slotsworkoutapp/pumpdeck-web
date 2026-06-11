@@ -1,211 +1,213 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-// Inline SVG for each feature icon key. Build-time only — returns a string
-// rendered with `set:html`.
-function iconFor(key: string): string {
-  const icons: Record<string, string> = {
-    map: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
-    target:
-      '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/>',
-    calendar:
-      '<rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-    flame:
-      '<path d="M12 2c1 3-1 4.5-2.5 6S7 11.5 7 14a5 5 0 0 0 10 0c0-2-1-3.5-2-5-1.2 1-2 .5-2-1 0-2 .5-4-1-6Z" fill="currentColor"/>',
-    dumbbell:
-      '<path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-    cloud:
-      '<path d="M7.5 18a4 4 0 0 1-.5-7.97A5 5 0 0 1 17 9.5a3.5 3.5 0 0 1-.5 8.5H7.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
-  };
-  return `<svg viewBox="0 0 24 24" class="size-6">${icons[key] ?? ''}</svg>`;
-}
-
-const features = [
-  {
-    title: 'Muscle-mapped training',
-    body: 'Every exercise shows the muscles it actually works on an anatomical body map — so you can see your coverage at a glance, not guess at it.',
-    icon: 'map',
-  },
-  {
-    title: 'Weekly targets',
-    body: 'Set a target for each muscle group and PumpDeck tracks your sets toward it all week. Know when a muscle is under- or over-trained.',
-    icon: 'target',
-  },
-  {
-    title: 'Programs & splits',
-    body: 'Build a recurring weekly program with multiple workout variants per day. Swap, rotate, and reorder exercises in seconds.',
-    icon: 'calendar',
-  },
-  {
-    title: 'Streaks & daily minimums',
-    body: 'Stay consistent with a daily streak and a minimum you can hit on rest days. Miss-day protection keeps momentum going.',
-    icon: 'flame',
-  },
-  {
-    title: 'Exercise library',
-    body: 'A rich library with photos, primary and secondary movers, and your own custom exercises — all searchable by muscle.',
-    icon: 'dumbbell',
-  },
-  {
-    title: 'Synced across devices',
-    body: 'Your program, history, and progress sync securely in the background, so your training is always up to date.',
-    icon: 'cloud',
-  },
-];
-
-const steps = [
-  {
-    n: '01',
-    title: 'Build your program',
-    body: 'Pick your split, add exercises to each day, and set weekly targets for the muscles you care about.',
-  },
-  {
-    n: '02',
-    title: 'Train and log',
-    body: 'Start a workout, log your sets, and watch the body map fill in as you cover each muscle group.',
-  },
-  {
-    n: '03',
-    title: 'Stay on target',
-    body: 'Hit your weekly targets, keep your streak alive, and adjust as you progress — week after week.',
-  },
-];
+import Tour from '../components/Tour.astro';
 
 // Replace with your real App Store URL once the app is live.
 const appStoreUrl = '#';
 
-const appleMark =
-  '<path d="M16.4 12.9c0-2 1.6-3 1.7-3-1-1.3-2.4-1.5-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.2 2-1.4 2.4-.4 6 1 8 .7 1 1.5 2 2.5 2 1 0 1.4-.6 2.6-.6 1.2 0 1.5.6 2.6.6 1.1 0 1.8-1 2.5-2 .5-.7.7-1.1 1-1.9-2.6-1-2.7-3.7-1.7-3.9ZM14.6 6.3c.5-.7.9-1.6.8-2.5-.8 0-1.7.5-2.3 1.2-.5.6-.9 1.5-.8 2.4.9.1 1.7-.4 2.3-1.1Z" fill="currentColor"/>';
+const faqs = [
+  {
+    q: 'Briefly, what does this app actually do?',
+    a: 'PumpDeck helps you build a weekly program that hits every muscle, fill it with any exercise — even ones you find online — and train toward a custom volume target for each muscle. Rate the pump on every exercise to keep what works best.',
+  },
+  {
+    q: 'What makes PumpDeck different from other fitness apps?',
+    a: 'Most apps lock you into their cookie-cutter programs. PumpDeck hands you the controls — build a split that covers every muscle, set custom volume per muscle, add any exercise (even from your feed), and fine-tune it all in a powerful editor — without making it complicated.',
+  },
+  {
+    q: 'Do I have to build my own program?',
+    a: 'No. Answer a few questions and PumpDeck builds your whole split and sets a target for every muscle — or set up every detail yourself. Either way, you can tweak anything later.',
+  },
+  {
+    q: 'Can I add exercises I find on social media?',
+    a: 'Yes. Save any move you see on TikTok, Instagram, or YouTube as a custom exercise with photos and muscle tags, then drop it straight into your program.',
+  },
+  {
+    q: 'What does “rating the pump” do?',
+    a: 'After each exercise you rate the pump from 1 to 10. Over time you can sort your exercises by pump to keep the ones that work best for you.',
+  },
+  {
+    q: 'Can I use PumpDeck for bulking and cutting?',
+    a: "Yes. Your training is the one constant through a bulk or a cut, and that's exactly what PumpDeck is built for. Follow your program and hit your targets — then adjust your diet to whichever goal you're on.",
+  },
+  {
+    q: 'Is this app suitable for beginners?',
+    a: 'Definitely. Let PumpDeck build your whole program to start, then the muscle maps and targets make it clear exactly what to train each day. Learn and adjust as you go.',
+  },
+  {
+    q: 'Do I need a gym to use this app?',
+    a: 'PumpDeck is built mainly for training in a gym, so most exercises assume gym equipment. That said, you can add any exercise and customize your whole program — so you can build a home or bodyweight setup around what you have.',
+  },
+  {
+    q: 'Can I cancel anytime?',
+    a: 'Yes. You can manage or cancel a subscription anytime from your App Store account settings, and you keep access until the end of your current billing period.',
+  },
+];
+
+// Where people find exercises, before they land in PumpDeck.
+const socials = [
+  {
+    name: 'TikTok',
+    color: '#010101',
+    path: 'M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z',
+  },
+  {
+    name: 'Instagram',
+    color: '#E4405F',
+    path: 'M7.03.084c-1.277.06-2.149.264-2.911.563-.789.308-1.458.72-2.123 1.388C1.33 2.703.92 3.372.615 4.162c-.295.764-.496 1.636-.552 2.914-.056 1.278-.069 1.688-.063 4.947.006 3.259.021 3.667.083 4.947.061 1.277.264 2.148.563 2.911.308.789.72 1.457 1.388 2.123.668.665 1.337 1.074 2.129 1.38.763.295 1.636.496 2.913.552 1.278.056 1.688.069 4.946.063 3.258-.006 3.668-.021 4.948-.081 1.28-.06 2.147-.265 2.91-.563.789-.308 1.458-.72 2.123-1.388.665-.668 1.074-1.338 1.38-2.128.295-.763.496-1.636.551-2.913.056-1.281.069-1.69.063-4.948-.006-3.258-.021-3.667-.082-4.947-.061-1.28-.264-2.149-.563-2.912-.308-.789-.72-1.457-1.388-2.123C21.298 1.33 20.628.92 19.838.615 19.074.32 18.202.117 16.924.062 15.646.006 15.236-.007 11.977 0 8.718.006 8.31.02 7.03.084m.14 21.685c-1.17-.05-1.805-.245-2.228-.408-.56-.216-.96-.475-1.382-.894-.42-.419-.68-.818-.9-1.378-.164-.422-.362-1.058-.416-2.228-.06-1.264-.072-1.644-.08-4.848-.006-3.204.006-3.583.061-4.848.05-1.169.246-1.805.41-2.227.216-.561.474-.96.894-1.382.418-.421.816-.681 1.377-.9.422-.164 1.057-.361 2.227-.416 1.265-.06 1.644-.072 4.848-.079 3.203-.007 3.583.005 4.85.061 1.168.05 1.804.244 2.227.408.56.216.96.473 1.381.894.421.42.681.818.9 1.38.165.421.362 1.056.417 2.227.06 1.265.073 1.645.079 4.848.006 3.203-.005 3.583-.061 4.849-.051 1.17-.245 1.805-.408 2.228-.216.56-.475.96-.894 1.38-.42.421-.818.681-1.378.9-.422.165-1.058.362-2.226.417-1.265.06-1.645.073-4.85.079-3.204.007-3.582-.006-4.848-.061M16.953 5.586a1.44 1.44 0 1 0 1.437-1.442 1.44 1.44 0 0 0-1.437 1.442M5.839 12.012a6.173 6.173 0 1 0 12.346-.025 6.173 6.173 0 0 0-12.346.025M8 12.008A4 4 0 1 1 12.008 16 4 4 0 0 1 8 12.008',
+  },
+  {
+    name: 'YouTube',
+    color: '#FF0000',
+    path: 'M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12z',
+  },
+  {
+    name: 'X',
+    color: '#000000',
+    path: 'M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z',
+  },
+];
 ---
 
 <Layout>
   <!-- Hero -->
   <section class="relative overflow-hidden">
     <div
-      class="pointer-events-none absolute inset-x-0 -top-40 mx-auto h-[480px] max-w-5xl rounded-full bg-brand-100/60 blur-3xl"
+      class="relative mx-auto flex max-w-3xl flex-col items-center px-5 py-20 text-center lg:py-24"
     >
-    </div>
-    <div
-      class="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-20 lg:grid-cols-2 lg:py-28"
-    >
-      <div>
-        <span
-          class="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700"
-        >
-          <span class="size-1.5 rounded-full bg-flame-500"></span>
-          Train with intent
-        </span>
-        <h1
-          class="mt-5 text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-6xl"
-        >
-          Plan smarter.<br />Train harder.
-        </h1>
-        <p class="mt-5 max-w-md text-lg leading-relaxed text-ink-soft">
-          PumpDeck maps every set to the muscles it trains, keeps you on target
-          each week, and turns consistency into a streak you'll want to keep.
-        </p>
+      <h1
+        class="text-[2.75rem] font-extrabold leading-[0.98] tracking-tight text-ink sm:text-[4rem] lg:text-[5rem]"
+      >
+        Exercises from<br />your feed to your<br />program
+      </h1>
 
-        <div id="download" class="mt-8 flex flex-wrap items-center gap-4">
-          <a
-            href={appStoreUrl}
-            class="inline-flex items-center gap-3 rounded-2xl bg-ink px-5 py-3 text-white shadow-sm transition hover:opacity-90"
-          >
-            <svg viewBox="0 0 24 24" class="size-7"><Fragment set:html={appleMark} /></svg>
-            <span class="text-left leading-tight">
-              <span class="block text-[11px] text-white/70">Download on the</span>
-              <span class="block text-base font-semibold">App Store</span>
-            </span>
-          </a>
-          <a href="#features" class="text-sm font-semibold text-ink-soft hover:text-ink">
-            See what's inside &rarr;
-          </a>
+      <!-- Social → PumpDeck, right below the headline -->
+      <div class="mt-8 flex items-center justify-center gap-3 sm:gap-5">
+        <div class="flex items-center gap-2 sm:gap-2.5">
+          {
+            socials.map((s) => (
+              <span
+                class="grid size-10 place-items-center rounded-2xl bg-white shadow-md ring-1 ring-slate-100 sm:size-12"
+                style={`color:${s.color}`}
+                aria-label={s.name}
+              >
+                <svg viewBox="0 0 24 24" class="size-5 sm:size-6" fill="currentColor">
+                  <path d={s.path} />
+                </svg>
+              </span>
+            ))
+          }
         </div>
+        <svg
+          viewBox="0 0 24 24"
+          class="arrow-flow size-7 shrink-0 text-slate-400 sm:size-9"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+        >
+          <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <img
+          src="/app-icon.png"
+          alt="PumpDeck"
+          width="64"
+          height="64"
+          class="size-14 shrink-0 rounded-[1.15rem] shadow-lg ring-1 ring-black/5 sm:size-16"
+        />
       </div>
 
-      <!-- Phone mockup placeholder -->
-      <div class="relative mx-auto w-full max-w-xs">
-        <div
-          class="aspect-[9/19] rounded-[2.5rem] border-[10px] border-ink bg-gradient-to-b from-brand-50 to-white p-4 shadow-2xl"
+      <p class="mt-8 max-w-xl text-lg leading-relaxed text-ink-soft">
+        Build a personal program from the exercises you love — and the ones
+        you've been wanting to try.
+      </p>
+
+      <div id="download" class="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <a
+          href={appStoreUrl}
+          class="inline-block transition hover:opacity-85"
+          aria-label="Download on the App Store"
         >
-          <div class="flex h-full flex-col items-center justify-center gap-3 text-center">
-            <span class="grid size-16 place-items-center rounded-2xl bg-brand-500 text-white">
-              <svg viewBox="0 0 24 24" class="size-9" fill="currentColor">
-                <path
-                  d="M12 2c1 3-1 4.5-2.5 6S7 11.5 7 14a5 5 0 0 0 10 0c0-2-1-3.5-2-5-1.2 1-2 .5-2-1 0-2 .5-4-1-6Z"
-                ></path>
-              </svg>
-            </span>
-            <p class="px-4 text-sm font-medium text-ink-soft">
-              Drop an app screenshot here
-            </p>
-          </div>
-        </div>
+          <img
+            src="/app-store-badge.svg"
+            alt="Download on the App Store"
+            width="180"
+            height="60"
+            class="h-[54px] w-auto"
+          />
+        </a>
+      </div>
+
+      <!-- Phone mockup — a single pre-framed PNG (screenshot already inside a
+           real iPhone device frame, transparent background). Drop it at
+           public/phone.png. See README for how to make it. -->
+      <div class="relative mt-14 w-full max-w-[280px]">
+        <img
+          src="/phone.png"
+          alt="PumpDeck on iPhone"
+          class="w-full drop-shadow-2xl"
+        />
       </div>
     </div>
   </section>
 
-  <!-- Features -->
-  <section id="features" class="mx-auto max-w-6xl px-5 py-20">
-    <div class="max-w-2xl">
-      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
-        Everything you need to train with purpose
-      </h2>
-      <p class="mt-4 text-lg text-ink-soft">
-        Not just a set logger. PumpDeck connects what you do to what it builds.
-      </p>
-    </div>
+  <style>
+    @keyframes arrowFlow {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(5px);
+      }
+    }
+    .arrow-flow {
+      animation: arrowFlow 1.4s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .arrow-flow {
+        animation: none;
+      }
+    }
+  </style>
 
-    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  <!-- Product tour -->
+  <Tour />
+
+  <!-- FAQ -->
+  <section id="faq" class="mx-auto max-w-3xl px-5 py-20">
+    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
+      Frequently asked questions
+    </h2>
+    <div class="mt-8 divide-y divide-slate-200 border-y border-slate-200">
       {
-        features.map((f) => (
-          <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:shadow-md">
-            <span class="grid size-11 place-items-center rounded-xl bg-brand-50 text-brand-600">
-              <Fragment set:html={iconFor(f.icon)} />
-            </span>
-            <h3 class="mt-4 text-lg font-semibold">{f.title}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-ink-soft">{f.body}</p>
-          </div>
+        faqs.map((f) => (
+          <details class="group">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-semibold text-ink marker:hidden">
+              {f.q}
+              <svg
+                viewBox="0 0 24 24"
+                class="size-5 shrink-0 text-slate-400 transition-transform duration-200 group-open:rotate-180"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </summary>
+            <p class="pb-5 -mt-1 leading-relaxed text-ink-soft">{f.a}</p>
+          </details>
         ))
       }
     </div>
-  </section>
-
-  <!-- How it works -->
-  <section id="how" class="bg-slate-50">
-    <div class="mx-auto max-w-6xl px-5 py-20">
-      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">How it works</h2>
-      <div class="mt-12 grid gap-8 md:grid-cols-3">
-        {
-          steps.map((s) => (
-            <div>
-              <div class="text-sm font-bold text-flame-500">{s.n}</div>
-              <h3 class="mt-2 text-xl font-semibold">{s.title}</h3>
-              <p class="mt-2 text-ink-soft">{s.body}</p>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="mx-auto max-w-6xl px-5 py-20">
-    <div
-      class="overflow-hidden rounded-3xl bg-ink px-8 py-14 text-center text-white sm:px-16"
-    >
-      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
-        Your next session starts here
-      </h2>
-      <p class="mx-auto mt-4 max-w-md text-white/70">
-        Build your program, hit your targets, and keep the streak alive.
-      </p>
+    <p class="mt-8 text-ink-soft">
+      Still have a question?{' '}
       <a
-        href={appStoreUrl}
-        class="mt-8 inline-flex items-center gap-3 rounded-2xl bg-white px-5 py-3 text-ink shadow-sm transition hover:opacity-90"
+        href="mailto:support@pumpdeck.app"
+        class="font-semibold text-brand-600 hover:underline"
       >
-        <svg viewBox="0 0 24 24" class="size-7"><Fragment set:html={appleMark} /></svg>
-        <span class="text-base font-semibold">Download on the App Store</span>
+        Email us
       </a>
-    </div>
+      .
+    </p>
   </section>
 </Layout>

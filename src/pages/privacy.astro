@@ -1,11 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Change to your real contact + an absolute "last updated" date before
-// publishing. This template is a starting point — have it reviewed to make
-// sure it reflects exactly what PumpDeck collects.
+// Mirrors the in-app Privacy Policy (SettingsView.swift). Keep the two in sync.
 const contactEmail = 'support@pumpdeck.app';
-const lastUpdated = 'June 10, 2026';
+const lastUpdated = 'May 6, 2026';
 ---
 
 <Layout
@@ -22,80 +20,87 @@ const lastUpdated = 'June 10, 2026';
     >
       <section class="space-y-3">
         <p>
-          PumpDeck ("we", "us") respects your privacy. This policy explains what
-          information the PumpDeck app collects, how we use it, and the choices
-          you have.
+          This document describes how PumpDeck ("the app", "we") handles your
+          data. It will be reviewed by counsel before final App Store
+          submission; the structure and commitments below are what we plan to
+          publish.
         </p>
       </section>
 
       <section class="space-y-3">
-        <h2>Information we collect</h2>
-        <ul class="list-disc space-y-2 pl-5">
-          <li>
-            <strong class="text-ink">Account information.</strong> When you create
-            an account we store an identifier and the email address used to sign
-            in, so we can sync your data across your devices.
-          </li>
-          <li>
-            <strong class="text-ink">Training data.</strong> Workouts, programs,
-            targets, exercises, and related progress you create in the app.
-          </li>
-          <li>
-            <strong class="text-ink">Profile details.</strong> Optional details
-            such as body weight and height that you choose to enter.
-          </li>
-        </ul>
-      </section>
-
-      <section class="space-y-3">
-        <h2>How we use your information</h2>
+        <h2>1. What we collect</h2>
         <p>
-          We use your information solely to provide the app's features: storing
-          your program and history, syncing them across your devices, and showing
-          your progress. We do not sell your personal data.
+          You sign in with Apple or Google. Through that we receive your email
+          address (or Apple's private relay address) — we never ask for or store
+          a password.
+        </p>
+        <p>
+          When you use the app, you may add: a chosen display name, body weight
+          and height, body measurements, progress photos, and your full workout
+          history (exercises, sets, weights, reps, plans, templates, notes).
         </p>
       </section>
 
       <section class="space-y-3">
-        <h2>Storage and processing</h2>
+        <h2>2. How it is stored</h2>
         <p>
-          Your data is stored and synced using Supabase, our backend provider, on
-          your behalf. Data is transmitted over encrypted connections and access
-          is restricted to your account.
+          Your account and the data you create are stored in our database hosted
+          on Supabase (US region). Data is transmitted over TLS and stored
+          encrypted at rest. Photos and exercise media are stored in object
+          storage with the same protections.
         </p>
       </section>
 
       <section class="space-y-3">
-        <h2>Data retention and deletion</h2>
+        <h2>3. Who sees it</h2>
         <p>
-          You can delete your account at any time from within the app, which
-          removes your account and associated training data from our systems. To
-          request deletion or ask a question, email
-          <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
+          Your data is yours. We do not sell it, share it with advertisers, or
+          use it to train any model. The only third party with technical access
+          to it is our infrastructure provider (Supabase), who acts as a data
+          processor under their published terms.
+        </p>
+        <p>
+          We do not include any third-party analytics, tracking, or advertising
+          SDKs in the app.
         </p>
       </section>
 
       <section class="space-y-3">
-        <h2>Children's privacy</h2>
+        <h2>4. Your rights</h2>
         <p>
-          PumpDeck is not directed to children under 13, and we do not knowingly
-          collect personal information from them.
+          You can export your data at any time from Settings → Data → Export.
+        </p>
+        <p>
+          You can delete your account and every record we hold about you from
+          Settings → Account → Delete account &amp; all data. This is immediate
+          and permanent.
+        </p>
+        <p>
+          If you live in a region with formal data rights (GDPR, CCPA, etc.),
+          you can also email us to exercise them.
         </p>
       </section>
 
       <section class="space-y-3">
-        <h2>Changes to this policy</h2>
+        <h2>5. Children</h2>
         <p>
-          We may update this policy from time to time. Material changes will be
-          reflected by the "last updated" date above.
+          PumpDeck is not directed at children under 13 and we do not knowingly
+          collect data from them.
         </p>
       </section>
 
       <section class="space-y-3">
-        <h2>Contact</h2>
+        <h2>6. Changes</h2>
         <p>
-          Questions about this policy? Email
-          <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
+          If we materially change how we handle your data, we will update this
+          document and notify you in-app the next time you launch.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2>7. Contact</h2>
+        <p>
+          <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
         </p>
       </section>
     </div>

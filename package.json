@@ -5,7 +5,7 @@
   "private": true,
   "description": "Marketing website for PumpDeck.",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"

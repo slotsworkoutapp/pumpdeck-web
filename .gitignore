@@ -25,3 +25,9 @@ pnpm-debug.log*
 # editor
 .vscode/
 .idea/
+
+# disk images
+*.dmg
+
+# local design source files (frames, raw screenshots)
+design-assets/

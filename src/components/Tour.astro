@@ -1,0 +1,981 @@
+---
+// The PumpDeck product tour — six steps, each an auto-playing mockup that
+// mirrors the app. Copy matches the in-app onboarding where it overlaps.
+
+// 10-point pump scale with the app's exact color ramp:
+// 1–2 gray · 3–4 light orange · 5–6 orange · 7–8 red · 9–10 deep red.
+const pumpBars = Array.from({ length: 10 }, (_, i) => {
+  const v = i + 1;
+  const lit =
+    v <= 2 ? '#9ca3af' : v <= 4 ? '#fb923c' : v <= 6 ? '#f97316' : v <= 8 ? '#ef4444' : '#dc2626';
+  return { v, lit };
+});
+
+const placeOpts = [
+  { t: 'Swap', d: 'M7 7h11l-3-3M17 17H6l3 3' },
+  { t: 'Rotate', d: 'M4 4v5h5M20 20v-5h-5M5 9a7 7 0 0 1 13-1M19 15a7 7 0 0 1-13 1' },
+  { t: 'Options', d: 'M6 7h12M6 12h12M6 17h12' },
+];
+
+const dumbbell =
+  '<svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10" stroke-linecap="round"/></svg>';
+
+// Step 1 — weekday → muscle assignments.
+const splitDays = [
+  { day: 'MON', muscles: ['Chest', 'Triceps'] },
+  { day: 'TUE', muscles: ['Back', 'Biceps'] },
+  { day: 'WED', rest: true },
+  { day: 'THU', muscles: ['Shoulders', 'Core'] },
+  { day: 'FRI', muscles: ['Legs'] },
+];
+
+// Step 2 — per-muscle weekly volume. Bar width is each muscle's sets relative
+// to the busiest one, so the bars read as "custom volume for each muscle."
+const splitMuscles = [
+  { name: 'Chest', sets: 12, w: 75 },
+  { name: 'Back', sets: 14, w: 88 },
+  { name: 'Shoulders', sets: 10, w: 62 },
+  { name: 'Legs', sets: 16, w: 100 },
+  { name: 'Arms', sets: 8, w: 50 },
+];
+
+// Step 6 — a workout row (clipboard icon + name + meta [+ trailing]).
+const clipboard =
+  '<svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5" stroke-linecap="round"/></svg>';
+function workoutRow(name: string, meta: string, opts: { trailing?: string } = {}) {
+  const trailing = opts.trailing
+    ? `<span class="ml-auto shrink-0 text-xs font-semibold text-slate-400">${opts.trailing}</span>`
+    : '';
+  return `<div class="flex items-center gap-3 rounded-xl bg-slate-50 px-2.5 py-2">
+    <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600">${clipboard}</span>
+    <div class="min-w-0">
+      <p class="text-sm font-semibold leading-tight">${name}</p>
+      <p class="text-[11px] leading-tight text-slate-400">${meta}</p>
+    </div>${trailing}
+  </div>`;
+}
+const metaA = '5 exercises · 36 min';
+const metaB = '7 exercises · 54 min';
+
+// A plan exercise row (dumbbell icon + name [+ trailing label]).
+function exRow(name: string, opts: { faded?: boolean; strike?: boolean; trailing?: string } = {}) {
+  const iconColor = opts.faded ? '#94a3b8' : '#2563eb';
+  const nameStyle = `${opts.strike ? 'text-decoration:line-through;' : ''}${opts.faded ? 'color:#64748b;' : ''}`;
+  const trailing = opts.trailing
+    ? `<span class="ml-auto text-xs font-semibold text-slate-400">${opts.trailing}</span>`
+    : '';
+  return `<div class="flex items-center gap-3 rounded-xl bg-slate-50 px-2.5 py-2">
+    <span class="grid size-9 place-items-center rounded-lg" style="background:#eff6ff;color:${iconColor}">${dumbbell}</span>
+    <span class="text-sm font-semibold" style="${nameStyle}">${name}</span>${trailing}
+  </div>`;
+}
+const arrowDown =
+  '<div class="flex justify-center text-slate-400"><svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M6 13l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
+const altLabel =
+  '<div class="flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-400"><svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h5M20 20v-5h-5M5 9a7 7 0 0 1 13-1M19 15a7 7 0 0 1-13 1" stroke-linecap="round"/></svg>alternates each week</div>';
+
+// Step 3 — where people find exercises, before they land in PumpDeck.
+const socials = [
+  {
+    name: 'TikTok',
+    color: '#010101',
+    path: 'M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z',
+  },
+  {
+    name: 'Instagram',
+    color: '#E4405F',
+    path: 'M7.03.084c-1.277.06-2.149.264-2.911.563-.789.308-1.458.72-2.123 1.388C1.33 2.703.92 3.372.615 4.162c-.295.764-.496 1.636-.552 2.914-.056 1.278-.069 1.688-.063 4.947.006 3.259.021 3.667.083 4.947.061 1.277.264 2.148.563 2.911.308.789.72 1.457 1.388 2.123.668.665 1.337 1.074 2.129 1.38.763.295 1.636.496 2.913.552 1.278.056 1.688.069 4.946.063 3.258-.006 3.668-.021 4.948-.081 1.28-.06 2.147-.265 2.91-.563.789-.308 1.458-.72 2.123-1.388.665-.668 1.074-1.338 1.38-2.128.295-.763.496-1.636.551-2.913.056-1.281.069-1.69.063-4.948-.006-3.258-.021-3.667-.082-4.947-.061-1.28-.264-2.149-.563-2.912-.308-.789-.72-1.457-1.388-2.123C21.298 1.33 20.628.92 19.838.615 19.074.32 18.202.117 16.924.062 15.646.006 15.236-.007 11.977 0 8.718.006 8.31.02 7.03.084m.14 21.685c-1.17-.05-1.805-.245-2.228-.408-.56-.216-.96-.475-1.382-.894-.42-.419-.68-.818-.9-1.378-.164-.422-.362-1.058-.416-2.228-.06-1.264-.072-1.644-.08-4.848-.006-3.204.006-3.583.061-4.848.05-1.169.246-1.805.41-2.227.216-.561.474-.96.894-1.382.418-.421.816-.681 1.377-.9.422-.164 1.057-.361 2.227-.416 1.265-.06 1.644-.072 4.848-.079 3.203-.007 3.583.005 4.85.061 1.168.05 1.804.244 2.227.408.56.216.96.473 1.381.894.421.42.681.818.9 1.38.165.421.362 1.056.417 2.227.06 1.265.073 1.645.079 4.848.006 3.203-.005 3.583-.061 4.849-.051 1.17-.245 1.805-.408 2.228-.216.56-.475.96-.894 1.38-.42.421-.818.681-1.378.9-.422.165-1.058.362-2.226.417-1.265.06-1.645.073-4.85.079-3.204.007-3.582-.006-4.848-.061M16.953 5.586a1.44 1.44 0 1 0 1.437-1.442 1.44 1.44 0 0 0-1.437 1.442M5.839 12.012a6.173 6.173 0 1 0 12.346-.025 6.173 6.173 0 0 0-12.346.025M8 12.008A4 4 0 1 1 12.008 16 4 4 0 0 1 8 12.008',
+  },
+  {
+    name: 'YouTube',
+    color: '#FF0000',
+    path: 'M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12z',
+  },
+  {
+    name: 'X',
+    color: '#000000',
+    path: 'M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z',
+  },
+];
+---
+
+<section id="tour" class="bg-slate-50">
+  <div class="mx-auto max-w-6xl px-5 py-20">
+    <div class="max-w-2xl">
+      <p class="text-sm font-semibold text-flame-500">Setup</p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+        Set up your program — your way
+      </h2>
+      <p class="mt-4 text-lg text-ink-soft">
+        Let PumpDeck build your whole program in a couple of taps, or craft
+        every detail yourself.
+      </p>
+    </div>
+
+    <div class="mt-12 space-y-24 lg:space-y-32">
+      <!-- 1 · Create a split + assign muscles to days -->
+      <div class="grid items-center gap-10 lg:grid-cols-2">
+        <div class="order-2 lg:order-1">
+          <div class="mx-auto max-w-sm rounded-2xl bg-white p-5 shadow-lg ring-1 ring-slate-100">
+            <p class="font-bold">Your split</p>
+            <div class="mt-3 space-y-2">
+              {
+                splitDays.map((d) => (
+                  <div class="splitday flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-2.5">
+                    <span class="w-9 shrink-0 text-xs font-bold text-slate-400">{d.day}</span>
+                    {d.rest ? (
+                      <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-400">
+                        Rest
+                      </span>
+                    ) : (
+                      <div class="flex flex-wrap items-end gap-4">
+                        {d.muscles?.map((m) => (
+                          <div class="flex flex-col items-center gap-1">
+                            <img
+                              src={`/maps/${m.toLowerCase()}.svg`}
+                              alt={m}
+                              class="h-12 w-auto"
+                            />
+                            <span class="text-[10px] font-semibold text-ink-soft">{m}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+        <div class="order-1 lg:order-2">
+          <div class="text-sm font-bold text-flame-500">01</div>
+          <h3 class="mt-2 text-2xl font-bold tracking-tight">
+            Create a workout split and assign each muscle to a day
+          </h3>
+          <p class="mt-3 text-lg text-ink-soft">
+            Answer a few questions and PumpDeck builds your weekly split — or set
+            it up yourself, assigning each muscle group to the day you'll train
+            it.
+          </p>
+        </div>
+      </div>
+
+      <!-- 2 · Custom volume per muscle -->
+      <div class="grid items-center gap-10 lg:grid-cols-2">
+        <div>
+          <div class="text-sm font-bold text-flame-500">02</div>
+          <h3 class="mt-2 text-2xl font-bold tracking-tight">
+            Set custom volume targets for each muscle
+          </h3>
+          <p class="mt-3 text-lg text-ink-soft">
+            Start from PumpDeck's recommended weekly sets for each muscle, or
+            dial in your own — and it tracks your progress all week.
+          </p>
+        </div>
+        <div>
+          <div class="mx-auto max-w-sm rounded-2xl bg-white p-5 shadow-lg ring-1 ring-slate-100">
+            <p class="font-bold">Weekly volume</p>
+            <div class="mt-4 space-y-3.5">
+              {
+                splitMuscles.map((m) => (
+                  <div>
+                    <div class="flex items-baseline justify-between">
+                      <span class="text-sm font-semibold">{m.name}</span>
+                      <span class="text-xs font-semibold text-slate-400 tabular-nums">
+                        {m.sets} sets
+                      </span>
+                    </div>
+                    <div class="mt-1.5 h-2 rounded-full bg-slate-100">
+                      <div class="cov-bar h-2 rounded-full bg-brand-500" style={`--w:${m.w}%`} />
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 · Add exercises to hit your targets -->
+      <div class="grid items-center gap-10 lg:grid-cols-2">
+        <div class="order-1 lg:order-2">
+          <div class="text-sm font-bold text-flame-500">03</div>
+          <h3 class="mt-2 text-2xl font-bold tracking-tight">
+            Add exercises to hit every target
+          </h3>
+          <p class="mt-3 text-lg text-ink-soft">
+            Open a day, tap a muscle's target card, and pick exercises until each
+            target is met — for every muscle, every day.
+          </p>
+        </div>
+        <div class="order-2 lg:order-1">
+          <div
+            class="ax-demo relative mx-auto h-[21rem] max-w-sm overflow-hidden rounded-2xl bg-white p-5 shadow-lg ring-1 ring-slate-100"
+          >
+            <p class="font-bold">Wednesday · Push</p>
+            <p class="mt-0.5 text-xs text-slate-400">Add exercises to hit each target</p>
+
+            <div class="mt-3 space-y-2.5">
+              <!-- Chest target card (the one being filled) -->
+              <div class="ax-target rounded-xl bg-slate-50">
+                <div class="flex items-center gap-3 px-3 py-2">
+                  <img src="/maps/chest.svg" alt="Chest" class="h-11 w-auto" />
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold">Chest</p>
+                    <p class="ax-progress text-xs font-medium text-slate-400">0 / 6 sets</p>
+                  </div>
+                  <svg viewBox="0 0 24 24" class="size-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+                <div class="ax-added space-y-1 px-3">
+                  {
+                    ['Bench Press', 'Incline DB Press'].map((ex) => (
+                      <div class="flex items-center gap-2 rounded-lg bg-white px-2.5 py-1.5 ring-1 ring-slate-100">
+                        <span class="grid size-6 shrink-0 place-items-center rounded-md bg-brand-50 text-brand-600">
+                          <Fragment set:html={dumbbell} />
+                        </span>
+                        <span class="text-xs font-semibold">{ex}</span>
+                        <span class="ml-auto text-[11px] text-slate-400">3 sets</span>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+
+              <!-- Triceps target card (context) -->
+              <div class="rounded-xl bg-slate-50">
+                <div class="flex items-center gap-3 px-3 py-2">
+                  <img src="/maps/triceps.svg" alt="Triceps" class="h-11 w-auto" />
+                  <div class="flex-1">
+                    <p class="text-sm font-semibold">Triceps</p>
+                    <p class="text-xs font-medium text-slate-400">0 / 4 sets</p>
+                  </div>
+                  <svg viewBox="0 0 24 24" class="size-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add-exercise sheet (slides up over the day) -->
+            <div class="ax-sheet absolute inset-x-0 bottom-0 rounded-t-2xl bg-white p-4 ring-1 ring-slate-100">
+              <div class="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-200"></div>
+              <p class="text-sm font-bold">Add chest exercises</p>
+              <div class="mt-3 space-y-2">
+                {
+                  ['Bench Press', 'Incline DB Press', 'Cable Fly'].map((ex, i) => (
+                    <div class="ax-ex flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-2" data-i={i}>
+                      <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600">
+                        <Fragment set:html={dumbbell} />
+                      </span>
+                      <span class="flex-1 text-sm font-semibold">{ex}</span>
+                      <span class="ax-check grid size-6 shrink-0 place-items-center rounded-full">
+                        <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="3">
+                          <path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      </span>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 · Fine-tune in the program editor -->
+      <div class="grid items-center gap-10 lg:grid-cols-2">
+        <div class="order-2 lg:order-2">
+          <!-- Replace with the framed editor screenshot at /program-editor.png -->
+          <div class="relative mx-auto w-full max-w-[270px]">
+            <div
+              class="grid aspect-[9/19.5] place-items-center rounded-[2.5rem] bg-white p-6 text-center shadow-xl ring-1 ring-slate-200"
+            >
+              <p class="text-sm font-medium text-ink-soft">
+                Program editor screenshot
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="order-1 lg:order-1">
+          <div class="text-sm font-bold text-flame-500">04</div>
+          <h3 class="mt-2 text-2xl font-bold tracking-tight">
+            Fine-tune everything in the program editor
+          </h3>
+          <p class="mt-3 text-lg text-ink-soft">
+            Reorder exercises, set reps, weight, and rest, build supersets, swap
+            and rotate — far more control over your program than most apps give
+            you.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider between the Setup steps and the Features section -->
+    <div class="mt-24 border-t border-slate-200 pt-20 lg:mt-28 lg:pt-24">
+      <div class="max-w-2xl">
+        <p class="text-sm font-semibold text-flame-500">Features</p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+          Then make it your own
+        </h2>
+        <p class="mt-4 text-lg text-ink-soft">
+          Add anything, tweak everything — your program is never locked in.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-12 space-y-24 lg:space-y-32">
+      <!-- 3 · From your feed to your program -->
+      <div class="grid items-center gap-10 lg:grid-cols-2">
+        <div class="order-2 lg:order-1">
+          <div class="flex items-center justify-center gap-3 sm:gap-5">
+            <div class="flex items-center gap-2 sm:gap-2.5">
+              {
+                socials.map((s) => (
+                  <span
+                    class="grid size-10 place-items-center rounded-2xl bg-white shadow-md ring-1 ring-slate-100 sm:size-12"
+                    style={`color:${s.color}`}
+                    aria-label={s.name}
+                  >
+                    <svg viewBox="0 0 24 24" class="size-5 sm:size-6" fill="currentColor">
+                      <path d={s.path} />
+                    </svg>
+                  </span>
+                ))
+              }
+            </div>
+            <svg
+              viewBox="0 0 24 24"
+              class="arrow-flow size-7 shrink-0 text-slate-400 sm:size-9"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+            >
+              <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <img
+              src="/app-icon.png"
+              alt="PumpDeck"
+              width="64"
+              height="64"
+              class="size-14 shrink-0 rounded-[1.15rem] shadow-lg ring-1 ring-black/5 sm:size-16"
+            />
+          </div>
+        </div>
+        <div class="order-1 lg:order-2">
+          <h3 class="mt-2 text-2xl font-bold tracking-tight">
+            From your feed to your program
+          </h3>
+          <p class="mt-3 text-lg text-ink-soft">
+            Find an exercise anywhere — TikTok, Instagram, YouTube — and bring it
+            straight into PumpDeck.
+          </p>
+        </div>
+      </div>
+
+      <!-- 4 · Drop any exercise into your program -->
+      <div class="grid items-center gap-10 lg:grid-cols-2">
+        <div>
+          <h3 class="mt-2 text-2xl font-bold tracking-tight">
+            Four ways to add any exercise into your program
+          </h3>
+          <p class="mt-3 text-lg text-ink-soft">
+            Add it straight to your program, swap it for one you already have,
+            rotate the two week to week, or keep both as options to pick from.
+          </p>
+        </div>
+        <div>
+          <div class="fly-container relative mx-auto max-w-sm">
+            <!-- The exercise being placed (source). The pill itself is the
+                 separate .flyer below; .fly-home just reserves its space. -->
+            <div class="adding-card rounded-2xl bg-white px-4 py-3 shadow-md ring-1 ring-slate-100">
+              <p class="text-xs font-semibold text-ink-soft">Adding to your plan</p>
+              <div class="fly-home mt-2"></div>
+            </div>
+
+            <!-- The plan it drops into -->
+            <div class="mt-3 rounded-2xl bg-white p-4 shadow-lg ring-1 ring-slate-100">
+              <div class="flex gap-1.5">
+                {
+                  placeOpts.map((o) => (
+                    <span class="chip inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-semibold">
+                      <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d={o.d} stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                      {o.t}
+                    </span>
+                  ))
+                }
+              </div>
+
+              <div class="place-content mt-3">
+                <!-- Pre-reveal: just the existing exercise, checked off -->
+                <div class="place-state place-base">
+                  <div class="flex items-center gap-3 rounded-xl bg-slate-50 px-2.5 py-2">
+                    <span class="grid size-9 place-items-center rounded-lg bg-brand-50 text-brand-600">
+                      <Fragment set:html={dumbbell} />
+                    </span>
+                    <span class="text-sm font-semibold">Barbell Bench Press</span>
+                    <span class="circle ml-auto grid size-5 place-items-center rounded-full">
+                      <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="3">
+                        <path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Swap result -->
+                <div class="place-state place-result space-y-1.5" data-opt="0">
+                  <Fragment set:html={exRow('Barbell Bench Press', { faded: true, strike: true })} />
+                  <Fragment set:html={arrowDown} />
+                  <div class="fly-slot"></div>
+                </div>
+
+                <!-- Rotate result -->
+                <div class="place-state place-result space-y-1.5" data-opt="1">
+                  <Fragment set:html={exRow('Barbell Bench Press', { trailing: 'Week 1' })} />
+                  <Fragment set:html={altLabel} />
+                  <div class="fly-slot"></div>
+                </div>
+
+                <!-- Options result -->
+                <div class="place-state place-result space-y-1.5" data-opt="2">
+                  <Fragment set:html={exRow('Barbell Bench Press')} />
+                  <div class="fly-slot"></div>
+                  <p class="pt-0.5 text-xs font-semibold text-slate-400">Pick one when you log</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- The flying pill — animates from .fly-home down into the active
+                 result's .fly-slot (matches the app's matchedGeometryEffect). -->
+            <div class="flyer flex items-center gap-3 rounded-xl bg-slate-50 px-2.5">
+              <span class="grid size-9 place-items-center rounded-lg bg-brand-50 text-brand-600">
+                <Fragment set:html={dumbbell} />
+              </span>
+              <span class="text-sm font-semibold">Dumbbell Bench Press</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 · Rate the pump -->
+      <div class="grid items-center gap-10 lg:grid-cols-2">
+        <div class="order-2 lg:order-1">
+          <div class="mx-auto max-w-sm rounded-2xl bg-white p-5 shadow-lg ring-1 ring-slate-100">
+            <p class="font-bold">Dumbbell Incline Press</p>
+            <div class="mt-3 grid grid-cols-[2rem_1fr_3rem_2.5rem_1.75rem] gap-x-2 px-1 text-[11px] font-semibold text-slate-400">
+              <span class="text-center">Set</span>
+              <span>Previous</span>
+              <span class="text-center">Lbs</span>
+              <span class="text-center">Reps</span>
+              <span></span>
+            </div>
+            <div class="mt-1.5 space-y-1.5">
+              {
+                [1, 2, 3].map((n) => (
+                  <div class="set-row grid grid-cols-[2rem_1fr_3rem_2.5rem_1.75rem] items-center gap-x-2 rounded-xl px-1 py-1">
+                    <span class="mx-auto grid size-7 place-items-center rounded-md bg-slate-100 text-sm font-bold">
+                      {n}
+                    </span>
+                    <span class="text-sm font-medium text-slate-400">110 × 10</span>
+                    <span class="rounded-md bg-slate-100 py-1 text-center text-sm tabular-nums">115</span>
+                    <span class="rounded-md bg-slate-100 py-1 text-center text-sm tabular-nums">10</span>
+                    <span class="check grid size-7 place-items-center rounded-md">
+                      <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="3">
+                        <path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                ))
+              }
+            </div>
+
+            <div class="pump-block mt-4">
+              <div class="flex items-center gap-2">
+                <svg
+                  viewBox="0 0 16 16"
+                  class="size-5"
+                  style="filter: drop-shadow(0 1px 2px rgba(249,115,22,0.5))"
+                >
+                  <defs>
+                    <linearGradient id="pumpFlame" x1="8" y1="0" x2="8" y2="16" gradientUnits="userSpaceOnUse">
+                      <stop offset="0" stop-color="#fb923c" />
+                      <stop offset="1" stop-color="#ea580c" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    fill="url(#pumpFlame)"
+                    fill-rule="evenodd"
+                    d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16Zm0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15Z"
+                  />
+                </svg>
+                <span class="font-bold">Pump</span>
+              </div>
+              <div class="mt-2 flex gap-1">
+                {
+                  pumpBars.map((b) => (
+                    <span
+                      class="bar grid h-8 flex-1 place-items-center rounded-md text-[11px] font-bold"
+                      style={`--lit:${b.lit}`}
+                    >
+                      {b.v}
+                    </span>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="order-1 lg:order-2">
+          <h3 class="mt-2 text-2xl font-bold tracking-tight">
+            Rate the pump on every exercise
+          </h3>
+          <p class="mt-3 text-lg text-ink-soft">
+            After every exercise, rate the pump. Then sort exercises by pump to
+            keep track of your favorites.
+          </p>
+        </div>
+      </div>
+
+      <!-- 6 · Workout variants -->
+      <div class="grid items-center gap-10 lg:grid-cols-2">
+        <div>
+          <h3 class="mt-2 text-2xl font-bold tracking-tight">
+            More than one version per day
+          </h3>
+          <p class="mt-3 text-lg text-ink-soft">
+            Build a few versions of a day — like Push A and Push B — then rotate
+            them week to week or keep them as options to pick from.
+          </p>
+        </div>
+        <div>
+          <div class="fly-container relative mx-auto max-w-sm">
+            <!-- The workout being added (source). The pill is the .flyer below. -->
+            <div class="adding-card rounded-2xl bg-white px-4 py-3 shadow-md ring-1 ring-slate-100">
+              <p class="text-xs font-semibold text-ink-soft">Adding to Push Day</p>
+              <div class="fly-home mt-2"></div>
+            </div>
+
+            <!-- The day it drops into -->
+            <div class="mt-3 rounded-2xl bg-white p-4 shadow-lg ring-1 ring-slate-100">
+              <div class="flex gap-1.5">
+                <span class="chip inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-semibold">
+                  <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4v5h5M20 20v-5h-5M5 9a7 7 0 0 1 13-1M19 15a7 7 0 0 1-13 1" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  Rotate
+                </span>
+                <span class="chip inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-semibold">
+                  <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 7h12M6 12h12M6 17h12" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  Options
+                </span>
+              </div>
+
+              <div class="place-content mt-3">
+                <!-- Pre-reveal: the existing workout, checked off -->
+                <div class="place-state place-base">
+                  <div class="flex items-center gap-3 rounded-xl bg-slate-50 px-2.5 py-2">
+                    <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600">
+                      <Fragment set:html={clipboard} />
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-sm font-semibold leading-tight">Push A</p>
+                      <p class="text-[11px] leading-tight text-slate-400">{metaA}</p>
+                    </div>
+                    <span class="circle ml-auto grid size-5 shrink-0 place-items-center rounded-full">
+                      <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="3">
+                        <path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Rotate result -->
+                <div class="place-state place-result space-y-1.5" data-opt="0">
+                  <Fragment set:html={workoutRow('Push A', metaA, { trailing: 'Week 1' })} />
+                  <Fragment set:html={altLabel} />
+                  <div class="fly-slot"></div>
+                </div>
+
+                <!-- Options result -->
+                <div class="place-state place-result space-y-1.5" data-opt="1">
+                  <Fragment set:html={workoutRow('Push A', metaA)} />
+                  <div class="fly-slot"></div>
+                  <p class="pt-0.5 text-xs font-semibold text-slate-400">Pick one when you train</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- The flying workout pill (Push B) -->
+            <div class="flyer flex items-center gap-3 rounded-xl bg-slate-50 px-2.5">
+              <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600">
+                <Fragment set:html={clipboard} />
+              </span>
+              <div class="min-w-0">
+                <p class="text-sm font-semibold leading-tight">Push B</p>
+                <p class="text-[11px] leading-tight text-slate-400">{metaB}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Step 1 — weekday rows fade/slide in one by one. */
+  .splitday {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .splitday.is-on { opacity: 1; transform: none; }
+
+  /* Step 2 — per-muscle volume bars fill to their custom width one by one. */
+  .cov-bar {
+    width: 0;
+    transition: width 0.5s ease;
+  }
+  .cov-bar.is-on { width: var(--w); }
+
+  /* Step 3 — social → PumpDeck arrow nudge. */
+  @keyframes arrowFlow {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(5px);
+    }
+  }
+  .arrow-flow {
+    animation: arrowFlow 1.4s ease-in-out infinite;
+  }
+
+  /* Step 5 — set rows check off green. */
+  .set-row .check {
+    background: #e2e8f0;
+    color: #94a3b8;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .set-row.is-done { background: #f0fdf4; }
+  .set-row.is-done .check { background: #22c55e; color: #ffffff; }
+
+  /* Step 5 — pump block slides up + fades in. */
+  .pump-block {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .pump-block.is-shown { opacity: 1; transform: none; }
+
+  /* Step 5 — pump bars fill in one by one with their ramp color. */
+  .bar {
+    background: #e2e8f0;
+    color: #64748b;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .bar.is-lit { background: var(--lit); color: #ffffff; }
+
+  /* Step 4 — add-to-plan option chips. */
+  .chip {
+    background: #f1f5f9;
+    color: #64748b;
+    transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .chip.is-selected {
+    background: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  /* Step 4 — reserve room for the tallest result so revealing it never
+     changes the card height (no layout shift of nearby sections). */
+  .place-content { min-height: 9rem; }
+  .place-state { display: none; }
+  .place-state.is-on { display: block; }
+
+  /* Step 4 — the pill that flies from the source card into the plan. */
+  .fly-home,
+  .fly-slot,
+  .flyer { height: 52px; }
+  .flyer {
+    position: absolute;
+    z-index: 10;
+    box-sizing: border-box;
+    opacity: 0;
+    will-change: transform;
+  }
+  .adding-card { transition: opacity 0.4s ease; }
+
+  /* Step 4 — the "checked off" circle on the base row. */
+  .circle {
+    box-sizing: border-box;
+    border: 2px solid #cbd5e1;
+    color: transparent;
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+  .circle.is-checked { background: #22c55e; border-color: #22c55e; color: #ffffff; }
+
+  /* Step 3 — tap a target, an add-exercise sheet slides up, picks land below. */
+  .ax-target {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    transition: box-shadow 0.25s ease;
+  }
+  .ax-target.is-active {
+    box-shadow: 0 0 0 2px #3b82f6;
+  }
+  .ax-target.is-done .ax-progress {
+    color: #16a34a;
+  }
+  .ax-added {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease, padding 0.4s ease;
+    padding-bottom: 0;
+  }
+  .ax-target.is-done .ax-added {
+    max-height: 120px;
+    opacity: 1;
+    padding-bottom: 0.5rem;
+  }
+  .ax-sheet {
+    transform: translateY(110%);
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.12);
+  }
+  .ax-sheet.is-open {
+    transform: translateY(0);
+  }
+  .ax-ex {
+    transition: background-color 0.2s ease;
+  }
+  .ax-ex.is-checked {
+    background: #f0fdf4;
+  }
+  .ax-check {
+    box-sizing: border-box;
+    border: 2px solid #cbd5e1;
+    color: transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .ax-ex.is-checked .ax-check {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: #ffffff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .splitday,
+    .cov-bar,
+    .set-row .check,
+    .pump-block,
+    .bar,
+    .chip,
+    .circle,
+    .flyer,
+    .adding-card,
+    .ax-target,
+    .ax-added,
+    .ax-sheet,
+    .ax-ex,
+    .ax-check {
+      transition: none;
+    }
+    .arrow-flow {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const root = document.getElementById('tour');
+  if (root) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+    const splitRows = [...root.querySelectorAll<HTMLElement>('.splitday')];
+    const covBars = [...root.querySelectorAll<HTMLElement>('.cov-bar')];
+
+    const setRows = [...root.querySelectorAll<HTMLElement>('.set-row')];
+    const pumpBlock = root.querySelector<HTMLElement>('.pump-block');
+    const bars = [...root.querySelectorAll<HTMLElement>('.bar')];
+
+    // Step 1: reveal each weekday's muscle assignment one by one.
+    async function splitDayLoop() {
+      while (true) {
+        splitRows.forEach((r) => r.classList.remove('is-on'));
+        await sleep(600);
+        for (const r of splitRows) {
+          r.classList.add('is-on');
+          await sleep(350);
+        }
+        await sleep(2600);
+      }
+    }
+
+    // Step 2: fill each muscle's weekly volume bar one by one.
+    async function volumeLoop() {
+      while (true) {
+        covBars.forEach((b) => b.classList.remove('is-on'));
+        await sleep(600);
+        for (const b of covBars) {
+          b.classList.add('is-on');
+          await sleep(350);
+        }
+        await sleep(2600);
+      }
+    }
+
+    // Step 3: tap a target card → add-exercise sheet slides up → check a
+    // couple → sheet dismisses → the picks land in the day, target met.
+    async function addExerciseLoop() {
+      const demo = root.querySelector<HTMLElement>('.ax-demo');
+      if (!demo) return;
+      const target = demo.querySelector<HTMLElement>('.ax-target');
+      const progress = demo.querySelector<HTMLElement>('.ax-progress');
+      const sheet = demo.querySelector<HTMLElement>('.ax-sheet');
+      const exes = [...demo.querySelectorAll<HTMLElement>('.ax-ex')];
+      while (true) {
+        target?.classList.remove('is-active', 'is-done');
+        sheet?.classList.remove('is-open');
+        exes.forEach((e) => e.classList.remove('is-checked'));
+        if (progress) progress.textContent = '0 / 6 sets';
+        await sleep(1000);
+        target?.classList.add('is-active'); // tap the target card
+        await sleep(450);
+        sheet?.classList.add('is-open'); // add-exercise sheet slides up
+        await sleep(900);
+        exes[0]?.classList.add('is-checked');
+        await sleep(650);
+        exes[1]?.classList.add('is-checked');
+        await sleep(800);
+        sheet?.classList.remove('is-open'); // sheet dismisses
+        await sleep(450);
+        if (progress) progress.textContent = '6 / 6 sets';
+        target?.classList.remove('is-active');
+        target?.classList.add('is-done'); // picks appear, target met
+        await sleep(3200);
+      }
+    }
+
+    // Step 5: check sets one by one, reveal the pump row, fill 1→8, loop.
+    async function pumpLoop() {
+      while (true) {
+        setRows.forEach((r) => r.classList.remove('is-done'));
+        pumpBlock?.classList.remove('is-shown');
+        bars.forEach((b) => b.classList.remove('is-lit'));
+        await sleep(900);
+        for (const r of setRows) {
+          r.classList.add('is-done');
+          await sleep(400);
+        }
+        await sleep(250);
+        pumpBlock?.classList.add('is-shown');
+        await sleep(450);
+        for (let i = 0; i < 8; i++) {
+          bars[i]?.classList.add('is-lit');
+          await sleep(100);
+        }
+        await sleep(2200);
+      }
+    }
+
+    // Steps 4 & 6: the "Adding to …" pill flies down into the destination
+    // card, cycling through that card's placement options (the app's
+    // matchedGeometryEffect). Scoped to one `.fly-container` so both demos
+    // run independently off the same code.
+    function runFlipDemo(container: HTMLElement, animate: boolean) {
+      const chips = [...container.querySelectorAll<HTMLElement>('.chip')];
+      const base = container.querySelector<HTMLElement>('.place-base');
+      const circle = container.querySelector<HTMLElement>('.circle');
+      const results = [...container.querySelectorAll<HTMLElement>('.place-result')];
+      const home = container.querySelector<HTMLElement>('.fly-home');
+      const flyer = container.querySelector<HTMLElement>('.flyer');
+      const slots = [...container.querySelectorAll<HTMLElement>('.fly-slot')];
+      const addingCard = container.querySelector<HTMLElement>('.adding-card');
+
+      function flyTo(target: HTMLElement | null, anim: boolean) {
+        if (!flyer || !home || !target) return;
+        const cr = container.getBoundingClientRect();
+        const hr = home.getBoundingClientRect();
+        const tr = target.getBoundingClientRect();
+        flyer.style.left = `${hr.left - cr.left}px`;
+        flyer.style.top = `${hr.top - cr.top}px`;
+        flyer.style.width = `${hr.width}px`;
+        flyer.style.transition = anim
+          ? 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)'
+          : 'none';
+        flyer.style.transform = `translate(${tr.left - hr.left}px, ${tr.top - hr.top}px)`;
+      }
+
+      if (!animate) {
+        // Reduced motion: static landed state on the first option.
+        chips.forEach((c, i) => c.classList.toggle('is-selected', i === 0));
+        base?.classList.remove('is-on');
+        results.forEach((r, i) => r.classList.toggle('is-on', i === 0));
+        circle?.classList.add('is-checked');
+        addingCard?.style.setProperty('opacity', '0');
+        if (flyer) flyer.style.opacity = '1';
+        requestAnimationFrame(() => flyTo(slots[0], false));
+        return;
+      }
+
+      (async () => {
+        while (true) {
+          for (let i = 0; i < results.length; i++) {
+            // Reset: source pill home, only the existing item showing.
+            chips.forEach((c, idx) => c.classList.toggle('is-selected', idx === i));
+            results.forEach((r) => r.classList.remove('is-on'));
+            circle?.classList.remove('is-checked');
+            base?.classList.add('is-on');
+            if (flyer) {
+              flyer.style.opacity = '1';
+              flyTo(home, false);
+            }
+            addingCard?.style.removeProperty('opacity');
+            await sleep(1100);
+            circle?.classList.add('is-checked');
+            await sleep(800);
+            // Reveal the result, then fly the pill into its slot.
+            base?.classList.remove('is-on');
+            results[i]?.classList.add('is-on');
+            if (addingCard) addingCard.style.opacity = '0';
+            requestAnimationFrame(() => flyTo(slots[i], true));
+            await sleep(3000);
+          }
+        }
+      })();
+    }
+
+    const flipDemos = [...root.querySelectorAll<HTMLElement>('.fly-container')];
+
+    if (reduce) {
+      splitRows.forEach((r) => r.classList.add('is-on'));
+      covBars.forEach((b) => b.classList.add('is-on'));
+      setRows.forEach((r) => r.classList.add('is-done'));
+      pumpBlock?.classList.add('is-shown');
+      bars.forEach((b, i) => i < 6 && b.classList.add('is-lit'));
+      flipDemos.forEach((c) => runFlipDemo(c, false));
+      // Step 3 static: target met, picks shown, no sheet.
+      const ax = root.querySelector<HTMLElement>('.ax-demo');
+      ax?.querySelectorAll<HTMLElement>('.ax-ex').forEach((e, i) => i < 2 && e.classList.add('is-checked'));
+      ax?.querySelector<HTMLElement>('.ax-target')?.classList.add('is-done');
+      const axProgress = ax?.querySelector<HTMLElement>('.ax-progress');
+      if (axProgress) axProgress.textContent = '6 / 6 sets';
+    } else {
+      splitDayLoop();
+      volumeLoop();
+      addExerciseLoop();
+      pumpLoop();
+      flipDemos.forEach((c) => runFlipDemo(c, true));
+    }
+  }
+</script>
