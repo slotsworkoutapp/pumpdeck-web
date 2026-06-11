@@ -44,6 +44,20 @@ const faqs = [
   },
 ];
 
+// The 8 muscle groups and how many individual muscles each breaks into —
+// drives the "track 28 muscles" coverage section. Maps live in /public/maps.
+const muscleGroups = [
+  { slug: 'chest', name: 'Chest', muscles: ['Upper Chest', 'Mid Chest', 'Lower Chest'] },
+  { slug: 'back', name: 'Back', muscles: ['Lats', 'Upper Back', 'Traps', 'Lower Back'] },
+  { slug: 'shoulders', name: 'Shoulders', muscles: ['Front Delt', 'Side Delt', 'Rear Delt'] },
+  { slug: 'legs', name: 'Legs', muscles: ['Quadriceps', 'Hamstrings', 'Glutes', 'Abductors', 'Adductors', 'Calves', 'Shins'] },
+  { slug: 'core', name: 'Core', muscles: ['Upper Abs', 'Lower Abs', 'Obliques'] },
+  { slug: 'biceps', name: 'Biceps', muscles: ['Long Head', 'Short Head'] },
+  { slug: 'triceps', name: 'Triceps', muscles: ['Lateral Head', 'Long Head', 'Medial Head'] },
+  { slug: 'forearms', name: 'Forearms', muscles: ['Brachioradialis', 'Extensors', 'Flexors'] },
+];
+const muscleCount = muscleGroups.reduce((n, g) => n + g.muscles.length, 0);
+
 // Where people find exercises, before they land in PumpDeck.
 const socials = [
   {
@@ -170,6 +184,53 @@ const socials = [
     }
   </style>
 
+  <!-- Muscle coverage -->
+  <section class="mx-auto max-w-6xl px-5 py-20">
+    <div class="max-w-2xl">
+      <p class="text-sm font-semibold text-flame-500">Coverage</p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+        Track {muscleCount} muscles, not just {muscleGroups.length} groups
+      </h2>
+      <p class="mt-4 text-lg text-ink-soft">
+        Most apps stop at chest, back, and legs. PumpDeck breaks training into
+        {' '}{muscleCount} individual muscles across {muscleGroups.length} groups.
+        Set a target for each muscle — or combine a group's muscles into one,
+        like tracking all of Legs as a single target instead of seven. Add your
+        own custom muscles anytime.
+      </p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-2 items-start gap-4 sm:grid-cols-4">
+      {
+        muscleGroups.map((g) => (
+          <details class="group/m rounded-2xl bg-slate-50 ring-1 ring-slate-100 transition-colors open:ring-brand-200 hover:bg-slate-100/70">
+            <summary class="flex cursor-pointer list-none flex-col items-center gap-2 p-5 marker:hidden [&::-webkit-details-marker]:hidden">
+              <img src={`/maps/${g.slug}.svg`} alt={g.name} class="h-20 w-auto" />
+              <p class="font-bold">{g.name}</p>
+              <p class="flex items-center gap-1 text-sm font-semibold text-ink-soft">
+                {g.muscles.length} muscles
+                <svg
+                  viewBox="0 0 24 24"
+                  class="size-4 text-slate-400 transition-transform duration-200 group-open/m:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                >
+                  <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </p>
+            </summary>
+            <ul class="space-y-1.5 px-5 pb-5 text-center text-sm font-medium text-ink-soft">
+              {g.muscles.map((m) => (
+                <li>{m}</li>
+              ))}
+            </ul>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
   <!-- Product tour -->
   <Tour />
 
@@ -209,5 +270,30 @@ const socials = [
       </a>
       .
     </p>
+  </section>
+
+  <!-- Closing call to action -->
+  <section class="mx-auto max-w-6xl px-5 pb-24 text-center">
+    <img
+      src="/app-icon.png"
+      alt=""
+      width="64"
+      height="64"
+      class="mx-auto size-16 rounded-[1.15rem] shadow-lg ring-1 ring-black/5"
+    />
+    <h2 class="mx-auto mt-6 max-w-xl text-3xl font-bold tracking-tight sm:text-4xl">
+      Build a program that hits every muscle
+    </h2>
+    <p class="mx-auto mt-3 max-w-md text-lg text-ink-soft">
+      Your split, your targets, your exercises — all in one place.
+    </p>
+    <div class="mt-8 flex justify-center">
+      <a
+        href={appStoreUrl}
+        class="inline-flex items-center rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white shadow-sm transition hover:opacity-90"
+      >
+        Try for free
+      </a>
+    </div>
   </section>
 </Layout>

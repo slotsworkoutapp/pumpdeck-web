@@ -32,11 +32,11 @@ const splitDays = [
 // Step 2 — per-muscle weekly volume. Bar width is each muscle's sets relative
 // to the busiest one, so the bars read as "custom volume for each muscle."
 const splitMuscles = [
-  { name: 'Chest', sets: 12, w: 75 },
-  { name: 'Back', sets: 14, w: 88 },
-  { name: 'Shoulders', sets: 10, w: 62 },
-  { name: 'Legs', sets: 16, w: 100 },
-  { name: 'Arms', sets: 8, w: 50 },
+  { name: 'Chest', slug: 'chest', color: '#DC2626', sets: 12, w: 75 },
+  { name: 'Back', slug: 'back', color: '#2563EB', sets: 14, w: 88 },
+  { name: 'Shoulders', slug: 'shoulders', color: '#7C3AED', sets: 10, w: 62 },
+  { name: 'Legs', slug: 'legs', color: '#16A34A', sets: 16, w: 100 },
+  { name: 'Biceps', slug: 'biceps', color: '#EA580C', sets: 8, w: 50 },
 ];
 
 // Step 6 — a workout row (clipboard icon + name + meta [+ trailing]).
@@ -181,14 +181,20 @@ const socials = [
               {
                 splitMuscles.map((m) => (
                   <div>
-                    <div class="flex items-baseline justify-between">
-                      <span class="text-sm font-semibold">{m.name}</span>
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="flex items-center gap-2 text-sm font-semibold">
+                        <img src={`/maps/${m.slug}.svg`} alt={m.name} class="h-8 w-auto" />
+                        {m.name}
+                      </span>
                       <span class="text-xs font-semibold text-slate-400 tabular-nums">
                         {m.sets} sets
                       </span>
                     </div>
                     <div class="mt-1.5 h-2 rounded-full bg-slate-100">
-                      <div class="cov-bar h-2 rounded-full bg-brand-500" style={`--w:${m.w}%`} />
+                      <div
+                        class="cov-bar h-2 rounded-full"
+                        style={`--w:${m.w}%;background-color:${m.color}`}
+                      />
                     </div>
                   </div>
                 ))
@@ -321,10 +327,12 @@ const socials = [
       <div class="max-w-2xl">
         <p class="text-sm font-semibold text-flame-500">Features</p>
         <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-          Then make it your own
+          What sets PumpDeck apart
         </h2>
         <p class="mt-4 text-lg text-ink-soft">
-          Add anything, tweak everything — your program is never locked in.
+          The stuff a plain workout tracker doesn't do — pull moves from your
+          feed, four ways to add, pump ratings, and more than one version of a
+          day.
         </p>
       </div>
     </div>
@@ -333,12 +341,12 @@ const socials = [
       <!-- 3 · From your feed to your program -->
       <div class="grid items-center gap-10 lg:grid-cols-2">
         <div class="order-2 lg:order-1">
-          <div class="flex items-center justify-center gap-3 sm:gap-5">
+          <div class="feed-flow flex items-center justify-center gap-3 sm:gap-5">
             <div class="flex items-center gap-2 sm:gap-2.5">
               {
                 socials.map((s) => (
                   <span
-                    class="grid size-10 place-items-center rounded-2xl bg-white shadow-md ring-1 ring-slate-100 sm:size-12"
+                    class="pop grid size-10 place-items-center rounded-2xl bg-white shadow-md ring-1 ring-slate-100 sm:size-12"
                     style={`color:${s.color}`}
                     aria-label={s.name}
                   >
@@ -351,7 +359,7 @@ const socials = [
             </div>
             <svg
               viewBox="0 0 24 24"
-              class="arrow-flow size-7 shrink-0 text-slate-400 sm:size-9"
+              class="pop size-7 shrink-0 text-slate-400 sm:size-9"
               fill="none"
               stroke="currentColor"
               stroke-width="2.2"
@@ -363,7 +371,7 @@ const socials = [
               alt="PumpDeck"
               width="64"
               height="64"
-              class="size-14 shrink-0 rounded-[1.15rem] shadow-lg ring-1 ring-black/5 sm:size-16"
+              class="pop size-14 shrink-0 rounded-[1.15rem] shadow-lg ring-1 ring-black/5 sm:size-16"
             />
           </div>
         </div>
@@ -373,7 +381,9 @@ const socials = [
           </h3>
           <p class="mt-3 text-lg text-ink-soft">
             Find an exercise anywhere — TikTok, Instagram, YouTube — and bring it
-            straight into PumpDeck.
+            into PumpDeck. Add it to your program, or try it just once — it
+            swaps in for one that hits the same muscle, so your plan and targets
+            stay intact. Keep it only if you liked it.
           </p>
         </div>
       </div>
@@ -648,18 +658,17 @@ const socials = [
   }
   .cov-bar.is-on { width: var(--w); }
 
-  /* Step 3 — social → PumpDeck arrow nudge. */
-  @keyframes arrowFlow {
-    0%,
-    100% {
-      transform: translateX(0);
-    }
-    50% {
-      transform: translateX(5px);
-    }
+  /* Step 3 (feed) — icons pop in one by one: socials → arrow → app icon. */
+  .pop {
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.3s ease,
+      transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .arrow-flow {
-    animation: arrowFlow 1.4s ease-in-out infinite;
+  .pop.is-pop {
+    opacity: 1;
+    transform: none;
   }
 
   /* Step 5 — set rows check off green. */
@@ -790,11 +799,9 @@ const socials = [
     .ax-added,
     .ax-sheet,
     .ax-ex,
-    .ax-check {
+    .ax-check,
+    .pop {
       transition: none;
-    }
-    .arrow-flow {
-      animation: none;
     }
   }
 </style>
@@ -805,6 +812,36 @@ const socials = [
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+    // Each animated demo gates on its own visibility: the loop pauses at the
+    // next cycle boundary once its step scrolls off-screen, and resumes when
+    // the user scrolls back to it. `el` is the step's two-column row.
+    function makeGate(el: Element | null | undefined) {
+      let visible = !el; // no element to observe → always run
+      let waiters: Array<() => void> = [];
+      if (el) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              visible = e.isIntersecting;
+              if (visible && waiters.length) {
+                const fire = waiters;
+                waiters = [];
+                fire.forEach((r) => r());
+              }
+            }
+          },
+          { threshold: 0.2 }
+        );
+        io.observe(el);
+      }
+      return {
+        wait: () =>
+          visible ? Promise.resolve() : new Promise<void>((r) => waiters.push(r)),
+      };
+    }
+    // The step's two-column row — uniquely identifies a step within the tour.
+    const STEP = '.lg\\:grid-cols-2';
+
     const splitRows = [...root.querySelectorAll<HTMLElement>('.splitday')];
     const covBars = [...root.querySelectorAll<HTMLElement>('.cov-bar')];
 
@@ -814,7 +851,9 @@ const socials = [
 
     // Step 1: reveal each weekday's muscle assignment one by one.
     async function splitDayLoop() {
+      const gate = makeGate(splitRows[0]?.closest(STEP));
       while (true) {
+        await gate.wait();
         splitRows.forEach((r) => r.classList.remove('is-on'));
         await sleep(600);
         for (const r of splitRows) {
@@ -825,9 +864,30 @@ const socials = [
       }
     }
 
+    // Step 3 (feed): pop in the social icons one by one, then the arrow,
+    // then the PumpDeck icon.
+    async function feedLoop() {
+      const flow = root.querySelector<HTMLElement>('.feed-flow');
+      if (!flow) return;
+      const items = [...flow.querySelectorAll<HTMLElement>('.pop')];
+      const gate = makeGate(flow.closest(STEP));
+      while (true) {
+        await gate.wait();
+        items.forEach((i) => i.classList.remove('is-pop'));
+        await sleep(500);
+        for (const it of items) {
+          it.classList.add('is-pop');
+          await sleep(240);
+        }
+        await sleep(2600);
+      }
+    }
+
     // Step 2: fill each muscle's weekly volume bar one by one.
     async function volumeLoop() {
+      const gate = makeGate(covBars[0]?.closest(STEP));
       while (true) {
+        await gate.wait();
         covBars.forEach((b) => b.classList.remove('is-on'));
         await sleep(600);
         for (const b of covBars) {
@@ -847,7 +907,9 @@ const socials = [
       const progress = demo.querySelector<HTMLElement>('.ax-progress');
       const sheet = demo.querySelector<HTMLElement>('.ax-sheet');
       const exes = [...demo.querySelectorAll<HTMLElement>('.ax-ex')];
+      const gate = makeGate(demo.closest(STEP));
       while (true) {
+        await gate.wait();
         target?.classList.remove('is-active', 'is-done');
         sheet?.classList.remove('is-open');
         exes.forEach((e) => e.classList.remove('is-checked'));
@@ -872,7 +934,9 @@ const socials = [
 
     // Step 5: check sets one by one, reveal the pump row, fill 1→8, loop.
     async function pumpLoop() {
+      const gate = makeGate(setRows[0]?.closest(STEP));
       while (true) {
+        await gate.wait();
         setRows.forEach((r) => r.classList.remove('is-done'));
         pumpBlock?.classList.remove('is-shown');
         bars.forEach((b) => b.classList.remove('is-lit'));
@@ -932,8 +996,10 @@ const socials = [
         return;
       }
 
+      const gate = makeGate(container.closest(STEP) ?? container);
       (async () => {
         while (true) {
+          await gate.wait();
           for (let i = 0; i < results.length; i++) {
             // Reset: source pill home, only the existing item showing.
             chips.forEach((c, idx) => c.classList.toggle('is-selected', idx === i));
@@ -964,6 +1030,7 @@ const socials = [
     if (reduce) {
       splitRows.forEach((r) => r.classList.add('is-on'));
       covBars.forEach((b) => b.classList.add('is-on'));
+      root.querySelectorAll<HTMLElement>('.feed-flow .pop').forEach((i) => i.classList.add('is-pop'));
       setRows.forEach((r) => r.classList.add('is-done'));
       pumpBlock?.classList.add('is-shown');
       bars.forEach((b, i) => i < 6 && b.classList.add('is-lit'));
@@ -977,6 +1044,7 @@ const socials = [
     } else {
       splitDayLoop();
       volumeLoop();
+      feedLoop();
       addExerciseLoop();
       pumpLoop();
       flipDemos.forEach((c) => runFlipDemo(c, true));
