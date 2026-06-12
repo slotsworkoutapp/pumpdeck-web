@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 
 // Mirrors the in-app Terms of Service (SettingsView.swift). Keep the two in sync.
 const contactEmail = 'support@pumpdeck.app';
-const lastUpdated = 'May 6, 2026';
+const lastUpdated = 'June 11, 2026';
 ---
 
 <Layout
@@ -20,8 +20,8 @@ const lastUpdated = 'May 6, 2026';
     >
       <section class="space-y-3">
         <p>
-          These terms govern your use of PumpDeck. They will be reviewed by
-          counsel before final App Store submission.
+          These terms govern your use of PumpDeck, operated by Kia Kaha Labs LLC
+          ("we"). By downloading or using the app, you agree to them.
         </p>
       </section>
 
@@ -106,7 +106,17 @@ const lastUpdated = 'May 6, 2026';
       </section>
 
       <section class="space-y-3">
-        <h2>8. Changes</h2>
+        <h2>8. Governing law</h2>
+        <p>
+          These terms are governed by the laws of the State of Utah, United
+          States, without regard to its conflict-of-laws rules. Any dispute that
+          isn't resolved informally will be brought exclusively in the state or
+          federal courts located in Utah, and you consent to their jurisdiction.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2>9. Changes</h2>
         <p>
           We may update these terms; material changes will be surfaced in-app on
           next launch.
@@ -114,7 +124,7 @@ const lastUpdated = 'May 6, 2026';
       </section>
 
       <section class="space-y-3">
-        <h2>9. Contact</h2>
+        <h2>10. Contact</h2>
         <p>
           <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
         </p>
