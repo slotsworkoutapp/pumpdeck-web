@@ -55,12 +55,51 @@ const year = new Date().getFullYear();
           <span class="text-lg">PumpDeck</span>
         </a>
 
-        <a
-          href="#download"
-          class="shrink-0 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
+        <nav
+          class="hidden items-center gap-7 text-sm font-semibold text-ink-soft sm:flex"
         >
-          Try for free
-        </a>
+          <a class="transition hover:text-ink" href="#setup">Setup</a>
+          <a class="transition hover:text-ink" href="#features">Features</a>
+          <a class="transition hover:text-ink" href="#comparison">Comparison</a>
+        </nav>
+
+        <div class="flex items-center gap-2">
+          <a
+            href="#download"
+            class="shrink-0 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
+          >
+            Try for free
+          </a>
+          <button
+            id="menu-btn"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            class="grid size-9 place-items-center rounded-lg text-ink sm:hidden"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              class="size-6"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile dropdown — toggled by #menu-btn -->
+      <div id="mobile-menu" class="hidden border-t border-slate-100 bg-white sm:hidden">
+        <nav
+          class="mx-auto flex max-w-6xl flex-col px-5 py-2 text-base font-semibold text-ink-soft"
+        >
+          <a class="py-2.5 transition hover:text-ink" href="#setup">Setup</a>
+          <a class="py-2.5 transition hover:text-ink" href="#features">Features</a>
+          <a class="py-2.5 transition hover:text-ink" href="#comparison">Comparison</a>
+        </nav>
       </div>
     </header>
 
@@ -90,5 +129,22 @@ const year = new Date().getFullYear();
         <p>&copy; {year} PumpDeck. All rights reserved.</p>
       </div>
     </footer>
+
+    <script>
+      const btn = document.getElementById('menu-btn');
+      const menu = document.getElementById('mobile-menu');
+      if (btn && menu) {
+        const setOpen = (open: boolean) => {
+          menu.classList.toggle('hidden', !open);
+          btn.setAttribute('aria-expanded', String(open));
+        };
+        btn.addEventListener('click', () =>
+          setOpen(menu.classList.contains('hidden'))
+        );
+        menu
+          .querySelectorAll('a')
+          .forEach((a) => a.addEventListener('click', () => setOpen(false)));
+      }
+    </script>
   </body>
 </html>

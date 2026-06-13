@@ -104,15 +104,11 @@ const socials = [
 
 <section id="tour" class="bg-slate-50">
   <div class="mx-auto max-w-6xl px-5 py-20">
-    <div class="max-w-2xl">
+    <div id="setup" class="max-w-2xl scroll-mt-24">
       <p class="text-sm font-semibold text-flame-500">Setup</p>
       <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-        Set up your program — your way
+        Set up your program — <span class="text-flame-500">3</span> steps
       </h2>
-      <p class="mt-4 text-lg text-ink-soft">
-        Let PumpDeck build your whole program in a couple of taps, or craft
-        every detail yourself.
-      </p>
     </div>
 
     <div class="mt-12 space-y-32 lg:space-y-32">
@@ -212,13 +208,13 @@ const socials = [
         <div class="order-1 lg:order-2">
           <div class="text-sm font-bold text-flame-500">03</div>
           <h3 class="mt-2 text-2xl font-bold tracking-tight">
-            The easiest way to add exercises
+            Create workouts in seconds
           </h3>
           <p class="mt-3 text-lg text-ink-soft">
-            Your split and targets guide you the whole way. Tap any muscle's
-            target and PumpDeck pulls up exercises for exactly that muscle — so
-            everything you add hits the right muscle in the right amount, and you
-            watch each target fill in as you go.
+            Most apps drop you on an empty day that just says "add exercises" —
+            leaving you to guess what to train and how much. PumpDeck shows you
+            the exact muscles to hit and their targets. Tap one and it pulls up
+            exercises for that muscle, so you build a balanced day in seconds.
           </p>
         </div>
         <div class="order-2 lg:order-1">
@@ -312,7 +308,6 @@ const socials = [
           </div>
         </div>
         <div class="order-1 lg:order-1">
-          <div class="text-sm font-bold text-flame-500">04</div>
           <h3 class="mt-2 text-2xl font-bold tracking-tight">
             Fine-tune everything in the program editor
           </h3>
@@ -326,17 +321,15 @@ const socials = [
     </div>
 
     <!-- Divider between the Setup steps and the Features section -->
-    <div class="mt-24 border-t border-slate-200 pt-20 lg:mt-28 lg:pt-24">
+    <div
+      id="features"
+      class="mt-24 scroll-mt-24 border-t border-slate-200 pt-20 lg:mt-28 lg:pt-24"
+    >
       <div class="max-w-2xl">
         <p class="text-sm font-semibold text-flame-500">Features</p>
         <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
           What sets PumpDeck apart
         </h2>
-        <p class="mt-4 text-lg text-ink-soft">
-          The stuff a plain workout tracker doesn't do — pull moves from your
-          feed, four ways to add, pump ratings, and more than one version of a
-          day.
-        </p>
       </div>
     </div>
 
@@ -388,92 +381,6 @@ const socials = [
             swaps in for one that hits the same muscle, so your plan and targets
             stay intact. Keep it only if you liked it.
           </p>
-        </div>
-      </div>
-
-      <!-- 4 · Drop any exercise into your program -->
-      <div class="grid items-center gap-10 lg:grid-cols-2">
-        <div>
-          <h3 class="mt-2 text-2xl font-bold tracking-tight">
-            Four ways to add any exercise into your program
-          </h3>
-          <p class="mt-3 text-lg text-ink-soft">
-            Add it straight to your program, swap it for one you already have,
-            rotate the two week to week, or keep both as options to pick from.
-          </p>
-        </div>
-        <div>
-          <div class="fly-container relative mx-auto max-w-sm">
-            <!-- The exercise being placed (source). The pill itself is the
-                 separate .flyer below; .fly-home just reserves its space. -->
-            <div class="adding-card rounded-2xl bg-white px-4 py-3 shadow-md ring-1 ring-slate-100">
-              <p class="text-xs font-semibold text-ink-soft">Adding to your plan</p>
-              <div class="fly-home mt-2"></div>
-            </div>
-
-            <!-- The plan it drops into -->
-            <div class="mt-3 rounded-2xl bg-white p-4 shadow-lg ring-1 ring-slate-100">
-              <div class="flex gap-1.5">
-                {
-                  placeOpts.map((o) => (
-                    <span class="chip inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-semibold">
-                      <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d={o.d} stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                      {o.t}
-                    </span>
-                  ))
-                }
-              </div>
-
-              <div class="place-content mt-3">
-                <!-- Pre-reveal: just the existing exercise, checked off -->
-                <div class="place-state place-base">
-                  <div class="flex items-center gap-3 rounded-xl bg-slate-50 px-2.5 py-2">
-                    <span class="grid size-9 place-items-center rounded-lg bg-brand-50 text-brand-600">
-                      <Fragment set:html={dumbbell} />
-                    </span>
-                    <span class="text-sm font-semibold">Barbell Bench Press</span>
-                    <span class="circle ml-auto grid size-5 place-items-center rounded-full">
-                      <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="3">
-                        <path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-
-                <!-- Swap result -->
-                <div class="place-state place-result space-y-1.5" data-opt="0">
-                  <Fragment set:html={exRow('Barbell Bench Press', { faded: true, strike: true })} />
-                  <Fragment set:html={arrowDown} />
-                  <div class="fly-slot"></div>
-                </div>
-
-                <!-- Rotate result -->
-                <div class="place-state place-result space-y-1.5" data-opt="1">
-                  <Fragment set:html={exRow('Barbell Bench Press', { trailing: 'Week 1' })} />
-                  <Fragment set:html={altLabel} />
-                  <div class="fly-slot"></div>
-                </div>
-
-                <!-- Options result -->
-                <div class="place-state place-result space-y-1.5" data-opt="2">
-                  <Fragment set:html={exRow('Barbell Bench Press')} />
-                  <div class="fly-slot"></div>
-                  <p class="pt-0.5 text-xs font-semibold text-slate-400">Pick one when you log</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- The flying pill — animates from .fly-home down into the active
-                 result's .fly-slot (matches the app's matchedGeometryEffect). -->
-            <div class="flyer flex items-center gap-3 rounded-xl bg-slate-50 px-2.5">
-              <span class="grid size-9 place-items-center rounded-lg bg-brand-50 text-brand-600">
-                <Fragment set:html={dumbbell} />
-              </span>
-              <span class="text-sm font-semibold">Dumbbell Bench Press</span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -556,15 +463,137 @@ const socials = [
         </div>
       </div>
 
+    </div>
+
+    <!-- Divider between Features and the Comparison section -->
+    <div
+      id="comparison"
+      class="mt-24 scroll-mt-24 border-t border-slate-200 pt-20 lg:mt-28 lg:pt-24"
+    >
+      <div class="max-w-2xl">
+        <p class="text-sm font-semibold text-flame-500">Comparison</p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+          How PumpDeck compares
+        </h2>
+      </div>
+    </div>
+
+    <div class="mt-12 space-y-32 lg:space-y-32">
+      <!-- 4 · Drop any exercise into your program -->
+      <div class="grid items-center gap-10 lg:grid-cols-2">
+        <div>
+          <h3 class="mt-2 text-2xl font-bold tracking-tight">
+            Four ways to add any exercise into your program
+          </h3>
+          <p class="mt-3 text-lg text-ink-soft">
+            Most apps stop at add or swap. PumpDeck gives you four ways:
+          </p>
+          <ol class="mt-4 space-y-3 text-lg text-ink-soft">
+            <li class="flex gap-3">
+              <span class="shrink-0 font-bold text-flame-500 tabular-nums">1</span>
+              Add to a workout
+            </li>
+            <li class="flex gap-3">
+              <span class="shrink-0 font-bold text-flame-500 tabular-nums">2</span>
+              Swap for an existing exercise
+            </li>
+            <li class="flex gap-3">
+              <span class="shrink-0 font-bold text-flame-500 tabular-nums">3</span>
+              Alternate with an existing exercise
+            </li>
+            <li class="flex gap-3">
+              <span class="shrink-0 font-bold text-flame-500 tabular-nums">4</span>
+              Make it an option with an existing exercise — pick between the two
+              when you train
+            </li>
+          </ol>
+        </div>
+        <div>
+          <div class="fly-container relative mx-auto max-w-sm">
+            <!-- The exercise being placed (source). The pill itself is the
+                 separate .flyer below; .fly-home just reserves its space. -->
+            <div class="adding-card rounded-2xl bg-white px-4 py-3 shadow-md ring-1 ring-slate-100">
+              <p class="text-xs font-semibold text-ink-soft">Adding to your plan</p>
+              <div class="fly-home mt-2"></div>
+            </div>
+
+            <!-- The plan it drops into -->
+            <div class="mt-3 rounded-2xl bg-white p-4 shadow-lg ring-1 ring-slate-100">
+              <div class="flex gap-1.5">
+                {
+                  placeOpts.map((o) => (
+                    <span class="chip inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-semibold">
+                      <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d={o.d} stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                      {o.t}
+                    </span>
+                  ))
+                }
+              </div>
+
+              <div class="place-content mt-3">
+                <!-- Pre-reveal: just the existing exercise, checked off -->
+                <div class="place-state place-base">
+                  <div class="flex items-center gap-3 rounded-xl bg-slate-50 px-2.5 py-2">
+                    <span class="grid size-9 place-items-center rounded-lg bg-brand-50 text-brand-600">
+                      <Fragment set:html={dumbbell} />
+                    </span>
+                    <span class="text-sm font-semibold">Barbell Bench Press</span>
+                    <span class="circle ml-auto grid size-5 place-items-center rounded-full">
+                      <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="3">
+                        <path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Swap result -->
+                <div class="place-state place-result space-y-1.5" data-opt="0">
+                  <Fragment set:html={exRow('Barbell Bench Press', { faded: true, strike: true })} />
+                  <Fragment set:html={arrowDown} />
+                  <div class="fly-slot"></div>
+                </div>
+
+                <!-- Rotate result -->
+                <div class="place-state place-result space-y-1.5" data-opt="1">
+                  <Fragment set:html={exRow('Barbell Bench Press', { trailing: 'Week 1' })} />
+                  <Fragment set:html={altLabel} />
+                  <div class="fly-slot"></div>
+                </div>
+
+                <!-- Options result -->
+                <div class="place-state place-result space-y-1.5" data-opt="2">
+                  <Fragment set:html={exRow('Barbell Bench Press')} />
+                  <div class="fly-slot"></div>
+                  <p class="pt-0.5 text-xs font-semibold text-slate-400">Pick one when you log</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- The flying pill — animates from .fly-home down into the active
+                 result's .fly-slot (matches the app's matchedGeometryEffect). -->
+            <div class="flyer flex items-center gap-3 rounded-xl bg-slate-50 px-2.5">
+              <span class="grid size-9 place-items-center rounded-lg bg-brand-50 text-brand-600">
+                <Fragment set:html={dumbbell} />
+              </span>
+              <span class="text-sm font-semibold">Dumbbell Bench Press</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- 6 · Workout variants -->
       <div class="grid items-center gap-10 lg:grid-cols-2">
         <div>
           <h3 class="mt-2 text-2xl font-bold tracking-tight">
-            More than one version per day
+            Other apps = Push day<br />PumpDeck = Push A, Push B, Push C
           </h3>
           <p class="mt-3 text-lg text-ink-soft">
-            Build a few versions of a day — like Push A and Push B — then rotate
-            them week to week or keep them as options to pick from.
+            In most apps, each day of your split is one fixed workout — your Push
+            day is the same five exercises, every time. PumpDeck lets you build as
+            many versions of a day as you want — Push A, Push B, Push C — then
+            rotate them week to week or pick one whenever you train.
           </p>
         </div>
         <div>
@@ -647,12 +676,18 @@ const socials = [
 
 <style>
   /* Step 1 — weekday rows fade/slide in one by one. */
+  /* Step 1 — weekday rows fade/slide in one by one. */
   .splitday {
     opacity: 0;
     transform: translateY(8px);
-    transition: opacity 0.35s ease, transform 0.35s ease;
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease;
   }
-  .splitday.is-on { opacity: 1; transform: none; }
+  .splitday.is-on {
+    opacity: 1;
+    transform: none;
+  }
 
   /* Step 2 — per-muscle volume bars fill to their custom width one by one. */
   .cov-bar {
