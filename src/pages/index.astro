@@ -92,7 +92,7 @@ const socials = [
       <h1
         class="text-[2.75rem] font-extrabold leading-[0.98] tracking-tight text-ink sm:text-[4rem] lg:text-[5rem]"
       >
-        Exercises from<br />your feed to your<br />program
+        Finally do the<br />exercises you save
       </h1>
 
       <!-- Social → PumpDeck, right below the headline -->
@@ -131,8 +131,8 @@ const socials = [
       </div>
 
       <p class="mt-8 max-w-xl text-lg leading-relaxed text-ink-soft">
-        Build a personal program from the exercises you love — and the ones
-        you've been wanting to try.
+        You save them on TikTok, Instagram, and YouTube — then never do them.
+        PumpDeck drops your saves straight into a program you'll actually follow.
       </p>
 
       <div id="download" class="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -184,12 +184,63 @@ const socials = [
     }
   </style>
 
-  <!-- Muscle coverage -->
+  <!-- The flow — Problem → Solution: save it, try it, keep what works. -->
+  <section class="mx-auto max-w-6xl px-5 py-20">
+    <div class="max-w-2xl">
+      <p class="text-sm font-semibold text-flame-500">How it works</p>
+      <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+        From “saved” to actually done
+      </h2>
+      <p class="mt-4 text-lg text-ink-soft">
+        Saved exercises die because they aren’t organized, you’ve no time to dig
+        for them at the gym, and you never know what to swap them for. PumpDeck
+        fixes the whole loop.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-3">
+      <div class="rounded-2xl bg-slate-50 p-6 ring-1 ring-slate-100">
+        <div class="grid size-10 place-items-center rounded-xl bg-flame-500/10 text-lg font-bold text-flame-500">
+          1
+        </div>
+        <h3 class="mt-4 text-xl font-bold">Save it</h3>
+        <p class="mt-2 text-ink-soft">
+          See a move on TikTok, Instagram, or YouTube? Save it into PumpDeck with
+          photos, video, and muscle tags — so it’s ready when you are.
+        </p>
+      </div>
+      <div class="rounded-2xl bg-slate-50 p-6 ring-1 ring-slate-100">
+        <div class="grid size-10 place-items-center rounded-xl bg-flame-500/10 text-lg font-bold text-flame-500">
+          2
+        </div>
+        <h3 class="mt-4 text-xl font-bold">Try it once</h3>
+        <p class="mt-2 text-ink-soft">
+          Drop it straight into your program and actually do it — no commitment,
+          no rebuilding your week.
+        </p>
+      </div>
+      <div class="rounded-2xl bg-slate-50 p-6 ring-1 ring-slate-100">
+        <div class="grid size-10 place-items-center rounded-xl bg-flame-500/10 text-lg font-bold text-flame-500">
+          3
+        </div>
+        <h3 class="mt-4 text-xl font-bold">Keep what works</h3>
+        <p class="mt-2 text-ink-soft">
+          Loved it? Swap it in, rotate it week to week, or keep both as options.
+          Your program keeps the moves you love and drops the rest.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product tour -->
+  <Tour />
+
+  <!-- Muscle coverage — demoted below the tour so the top stays on one story. -->
   <section class="mx-auto max-w-6xl px-5 py-20">
     <div class="max-w-2xl">
       <p class="text-sm font-semibold text-flame-500">Coverage</p>
       <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-        Track anywhere from {muscleGroups.length} to {muscleCount} muscles
+        Cover every muscle — down to {muscleCount} if you want
       </h2>
       <p class="mt-4 text-lg text-ink-soft">
         Roll everything up into {muscleGroups.length} group targets, break it
@@ -229,9 +280,6 @@ const socials = [
       }
     </div>
   </section>
-
-  <!-- Product tour -->
-  <Tour />
 
   <!-- FAQ -->
   <section id="faq" class="mx-auto max-w-3xl px-5 py-20">

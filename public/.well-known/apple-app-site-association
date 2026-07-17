@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["CS9LJQUFV8.com.jason.personal.pumpdeck"],
+        "components": [
+          {
+            "/": "/u/*",
+            "comment": "Profile links open the app to that lifter's profile"
+          }
+        ]
+      }
+    ]
+  }
+}

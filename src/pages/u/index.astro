@@ -1,0 +1,76 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Follow on PumpDeck"
+  description="Follow this lifter on PumpDeck and add their shared exercises with a swipe."
+>
+  <section class="mx-auto flex max-w-md flex-col items-center px-5 py-24 text-center">
+    <img
+      src="/app-icon.png"
+      alt="PumpDeck"
+      width="72"
+      height="72"
+      class="h-[72px] w-[72px] rounded-[1.3rem] shadow-lg ring-1 ring-black/5"
+    />
+
+    <h1 class="mt-8 text-3xl font-extrabold tracking-tight sm:text-4xl">
+      Follow <span id="handle" class="text-flame-500">this lifter</span>
+    </h1>
+
+    <p class="mt-4 text-lg text-ink-soft">
+      Get PumpDeck to follow <span id="handle-inline">them</span> and add their
+      shared exercises — video and muscles included — with a swipe.
+    </p>
+
+    <div class="mt-8 flex flex-col items-center gap-4">
+      <a
+        id="open-app"
+        href="#"
+        class="hidden items-center rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white shadow-sm transition hover:opacity-90"
+      >
+        Open in PumpDeck
+      </a>
+      <a
+        href="/#download"
+        class="inline-block transition hover:opacity-85"
+        aria-label="Download on the App Store"
+      >
+        <img
+          src="/app-store-badge.svg"
+          alt="Download on the App Store"
+          width="180"
+          height="60"
+          class="h-[54px] w-auto"
+        />
+      </a>
+    </div>
+  </section>
+
+  <script>
+    // This page is served for any /u/<username> (via the Vercel rewrite). On an
+    // iPhone with the app installed, the Universal Link opens the app directly
+    // and this page never shows — so it's the fallback for everyone else.
+    const parts = location.pathname.split('/').filter(Boolean); // ["u", "<name>"]
+    const username =
+      parts[0] === 'u' && parts[1] ? decodeURIComponent(parts[1]) : '';
+
+    if (username) {
+      const at = '@' + username;
+      const h = document.getElementById('handle');
+      const hi = document.getElementById('handle-inline');
+      if (h) h.textContent = at;
+      if (hi) hi.textContent = at;
+
+      // Offer a manual "open in app" attempt (e.g. installed but link didn't
+      // hand off, or opened via QR on a page).
+      const open = document.getElementById('open-app');
+      if (open) {
+        open.setAttribute('href', 'pumpdeck://u/' + encodeURIComponent(username));
+        open.classList.remove('hidden');
+        open.classList.add('inline-flex');
+      }
+    }
+  </script>
+</Layout>
