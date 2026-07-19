@@ -7,6 +7,10 @@
           {
             "/": "/u/*",
             "comment": "Profile links open the app to that lifter's profile"
+          },
+          {
+            "/": "/e/*",
+            "comment": "Exercise links open the app to a single shared exercise"
           }
         ]
       }

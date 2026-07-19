@@ -1,6 +1,7 @@
 {
   "rewrites": [
-    { "source": "/u/:username", "destination": "/u" }
+    { "source": "/u/:username", "destination": "/u" },
+    { "source": "/e/:owner/:id", "destination": "/e" }
   ],
   "headers": [
     {
