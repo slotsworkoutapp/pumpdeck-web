@@ -8,15 +8,15 @@ const appStoreUrl = '#';
 const faqs = [
   {
     q: 'Briefly, what does this app actually do?',
-    a: 'PumpDeck helps you build a weekly program that hits every muscle, fill it with any exercise — even ones you find online — and train toward a custom volume target for each muscle. Rate the pump on every exercise to keep what works best.',
+    a: "PumpDeck lets you build a weekly program around variations and muscles instead of fixed exercises. Add a whole movement (like “Chest Press”) or a whole muscle to a slot, then pick the exact exercise when you train. Fill it with any exercise — even ones you find online — rate the pump, and keep what works best.",
   },
   {
     q: 'What makes PumpDeck different from other fitness apps?',
-    a: 'Most apps lock you into their cookie-cutter programs. PumpDeck hands you the controls — build a split that covers every muscle, set custom volume per muscle, add any exercise (even from your feed), and fine-tune it all in a powerful editor — without making it complicated.',
+    a: 'Most apps lock every day into fixed exercises. PumpDeck lets you add a whole variation (every version of a movement) or a whole muscle to your program, then pick the exact exercise when you train — so you can grab a free machine, try something new, or beat boredom without ever rebuilding your week.',
   },
   {
     q: 'Do I have to build my own program?',
-    a: 'No. Answer a few questions and PumpDeck builds your whole split and sets a target for every muscle — or set up every detail yourself. Either way, you can tweak anything later.',
+    a: 'No. Answer a few questions and PumpDeck builds your whole split — or set up every detail yourself. Either way, you can tweak anything later.',
   },
   {
     q: 'Can I add exercises I find on social media?',
@@ -28,11 +28,11 @@ const faqs = [
   },
   {
     q: 'Can I use PumpDeck for bulking and cutting?',
-    a: "Yes. Your training is the one constant through a bulk or a cut, and that's exactly what PumpDeck is built for. Follow your program and hit your targets — then adjust your diet to whichever goal you're on.",
+    a: "Yes. Your training is the one constant through a bulk or a cut, and that's exactly what PumpDeck is built for. Follow your program and cover every muscle — then adjust your diet to whichever goal you're on.",
   },
   {
     q: 'Is this app suitable for beginners?',
-    a: 'Definitely. Let PumpDeck build your whole program to start, then the muscle maps and targets make it clear exactly what to train each day. Learn and adjust as you go.',
+    a: 'Definitely. Let PumpDeck build your whole program to start, then the muscle maps make it clear exactly what you train each day. Learn and adjust as you go.',
   },
   {
     q: 'Do I need a gym to use this app?',
@@ -243,10 +243,11 @@ const socials = [
         Cover every muscle — down to {muscleCount} if you want
       </h2>
       <p class="mt-4 text-lg text-ink-soft">
-        Roll everything up into {muscleGroups.length} group targets, break it
-        all the way down to {muscleCount} individual muscles, or land anywhere in
-        between — like tracking all of Legs as one target, or Quads, Hamstrings,
-        and Glutes on their own. Add your own custom muscles.
+        Roll everything up into {muscleGroups.length} groups, break it all the
+        way down to {muscleCount} individual muscles, or land anywhere in
+        between — like tracking all of Legs together, or Quads, Hamstrings, and
+        Glutes on their own. Add your own custom muscles, and see at a glance
+        that nothing slips through the cracks.
       </p>
     </div>
 
@@ -332,7 +333,7 @@ const socials = [
       Build a program that hits every muscle
     </h2>
     <p class="mx-auto mt-3 max-w-md text-lg text-ink-soft">
-      Your split, your targets, your exercises — all in one place.
+      Your split, your variations, your exercises — all in one place.
     </p>
     <div class="mt-8 flex justify-center">
       <a
