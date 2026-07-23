@@ -29,19 +29,6 @@ const splitDays = [
   { day: 'FRI', muscles: ['Legs'] },
 ];
 
-// Step 2 — per-muscle weekly volume. Bar width is each muscle's sets relative
-// to the busiest one, so the bars read as "custom volume for each muscle."
-const splitMuscles = [
-  { name: 'Chest', slug: 'chest', color: '#DC2626', sets: 12, w: 75 },
-  { name: 'Back', slug: 'back', color: '#2563EB', sets: 14, w: 88 },
-  { name: 'Shoulders', slug: 'shoulders', color: '#7C3AED', sets: 10, w: 62 },
-  { name: 'Legs', slug: 'legs', color: '#16A34A', sets: 16, w: 100 },
-  { name: 'Core', slug: 'core', color: '#CA8A04', sets: 9, w: 56 },
-  { name: 'Biceps', slug: 'biceps', color: '#EA580C', sets: 8, w: 50 },
-  { name: 'Triceps', slug: 'triceps', color: '#DB2777', sets: 8, w: 50 },
-  { name: 'Forearms', slug: 'forearms', color: '#0891B2', sets: 6, w: 38 },
-];
-
 // Step 6 — a workout row (clipboard icon + name + meta [+ trailing]).
 const clipboard =
   '<svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5" stroke-linecap="round"/></svg>';
@@ -159,62 +146,18 @@ const socials = [
         </div>
       </div>
 
-      <!-- 2 · Custom volume per muscle -->
-      <div class="grid items-center gap-10 lg:grid-cols-2">
-        <div>
-          <div class="text-sm font-bold text-flame-500">02</div>
-          <h3 class="mt-2 text-2xl font-bold tracking-tight">
-            Set custom volume targets for each muscle
-          </h3>
-          <p class="mt-3 text-lg text-ink-soft">
-            Set a weekly target for each muscle — or start from PumpDeck's
-            recommendations. Your planned sets update live as you build your
-            program, and your logged sets fill in as you train, so every
-            muscle's target, plan, and progress live in one place.
-          </p>
-        </div>
-        <div>
-          <div class="mx-auto max-w-sm rounded-2xl bg-white p-5 shadow-lg ring-1 ring-slate-100">
-            <p class="font-bold">Weekly volume</p>
-            <div class="mt-4 space-y-3.5">
-              {
-                splitMuscles.map((m) => (
-                  <div>
-                    <div class="flex items-center justify-between gap-2">
-                      <span class="flex items-center gap-2 text-sm font-semibold">
-                        <img src={`/maps/${m.slug}.svg`} alt={m.name} class="h-8 w-auto" />
-                        {m.name}
-                      </span>
-                      <span class="text-xs font-semibold text-slate-400 tabular-nums">
-                        {m.sets} sets
-                      </span>
-                    </div>
-                    <div class="mt-1.5 h-2 rounded-full bg-slate-100">
-                      <div
-                        class="cov-bar h-2 rounded-full"
-                        style={`--w:${m.w}%;background-color:${m.color}`}
-                      />
-                    </div>
-                  </div>
-                ))
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3 · Add exercises to hit your targets -->
+      <!-- 2 · Build from variations & muscles -->
       <div class="grid items-center gap-10 lg:grid-cols-2">
         <div class="order-1 lg:order-2">
-          <div class="text-sm font-bold text-flame-500">03</div>
+          <div class="text-sm font-bold text-flame-500">02</div>
           <h3 class="mt-2 text-2xl font-bold tracking-tight">
-            Create workouts in seconds
+            Build it from variations and muscles
           </h3>
           <p class="mt-3 text-lg text-ink-soft">
-            Most apps drop you on an empty day that just says "add exercises" —
-            leaving you to guess what to train and how much. PumpDeck shows you
-            the exact muscles to hit and their targets. Tap one and it pulls up
-            exercises for that muscle, so you build a balanced day in seconds.
+            This is what makes PumpDeck different. Instead of locking in one
+            exercise, add a whole <strong>variation</strong> — every version of a
+            movement, like a chest press — or an entire <strong>muscle</strong>
+            to a day. Then just pick the exact exercise when you train.
           </p>
         </div>
         <div class="order-2 lg:order-1">
@@ -222,43 +165,43 @@ const socials = [
             class="ax-demo relative mx-auto h-[21rem] max-w-sm overflow-hidden rounded-2xl bg-white p-5 shadow-lg ring-1 ring-slate-100"
           >
             <p class="font-bold">Monday · Push</p>
-            <p class="mt-0.5 text-xs text-slate-400">Add exercises to hit each target</p>
+            <p class="mt-0.5 text-xs text-slate-400">Tap a slot — pick your exercise</p>
 
             <div class="mt-3 space-y-2.5">
-              <!-- Chest target card (the one being filled) -->
+              <!-- Chest Press variation slot (the interactive one) -->
               <div class="ax-target rounded-xl bg-slate-50">
                 <div class="flex items-center gap-3 px-3 py-2">
                   <img src="/maps/chest.svg" alt="Chest" class="h-11 w-auto" />
                   <div class="flex-1">
-                    <p class="text-sm font-semibold">Chest</p>
-                    <p class="ax-progress text-xs font-medium text-slate-400">0 / 12 sets</p>
+                    <p class="text-sm font-semibold">Chest Press</p>
+                    <p class="text-xs font-medium text-brand-600">Variation</p>
                   </div>
                   <svg viewBox="0 0 24 24" class="size-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="m9 6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
                 <div class="ax-added space-y-1 px-3">
-                  {
-                    ['Bench Press', 'Incline DB Press', 'Cable Fly'].map((ex) => (
-                      <div class="flex items-center gap-2 rounded-lg bg-white px-2.5 py-1.5 ring-1 ring-slate-100">
-                        <span class="grid size-6 shrink-0 place-items-center rounded-md bg-brand-50 text-brand-600">
-                          <Fragment set:html={dumbbell} />
-                        </span>
-                        <span class="text-xs font-semibold">{ex}</span>
-                        <span class="ml-auto text-[11px] text-slate-400">4 sets</span>
-                      </div>
-                    ))
-                  }
+                  <div class="flex items-center gap-2 rounded-lg bg-emerald-50 px-2.5 py-1.5 ring-1 ring-emerald-100">
+                    <span class="grid size-6 shrink-0 place-items-center rounded-md bg-brand-50 text-brand-600">
+                      <Fragment set:html={dumbbell} />
+                    </span>
+                    <span class="text-xs font-semibold">Dumbbell Bench Press</span>
+                    <span class="ml-auto text-emerald-600">
+                      <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="3">
+                        <path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <!-- Triceps target card (context) -->
+              <!-- Abs muscle slot (context — shows a whole muscle as a slot) -->
               <div class="rounded-xl bg-slate-50">
                 <div class="flex items-center gap-3 px-3 py-2">
-                  <img src="/maps/triceps.svg" alt="Triceps" class="h-11 w-auto" />
+                  <img src="/maps/core.svg" alt="Abs" class="h-11 w-auto" />
                   <div class="flex-1">
-                    <p class="text-sm font-semibold">Triceps</p>
-                    <p class="text-xs font-medium text-slate-400">0 / 8 sets</p>
+                    <p class="text-sm font-semibold">Abs</p>
+                    <p class="text-xs font-medium text-indigo-500">Muscle</p>
                   </div>
                   <svg viewBox="0 0 24 24" class="size-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="m9 6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
@@ -267,13 +210,13 @@ const socials = [
               </div>
             </div>
 
-            <!-- Add-exercise sheet (slides up over the day) -->
+            <!-- Pick-exercise sheet (slides up over the day) -->
             <div class="ax-sheet absolute inset-x-0 bottom-0 rounded-t-2xl bg-white p-4 ring-1 ring-slate-100">
               <div class="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-200"></div>
-              <p class="text-sm font-bold">Add chest exercises</p>
+              <p class="text-sm font-bold">Pick a Chest Press</p>
               <div class="mt-3 space-y-2">
                 {
-                  ['Bench Press', 'Incline DB Press', 'Cable Fly'].map((ex, i) => (
+                  ['Barbell Bench Press', 'Dumbbell Bench Press', 'Machine Press'].map((ex, i) => (
                     <div class="ax-ex flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-2" data-i={i}>
                       <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600">
                         <Fragment set:html={dumbbell} />
@@ -308,6 +251,7 @@ const socials = [
           </div>
         </div>
         <div class="order-1 lg:order-1">
+          <div class="text-sm font-bold text-flame-500">03</div>
           <h3 class="mt-2 text-2xl font-bold tracking-tight">
             Fine-tune everything in the program editor
           </h3>
@@ -689,14 +633,7 @@ const socials = [
     transform: none;
   }
 
-  /* Step 2 — per-muscle volume bars fill to their custom width one by one. */
-  .cov-bar {
-    width: 0;
-    transition: width 0.5s ease;
-  }
-  .cov-bar.is-on { width: var(--w); }
-
-  /* Step 3 (feed) — icons pop in one by one: socials → arrow → app icon. */
+  /* Feed step — icons pop in one by one: socials → arrow → app icon. */
   .pop {
     opacity: 0;
     transform: scale(0.6);
@@ -825,7 +762,6 @@ const socials = [
 
   @media (prefers-reduced-motion: reduce) {
     .splitday,
-    .cov-bar,
     .set-row .check,
     .pump-block,
     .bar,
@@ -881,7 +817,6 @@ const socials = [
     const STEP = '.lg\\:grid-cols-2';
 
     const splitRows = [...root.querySelectorAll<HTMLElement>('.splitday')];
-    const covBars = [...root.querySelectorAll<HTMLElement>('.cov-bar')];
 
     const setRows = [...root.querySelectorAll<HTMLElement>('.set-row')];
     const pumpBlock = root.querySelector<HTMLElement>('.pump-block');
@@ -922,27 +857,12 @@ const socials = [
     }
 
     // Step 2: fill each muscle's weekly volume bar one by one.
-    async function volumeLoop() {
-      const gate = makeGate(covBars[0]?.closest(STEP));
-      while (true) {
-        await gate.wait();
-        covBars.forEach((b) => b.classList.remove('is-on'));
-        await sleep(600);
-        for (const b of covBars) {
-          b.classList.add('is-on');
-          await sleep(350);
-        }
-        await sleep(2600);
-      }
-    }
-
-    // Step 3: tap a target card → add-exercise sheet slides up → check a
-    // couple → sheet dismisses → the picks land in the day, target met.
+    // Step 2: tap a variation slot → pick-exercise sheet slides up → pick one →
+    // sheet dismisses → the chosen exercise lands in the slot.
     async function addExerciseLoop() {
       const demo = root.querySelector<HTMLElement>('.ax-demo');
       if (!demo) return;
       const target = demo.querySelector<HTMLElement>('.ax-target');
-      const progress = demo.querySelector<HTMLElement>('.ax-progress');
       const sheet = demo.querySelector<HTMLElement>('.ax-sheet');
       const exes = [...demo.querySelectorAll<HTMLElement>('.ax-ex')];
       const gate = makeGate(demo.closest(STEP));
@@ -951,23 +871,17 @@ const socials = [
         target?.classList.remove('is-active', 'is-done');
         sheet?.classList.remove('is-open');
         exes.forEach((e) => e.classList.remove('is-checked'));
-        if (progress) progress.textContent = '0 / 12 sets';
         await sleep(1000);
-        target?.classList.add('is-active'); // tap the target card
+        target?.classList.add('is-active'); // tap the variation slot
         await sleep(450);
-        sheet?.classList.add('is-open'); // add-exercise sheet slides up
-        await sleep(900);
-        exes[0]?.classList.add('is-checked');
-        await sleep(550);
-        exes[1]?.classList.add('is-checked');
-        await sleep(550);
-        exes[2]?.classList.add('is-checked');
-        await sleep(700);
+        sheet?.classList.add('is-open'); // pick-exercise sheet slides up
+        await sleep(1000);
+        exes[1]?.classList.add('is-checked'); // pick Dumbbell Bench Press
+        await sleep(750);
         sheet?.classList.remove('is-open'); // sheet dismisses
         await sleep(450);
-        if (progress) progress.textContent = '12 / 12 sets';
         target?.classList.remove('is-active');
-        target?.classList.add('is-done'); // picks appear, target met
+        target?.classList.add('is-done'); // the pick lands in the slot
         await sleep(3200);
       }
     }
@@ -1069,21 +983,17 @@ const socials = [
 
     if (reduce) {
       splitRows.forEach((r) => r.classList.add('is-on'));
-      covBars.forEach((b) => b.classList.add('is-on'));
       root.querySelectorAll<HTMLElement>('.feed-flow .pop').forEach((i) => i.classList.add('is-pop'));
       setRows.forEach((r) => r.classList.add('is-done'));
       pumpBlock?.classList.add('is-shown');
       bars.forEach((b, i) => i < 6 && b.classList.add('is-lit'));
       flipDemos.forEach((c) => runFlipDemo(c, false));
-      // Step 3 static: target met, picks shown, no sheet.
+      // Step 2 static: the exercise is picked and lands in the slot, no sheet.
       const ax = root.querySelector<HTMLElement>('.ax-demo');
-      ax?.querySelectorAll<HTMLElement>('.ax-ex').forEach((e, i) => i < 3 && e.classList.add('is-checked'));
+      ax?.querySelectorAll<HTMLElement>('.ax-ex').forEach((e, i) => i === 1 && e.classList.add('is-checked'));
       ax?.querySelector<HTMLElement>('.ax-target')?.classList.add('is-done');
-      const axProgress = ax?.querySelector<HTMLElement>('.ax-progress');
-      if (axProgress) axProgress.textContent = '12 / 12 sets';
     } else {
       splitDayLoop();
-      volumeLoop();
       feedLoop();
       addExerciseLoop();
       pumpLoop();
