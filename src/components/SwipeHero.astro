@@ -1,0 +1,410 @@
+---
+// Tinder-style discover deck for the hero: exercise cards get stamped ADD/SKIP
+// and fly off one by one, the way the app's Discover feed feels. Pure CSS +
+// a small gated loop; static fallback under reduced motion.
+const cards = [
+  { name: 'Dumbbell Bench Press', muscle: 'Chest', map: 'chest', variation: 'Chest Press', user: '@mike_lifts', tint: '#1e40af', dir: 'add' },
+  { name: 'Cable Lateral Raise', muscle: 'Shoulders', map: 'shoulders', variation: 'Lateral Raise', user: '@sarah.fit', tint: '#9a3412', dir: 'skip' },
+  { name: 'Bulgarian Split Squat', muscle: 'Legs', map: 'legs', variation: 'Split Squat', user: '@leg_day_leo', tint: '#065f46', dir: 'add' },
+  { name: 'Chest-Supported Row', muscle: 'Back', map: 'back', variation: 'Row', user: '@mike_lifts', tint: '#3730a3', dir: 'add' },
+  { name: 'Incline Hammer Curl', muscle: 'Biceps', map: 'biceps', variation: 'Bicep Curl', user: '@sarah.fit', tint: '#9d174d', dir: 'skip' },
+];
+---
+
+<div class="sc-hero" data-swipe-hero>
+  <div class="sc-frame">
+    <!-- Following / Discover tabs -->
+    <div class="sc-tabs">
+      <span class="sc-tab is-on">Following</span>
+      <span class="sc-tab">Discover</span>
+    </div>
+
+    <div class="sc-stack">
+    {
+      cards.map((c) => (
+        <div class="sc-card">
+          <div class="sc-inner">
+            <span class="sc-stamp sc-stamp-add">Add</span>
+            <span class="sc-stamp sc-stamp-skip">Skip</span>
+            <div
+              class="sc-media"
+              style={`background-image: linear-gradient(150deg, rgba(255,255,255,0.14), rgba(0,0,0,0.28)); background-color:${c.tint};`}
+            >
+              <img src={`/maps/${c.map}.svg`} alt="" class="sc-watermark" />
+              <span class="sc-badge">
+                <img src={`/maps/${c.map}.svg`} alt={c.muscle} />
+              </span>
+            </div>
+            <div class="sc-foot">
+              <div class="sc-foot-top">
+                <div class="sc-foot-title">
+                  <p class="sc-name">{c.name}</p>
+                  <p class="sc-muscle">{c.muscle}</p>
+                </div>
+                <div class="sc-user">
+                  <span class="sc-ava">{c.user.charAt(1).toUpperCase()}</span>
+                  <span class="sc-handle">{c.user}</span>
+                </div>
+              </div>
+              <div class="sc-joins">
+                <svg viewBox="0 0 24 24" class="sc-joins-icon" fill="currentColor">
+                  <path d="M12 3 2 8l10 5 10-5-10-5zM2 12l10 5 10-5M2 16l10 5 10-5" />
+                </svg>
+                <span>Joins {c.variation}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="sc-actions">
+    <span class="sc-btn sc-btn-rewind" aria-hidden="true">
+      <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2.4">
+        <path d="M9 14 4 9l5-5" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M4 9h11a5 5 0 0 1 0 10h-1" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
+    <span class="sc-btn sc-btn-skip" aria-hidden="true">
+      <svg viewBox="0 0 24 24" class="size-7" fill="none" stroke="currentColor" stroke-width="2.6">
+        <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
+    <span class="sc-btn sc-btn-add" aria-hidden="true">
+      <svg viewBox="0 0 24 24" class="size-7" fill="none" stroke="currentColor" stroke-width="2.6">
+        <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sc-hero {
+    display: flex;
+    justify-content: center;
+    user-select: none;
+  }
+  /* Phone-screen frame that holds the tabs, the deck, and the buttons. */
+  .sc-frame {
+    width: 340px;
+    max-width: 88vw;
+    background: #ffffff;
+    border-radius: 2rem;
+    padding: 0.85rem;
+    box-shadow: 0 30px 60px -22px rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+  }
+  .sc-tabs {
+    display: flex;
+    gap: 0.2rem;
+    width: fit-content;
+    margin: 0 auto 0.8rem;
+    padding: 0.2rem;
+    border-radius: 9999px;
+    background: #f1f5f9;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .sc-tab {
+    padding: 0.35rem 1.1rem;
+    border-radius: 9999px;
+    color: #94a3b8;
+  }
+  .sc-tab.is-on {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.14);
+  }
+  .sc-stack {
+    position: relative;
+    width: 100%;
+    height: 452px;
+    overflow: hidden;
+    border-radius: 1rem;
+  }
+  .sc-card {
+    position: absolute;
+    inset: 0;
+    transform-origin: center bottom;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+    will-change: transform;
+  }
+  .sc-inner {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: #ffffff;
+    box-shadow: 0 8px 22px -10px rgba(15, 23, 42, 0.35);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+    will-change: transform;
+  }
+  .sc-media {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+  }
+  /* Faint muscle silhouette filling the "video", like a thumbnail. */
+  .sc-watermark {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    height: 78%;
+    width: auto;
+    transform: translate(-50%, -50%);
+    filter: brightness(0) invert(1);
+    opacity: 0.16;
+  }
+  /* Crisp muscle-map badge in the corner, like the app. */
+  .sc-badge {
+    position: absolute;
+    left: 0.7rem;
+    bottom: 0.7rem;
+    display: grid;
+    place-items: center;
+    height: 2.6rem;
+    width: 2.6rem;
+    border-radius: 0.6rem;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+  }
+  .sc-badge img {
+    height: 2rem;
+    width: auto;
+  }
+  .sc-foot {
+    padding: 0.75rem 0.9rem 0.85rem;
+  }
+  .sc-foot-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .sc-name {
+    font-weight: 800;
+    font-size: 0.95rem;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: #0f172a;
+  }
+  .sc-muscle {
+    margin-top: 0.1rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #94a3b8;
+  }
+  .sc-user {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-shrink: 0;
+  }
+  .sc-ava {
+    display: grid;
+    place-items: center;
+    height: 1.15rem;
+    width: 1.15rem;
+    border-radius: 9999px;
+    background: #e0e7ff;
+    color: #4f46e5;
+    font-size: 0.6rem;
+    font-weight: 800;
+  }
+  .sc-handle {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #475569;
+  }
+  .sc-joins {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .sc-joins-icon {
+    height: 0.85rem;
+    width: 0.85rem;
+    color: #2563eb;
+    flex-shrink: 0;
+  }
+
+  /* Stamps — the ADD / SKIP badge that flashes as the card swipes. */
+  .sc-stamp {
+    position: absolute;
+    top: 0.9rem;
+    z-index: 5;
+    border: 3px solid currentColor;
+    border-radius: 0.5rem;
+    padding: 0.15rem 0.65rem;
+    font-size: 1.1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: rgba(255, 255, 255, 0.9);
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+  .sc-stamp-add {
+    left: 0.9rem;
+    color: #16a34a;
+    transform: rotate(-9deg);
+  }
+  .sc-stamp-skip {
+    right: 0.9rem;
+    color: #dc2626;
+    transform: rotate(9deg);
+  }
+  .sc-inner.is-add .sc-stamp-add { opacity: 1; }
+  .sc-inner.is-skip .sc-stamp-skip { opacity: 1; }
+
+  /* Swipe: nudge well to the side while the stamp shows (held, so the
+     direction is obvious — like the card below), then glide fully off the
+     screen edge, staying opaque so the slide is visible. */
+  .sc-inner.is-add { transform: translateX(34%) rotate(9deg); }
+  .sc-inner.is-skip { transform: translateX(-34%) rotate(-9deg); }
+  .sc-inner.is-fly { transition: transform 0.55s cubic-bezier(0.4, 0, 0.55, 1); }
+  .sc-inner.is-fly.is-add { transform: translateX(145%) rotate(18deg); }
+  .sc-inner.is-fly.is-skip { transform: translateX(-145%) rotate(-18deg); }
+  .no-tr { transition: none !important; }
+
+  /* Action bar — inside the frame, below the deck. */
+  .sc-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+    margin-top: 0.85rem;
+  }
+  .sc-btn {
+    display: grid;
+    place-items: center;
+    border-radius: 9999px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+  .sc-btn-rewind {
+    height: 2.5rem;
+    width: 2.5rem;
+    background: #f1f5f9;
+    color: #94a3b8;
+  }
+  .sc-btn-skip {
+    height: 3.25rem;
+    width: 3.25rem;
+    background: #fee2e2;
+    color: #ef4444;
+  }
+  .sc-btn-add {
+    height: 3.25rem;
+    width: 3.25rem;
+    background: #dcfce7;
+    color: #16a34a;
+  }
+  .sc-btn.is-hit {
+    transform: scale(1.12);
+  }
+  .sc-btn-skip.is-hit {
+    background: #ef4444;
+    color: #ffffff;
+    box-shadow: 0 8px 20px -4px rgba(239, 68, 68, 0.5);
+  }
+  .sc-btn-add.is-hit {
+    background: #22c55e;
+    color: #ffffff;
+    box-shadow: 0 8px 20px -4px rgba(34, 197, 94, 0.5);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sc-card,
+    .sc-inner,
+    .sc-btn,
+    .sc-stamp {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const hero = document.querySelector<HTMLElement>('[data-swipe-hero]');
+  if (hero) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const cards = [...hero.querySelectorAll<HTMLElement>('.sc-card')];
+    const btnAdd = hero.querySelector<HTMLElement>('.sc-btn-add');
+    const btnSkip = hero.querySelector<HTMLElement>('.sc-btn-skip');
+    // Front-most first: DOM order stacks last-on-top, so reverse it.
+    let order = cards.map((_, i) => i).reverse();
+
+    // Apply the depth transform for every card given the current order
+    // (order[0] = front). Deeper cards sit lower + smaller + faded.
+    function layout() {
+      order.forEach((cardIdx, depth) => {
+        const card = cards[cardIdx];
+        card.style.zIndex = String(cards.length - depth);
+        card.style.transform = `translateY(${depth * 12}px) scale(${1 - depth * 0.05})`;
+        card.style.opacity = depth > 2 ? '0' : String(1 - depth * 0.12);
+      });
+    }
+    layout();
+
+    if (reduce) {
+      // Static: front card sits ready, nothing flies.
+    } else {
+      // Gate the loop on hero visibility so it pauses when scrolled away.
+      let visible = true;
+      const io = new IntersectionObserver(
+        (entries) => { for (const e of entries) visible = e.isIntersecting; },
+        { threshold: 0.2 }
+      );
+      io.observe(hero);
+      const waitVisible = async () => { while (!visible) await sleep(300); };
+
+      (async () => {
+        // Alternate-ish add/skip pattern per card, matching the data order.
+        const dirs = ['add', 'skip', 'add', 'add', 'skip'];
+        let tick = 0;
+        await sleep(700);
+        while (true) {
+          await waitVisible();
+          const frontIdx = order[0];
+          const front = cards[frontIdx];
+          const inner = front.querySelector<HTMLElement>('.sc-inner');
+          const dir = dirs[tick % dirs.length];
+          const btn = dir === 'add' ? btnAdd : btnSkip;
+
+          inner?.classList.add('is-' + dir); // nudge to the side + stamp (held)
+          btn?.classList.add('is-hit');
+          await sleep(1050);
+          inner?.classList.add('is-fly'); // glide off screen
+          await sleep(650);
+          btn?.classList.remove('is-hit');
+
+          // Invisible reset: with transitions off, snap the inner back to
+          // center and drop the card straight to the back of the deck (where
+          // layout() makes it opacity 0). No fade, no flash across the screen.
+          front.classList.add('no-tr');
+          inner?.classList.add('no-tr');
+          inner?.classList.remove('is-add', 'is-skip', 'is-fly');
+          order = [...order.slice(1), frontIdx];
+          layout();
+          void front.offsetWidth; // force reflow so the reset isn't animated
+          front.classList.remove('no-tr');
+          inner?.classList.remove('no-tr');
+
+          tick++;
+          await sleep(1400);
+        }
+      })();
+    }
+  }
+</script>

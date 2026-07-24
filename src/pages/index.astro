@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Tour from '../components/Tour.astro';
+import SwipeHero from '../components/SwipeHero.astro';
 
 // Replace with your real App Store URL once the app is live.
 const appStoreUrl = '#';
@@ -8,27 +9,47 @@ const appStoreUrl = '#';
 const faqs = [
   {
     q: 'Briefly, what does this app actually do?',
-    a: "PumpDeck lets you build a weekly program around variations and muscles instead of fixed exercises. Add a whole movement (like “Chest Press”) or a whole muscle to a slot, then pick the exact exercise when you train. Fill it with any exercise — even ones you find online — rate the pump, and keep what works best.",
+    a: "PumpDeck lets you build a weekly program around variations and muscles instead of fixed exercises. Add a whole movement (like “Chest Press”) or a whole muscle to a slot, then pick the exact exercise when you train.",
   },
   {
     q: 'What makes PumpDeck different from other fitness apps?',
     a: 'Most apps lock every day into fixed exercises. PumpDeck lets you add a whole variation (every version of a movement) or a whole muscle to your program, then pick the exact exercise when you train — so you can grab a free machine, try something new, or beat boredom without ever rebuilding your week.',
   },
   {
+    q: 'What’s a variation, exactly?',
+    a: 'A variation is every version of the same movement grouped together — barbell, dumbbell, and machine bench press are all one “Chest Press.” Add the variation to your program and pick whichever version you feel like on the day.',
+  },
+  {
+    q: 'Can I just pick specific exercises instead of variations?',
+    a: 'Of course. A slot can be a whole variation, a whole muscle, or one specific exercise — pin your favorite lift and it stays put, or leave it open and choose when you train. It’s your call, slot by slot.',
+  },
+  {
+    q: 'Does the app come with exercises, or do I add them all myself?',
+    a: 'PumpDeck ships with 150+ built-in exercises — the most common movements lifters do for each muscle.',
+  },
+  {
     q: 'Do I have to build my own program?',
     a: 'No. Answer a few questions and PumpDeck builds your whole split — or set up every detail yourself. Either way, you can tweak anything later.',
+  },
+  {
+    q: 'Can I customize reps, sets, rest, and supersets?',
+    a: 'Yes. Set reps, weight, and rest for anything, build supersets, reorder your day, and swap or rotate exercises — far more control over your program than most apps give you.',
+  },
+  {
+    q: 'Does PumpDeck track my sets and progress?',
+    a: 'Yes. Log every set as you train, and PumpDeck remembers your last weights and reps so you always know what to beat next time.',
   },
   {
     q: 'Can I add exercises I find on social media?',
     a: 'Yes. Save any move you see on TikTok, Instagram, or YouTube as a custom exercise with photos and muscle tags, then drop it straight into your program.',
   },
   {
-    q: 'What does “rating the pump” do?',
-    a: 'After each exercise you rate the pump from 1 to 10. Over time you can sort your exercises by pump to keep the ones that work best for you.',
+    q: 'Can I get exercises from other users?',
+    a: 'Yes. Follow anyone to swipe through their public exercises, open a profile and tap “Add to library,” or browse the Discover feed of the most-saved exercises across PumpDeck. Anything you add drops into a variation that’s already in your program.',
   },
   {
-    q: 'Can I use PumpDeck for bulking and cutting?',
-    a: "Yes. Your training is the one constant through a bulk or a cut, and that's exactly what PumpDeck is built for. Follow your program and cover every muscle — then adjust your diet to whichever goal you're on.",
+    q: 'Is my account private, or can I make it public?',
+    a: 'Your account is private by default. Switch it to public and other users can find your profile and add the exercises you’ve made public — switch back to private anytime. You always choose which exercises are public; nothing else is ever shared.',
   },
   {
     q: 'Is this app suitable for beginners?',
@@ -41,30 +62,6 @@ const faqs = [
   {
     q: 'Can I cancel anytime?',
     a: 'Yes. You can manage or cancel a subscription anytime from your App Store account settings, and you keep access until the end of your current billing period.',
-  },
-];
-
-// Where people find exercises, before they land in PumpDeck.
-const socials = [
-  {
-    name: 'TikTok',
-    color: '#010101',
-    path: 'M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z',
-  },
-  {
-    name: 'Instagram',
-    color: '#E4405F',
-    path: 'M7.03.084c-1.277.06-2.149.264-2.911.563-.789.308-1.458.72-2.123 1.388C1.33 2.703.92 3.372.615 4.162c-.295.764-.496 1.636-.552 2.914-.056 1.278-.069 1.688-.063 4.947.006 3.259.021 3.667.083 4.947.061 1.277.264 2.148.563 2.911.308.789.72 1.457 1.388 2.123.668.665 1.337 1.074 2.129 1.38.763.295 1.636.496 2.913.552 1.278.056 1.688.069 4.946.063 3.258-.006 3.668-.021 4.948-.081 1.28-.06 2.147-.265 2.91-.563.789-.308 1.458-.72 2.123-1.388.665-.668 1.074-1.338 1.38-2.128.295-.763.496-1.636.551-2.913.056-1.281.069-1.69.063-4.948-.006-3.258-.021-3.667-.082-4.947-.061-1.28-.264-2.149-.563-2.912-.308-.789-.72-1.457-1.388-2.123C21.298 1.33 20.628.92 19.838.615 19.074.32 18.202.117 16.924.062 15.646.006 15.236-.007 11.977 0 8.718.006 8.31.02 7.03.084m.14 21.685c-1.17-.05-1.805-.245-2.228-.408-.56-.216-.96-.475-1.382-.894-.42-.419-.68-.818-.9-1.378-.164-.422-.362-1.058-.416-2.228-.06-1.264-.072-1.644-.08-4.848-.006-3.204.006-3.583.061-4.848.05-1.169.246-1.805.41-2.227.216-.561.474-.96.894-1.382.418-.421.816-.681 1.377-.9.422-.164 1.057-.361 2.227-.416 1.265-.06 1.644-.072 4.848-.079 3.203-.007 3.583.005 4.85.061 1.168.05 1.804.244 2.227.408.56.216.96.473 1.381.894.421.42.681.818.9 1.38.165.421.362 1.056.417 2.227.06 1.265.073 1.645.079 4.848.006 3.203-.005 3.583-.061 4.849-.051 1.17-.245 1.805-.408 2.228-.216.56-.475.96-.894 1.38-.42.421-.818.681-1.378.9-.422.165-1.058.362-2.226.417-1.265.06-1.645.073-4.85.079-3.204.007-3.582-.006-4.848-.061M16.953 5.586a1.44 1.44 0 1 0 1.437-1.442 1.44 1.44 0 0 0-1.437 1.442M5.839 12.012a6.173 6.173 0 1 0 12.346-.025 6.173 6.173 0 0 0-12.346.025M8 12.008A4 4 0 1 1 12.008 16 4 4 0 0 1 8 12.008',
-  },
-  {
-    name: 'YouTube',
-    color: '#FF0000',
-    path: 'M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12z',
-  },
-  {
-    name: 'X',
-    color: '#000000',
-    path: 'M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z',
   },
 ];
 ---
@@ -81,44 +78,11 @@ const socials = [
         Finally do the<br />exercises you save
       </h1>
 
-      <!-- Social → PumpDeck, right below the headline -->
-      <div class="mt-8 flex items-center justify-center gap-3 sm:gap-5">
-        <div class="flex items-center gap-2 sm:gap-2.5">
-          {
-            socials.map((s) => (
-              <span
-                class="grid size-10 place-items-center rounded-2xl bg-white shadow-md ring-1 ring-slate-100 sm:size-12"
-                style={`color:${s.color}`}
-                aria-label={s.name}
-              >
-                <svg viewBox="0 0 24 24" class="size-5 sm:size-6" fill="currentColor">
-                  <path d={s.path} />
-                </svg>
-              </span>
-            ))
-          }
-        </div>
-        <svg
-          viewBox="0 0 24 24"
-          class="arrow-flow size-7 shrink-0 text-slate-400 sm:size-9"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.2"
-        >
-          <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <img
-          src="/app-icon.png"
-          alt="PumpDeck"
-          width="64"
-          height="64"
-          class="size-14 shrink-0 rounded-[1.15rem] shadow-lg ring-1 ring-black/5 sm:size-16"
-        />
-      </div>
-
-      <p class="mt-8 max-w-xl text-lg leading-relaxed text-ink-soft">
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
         You save them on TikTok, Instagram, and YouTube — then never do them.
-        PumpDeck drops your saves straight into a program you'll actually follow.
+        <span class="font-semibold text-brand-600">One swipe</span>, and an
+        exercise you want to try is in your program — skip the saved folder
+        you'll never open again.
       </p>
 
       <div id="download" class="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -137,74 +101,11 @@ const socials = [
         </a>
       </div>
 
-    </div>
-  </section>
-
-  <style>
-    @keyframes arrowFlow {
-      0%,
-      100% {
-        transform: translateX(0);
-      }
-      50% {
-        transform: translateX(5px);
-      }
-    }
-    .arrow-flow {
-      animation: arrowFlow 1.4s ease-in-out infinite;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .arrow-flow {
-        animation: none;
-      }
-    }
-  </style>
-
-  <!-- The flow — Problem → Solution: save it, try it, keep what works. -->
-  <section class="mx-auto max-w-6xl px-5 py-20">
-    <div class="max-w-2xl">
-      <p class="text-sm font-semibold text-flame-500">How it works</p>
-      <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-        From “saved” to actually done
-      </h2>
-      <p class="mt-4 text-lg text-ink-soft">
-        Saved exercises die because they aren’t organized, you’ve no time to dig
-        for them at the gym, and you never know what to swap them for. PumpDeck
-        fixes the whole loop.
-      </p>
-    </div>
-
-    <div class="mt-12 grid gap-6 sm:grid-cols-3">
-      <div class="rounded-2xl bg-slate-50 p-6 ring-1 ring-slate-100">
-        <div class="grid size-10 place-items-center rounded-xl bg-flame-500/10 text-lg font-bold text-flame-500">
-          1
-        </div>
-        <h3 class="mt-4 text-xl font-bold">Save it</h3>
-        <p class="mt-2 text-ink-soft">
-          See a move on TikTok, Instagram, or YouTube? Save it into PumpDeck with
-          photos, video, and muscle tags — so it’s ready when you are.
-        </p>
+      <!-- Swipe-to-add discover deck -->
+      <div class="mt-10">
+        <SwipeHero />
       </div>
-      <div class="rounded-2xl bg-slate-50 p-6 ring-1 ring-slate-100">
-        <div class="grid size-10 place-items-center rounded-xl bg-flame-500/10 text-lg font-bold text-flame-500">
-          2
-        </div>
-        <h3 class="mt-4 text-xl font-bold">Try it once</h3>
-        <p class="mt-2 text-ink-soft">
-          Drop it straight into your program and actually do it — no commitment,
-          no rebuilding your week.
-        </p>
-      </div>
-      <div class="rounded-2xl bg-slate-50 p-6 ring-1 ring-slate-100">
-        <div class="grid size-10 place-items-center rounded-xl bg-flame-500/10 text-lg font-bold text-flame-500">
-          3
-        </div>
-        <h3 class="mt-4 text-xl font-bold">Keep what works</h3>
-        <p class="mt-2 text-ink-soft">
-          Loved it? Swap it in, rotate it week to week, or keep both as options.
-          Your program keeps the moves you love and drops the rest.
-        </p>
-      </div>
+
     </div>
   </section>
 
@@ -212,7 +113,8 @@ const socials = [
   <Tour />
 
   <!-- FAQ -->
-  <section id="faq" class="mx-auto max-w-3xl px-5 py-20">
+  <section id="faq" class="bg-slate-50">
+    <div class="mx-auto max-w-3xl px-5 py-20">
     <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
       Frequently asked questions
     </h2>
@@ -247,10 +149,11 @@ const socials = [
       </a>
       .
     </p>
+    </div>
   </section>
 
   <!-- Closing call to action -->
-  <section class="mx-auto max-w-6xl px-5 pb-24 text-center">
+  <section class="mx-auto max-w-6xl px-5 pt-20 pb-24 text-center">
     <img
       src="/app-icon.png"
       alt=""
@@ -259,10 +162,11 @@ const socials = [
       class="mx-auto size-16 rounded-[1.15rem] shadow-lg ring-1 ring-black/5"
     />
     <h2 class="mx-auto mt-6 max-w-xl text-3xl font-bold tracking-tight sm:text-4xl">
-      Build a program that hits every muscle
+      Finally do the exercises you save
     </h2>
     <p class="mx-auto mt-3 max-w-md text-lg text-ink-soft">
-      Your split, your variations, your exercises — all in one place.
+      Your split, your variations, your saves — in a program you'll actually
+      follow.
     </p>
     <div class="mt-8 flex justify-center">
       <a
