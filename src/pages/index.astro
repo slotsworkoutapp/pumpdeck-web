@@ -36,10 +36,6 @@ const faqs = [
     a: 'Yes. Log every set as you train, and PumpDeck remembers your last weights and reps so you always know what to beat next time.',
   },
   {
-    q: 'Can I get exercises from other users?',
-    a: 'Yes. Follow anyone to swipe through their public exercises, open a profile and tap “Add to library,” or browse the Discover feed of the most-saved exercises across PumpDeck. Anything you add drops into a variation that’s already in your program.',
-  },
-  {
     q: 'Is my account public, or can I make it private?',
     a: 'Your account is public by default, so others can find your profile and add the exercises you’ve shared. Switch to private anytime and you disappear from search and feeds — nobody can find or follow you. You always choose which exercises are public; nothing else is ever shared.',
   },
@@ -61,16 +57,16 @@ const faqs = [
       class="relative mx-auto flex max-w-3xl flex-col items-center px-5 py-20 text-center lg:py-24"
     >
       <h1
-        class="text-[2.75rem] font-extrabold leading-[0.98] tracking-tight text-ink sm:text-[4rem] lg:text-[5rem]"
+        class="text-[3.1rem] font-bold leading-[1.03] tracking-tight text-ink sm:text-[4rem] sm:font-extrabold sm:leading-[0.98] lg:text-[5rem]"
       >
         Finally do the<br />exercises you save
       </h1>
 
-      <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-        You save them on TikTok, Instagram, and YouTube — then never do them.
+      <p class="mt-6 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg">
+        You save them on TikTok, Instagram, and YouTube — then they die in a
+        folder you never open.
         <span class="font-semibold text-brand-600">One swipe</span>, and an
-        exercise you want to try is in your program — skip the saved folder
-        you'll never open again.
+        exercise you want to try is in your program.
       </p>
 
       <div id="download" class="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -94,6 +90,14 @@ const faqs = [
         <SwipeHero />
       </div>
 
+      <!-- Scroll cue into the big idea -->
+      <a href="#setup" class="mt-12 flex flex-col items-center gap-2 text-slate-400 transition hover:text-ink">
+        <span class="text-sm font-semibold">See the big idea</span>
+        <svg viewBox="0 0 24 24" class="size-5 animate-bounce" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M12 5v14M6 13l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+
     </div>
   </section>
 
@@ -103,7 +107,7 @@ const faqs = [
   <!-- FAQ -->
   <section id="faq" class="bg-slate-50">
     <div class="mx-auto max-w-3xl px-5 py-20">
-    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
+    <h2 class="text-4xl font-bold tracking-tight sm:text-4xl">
       Frequently asked questions
     </h2>
     <div class="mt-8 divide-y divide-slate-200 border-y border-slate-200">
@@ -149,10 +153,10 @@ const faqs = [
       height="64"
       class="mx-auto size-16 rounded-[1.15rem] shadow-lg ring-1 ring-black/5"
     />
-    <h2 class="mx-auto mt-6 max-w-xl text-3xl font-bold tracking-tight sm:text-4xl">
+    <h2 class="mx-auto mt-6 max-w-xl text-4xl font-bold tracking-tight sm:text-4xl">
       Finally do the exercises you save
     </h2>
-    <p class="mx-auto mt-3 max-w-md text-lg text-ink-soft">
+    <p class="mx-auto mt-3 max-w-md text-base text-ink-soft sm:text-lg">
       Your split, your variations, your saves — in a program you'll actually
       follow.
     </p>

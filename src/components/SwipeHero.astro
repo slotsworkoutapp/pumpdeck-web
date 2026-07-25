@@ -1,25 +1,30 @@
 ---
-// Tinder-style discover deck for the hero: exercise cards get stamped ADD/SKIP
-// and fly off one by one, the way the app's Discover feed feels. Pure CSS +
-// a small gated loop; static fallback under reduced motion.
-const cards = [
+// Tinder-style discover deck: exercise cards get stamped ADD/SKIP and fly off
+// one by one, the way the app's Discover feed feels. Pure CSS + a small gated
+// loop; static fallback under reduced motion. Reusable — pass `cards` to vary
+// the deck and `maxWidth` to size the phone.
+const defaultCards = [
   { name: 'Dumbbell Bench Press', muscle: 'Chest', map: 'chest', variation: 'Chest Press', user: '@mike_lifts', tint: '#1e40af', dir: 'add' },
   { name: 'Cable Lateral Raise', muscle: 'Shoulders', map: 'shoulders', variation: 'Lateral Raise', user: '@sarah.fit', tint: '#9a3412', dir: 'skip' },
   { name: 'Bulgarian Split Squat', muscle: 'Legs', map: 'legs', variation: 'Split Squat', user: '@leg_day_leo', tint: '#065f46', dir: 'add' },
   { name: 'Chest-Supported Row', muscle: 'Back', map: 'back', variation: 'Row', user: '@mike_lifts', tint: '#3730a3', dir: 'add' },
   { name: 'Incline Hammer Curl', muscle: 'Biceps', map: 'biceps', variation: 'Bicep Curl', user: '@sarah.fit', tint: '#9d174d', dir: 'skip' },
 ];
+const { cards = defaultCards, maxWidth = '320px' } = Astro.props;
 ---
 
 <div class="sc-hero" data-swipe-hero>
-  <div class="sc-frame">
-    <!-- Following / Discover tabs -->
-    <div class="sc-tabs">
-      <span class="sc-tab is-on">Following</span>
-      <span class="sc-tab">Discover</span>
-    </div>
+  <div class="sc-phone" style={`max-width:${maxWidth}`}>
+    <!-- App screen: content sits inside the bezel's cutout -->
+    <div class="sc-screen">
+      <div class="sc-statusbar"></div>
+      <!-- Following / Discover tabs -->
+      <div class="sc-tabs">
+        <span class="sc-tab is-on">Following</span>
+        <span class="sc-tab">Discover</span>
+      </div>
 
-    <div class="sc-stack">
+      <div class="sc-stack">
     {
       cards.map((c) => (
         <div class="sc-card">
@@ -76,7 +81,10 @@ const cards = [
         <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </span>
+      </div>
     </div>
+    <!-- device bezel overlay (Dynamic Island + edges sit above the screen) -->
+    <img class="sc-bezel" src="/phone-frame.png" alt="" aria-hidden="true" />
   </div>
 </div>
 
@@ -86,26 +94,54 @@ const cards = [
     justify-content: center;
     user-select: none;
   }
-  /* Phone-screen frame that holds the tabs, the deck, and the buttons. */
-  .sc-frame {
-    width: 340px;
-    max-width: 88vw;
+  /* Phone: the bezel PNG overlays a white app screen inset to its cutout. */
+  .sc-phone {
+    position: relative;
+    width: 320px;
+    max-width: 86vw;
+    aspect-ratio: 1350 / 2760;
+    margin: 0 auto;
+  }
+  .sc-bezel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+    filter: drop-shadow(0 26px 42px rgba(15, 23, 42, 0.38));
+  }
+  /* The app screen sits within the bezel's transparent cutout (measured). */
+  .sc-screen {
+    position: absolute;
+    top: 2.5%;
+    bottom: 2.5%;
+    left: 5.35%;
+    right: 5.4%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0.7rem 0.8rem;
     background: #ffffff;
-    border-radius: 2rem;
-    padding: 0.85rem;
-    box-shadow: 0 30px 60px -22px rgba(15, 23, 42, 0.4);
-    border: 1px solid rgba(15, 23, 42, 0.06);
+    border-radius: 11% / 5.5%;
+    overflow: hidden;
+  }
+  /* Space under the Dynamic Island so the tabs clear it. */
+  .sc-statusbar {
+    height: 8%;
+    flex-shrink: 0;
   }
   .sc-tabs {
     display: flex;
     gap: 0.2rem;
     width: fit-content;
-    margin: 0 auto 0.8rem;
+    margin: 0 auto 0.7rem;
     padding: 0.2rem;
     border-radius: 9999px;
     background: #f1f5f9;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 700;
+    flex-shrink: 0;
   }
   .sc-tab {
     padding: 0.35rem 1.1rem;
@@ -119,8 +155,9 @@ const cards = [
   }
   .sc-stack {
     position: relative;
+    flex: 1;
     width: 100%;
-    height: 452px;
+    min-height: 0;
     overflow: hidden;
     border-radius: 1rem;
   }
@@ -284,7 +321,8 @@ const cards = [
     align-items: center;
     justify-content: center;
     gap: 0.9rem;
-    margin-top: 0.85rem;
+    margin-top: 0.7rem;
+    flex-shrink: 0;
   }
   .sc-btn {
     display: grid;
@@ -335,10 +373,11 @@ const cards = [
 </style>
 
 <script>
-  const hero = document.querySelector<HTMLElement>('[data-swipe-hero]');
-  if (hero) {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  // Each [data-swipe-hero] on the page runs its own independent deck.
+  document.querySelectorAll<HTMLElement>('[data-swipe-hero]').forEach((hero) => {
     const cards = [...hero.querySelectorAll<HTMLElement>('.sc-card')];
     const btnAdd = hero.querySelector<HTMLElement>('.sc-btn-add');
     const btnSkip = hero.querySelector<HTMLElement>('.sc-btn-skip');
@@ -360,51 +399,77 @@ const cards = [
     if (reduce) {
       // Static: front card sits ready, nothing flies.
     } else {
-      // Gate the loop on hero visibility so it pauses when scrolled away.
-      let visible = true;
+      const dirs = ['add', 'skip', 'add', 'add', 'skip'];
+
+      // Reset the deck to its starting stack (front card ready, nothing flown).
+      function resetDeck() {
+        order = cards.map((_, i) => i).reverse();
+        cards.forEach((c) => {
+          const inner = c.querySelector<HTMLElement>('.sc-inner');
+          inner?.classList.remove('is-add', 'is-skip', 'is-fly', 'no-tr');
+        });
+        btnAdd?.classList.remove('is-hit');
+        btnSkip?.classList.remove('is-hit');
+        layout();
+      }
+
+      // Play only while the hero is on screen; a fresh run (from the first
+      // card) starts each time it re-enters view, and cancels when it leaves.
+      let run: { cancelled: boolean } | null = null;
       const io = new IntersectionObserver(
-        (entries) => { for (const e of entries) visible = e.isIntersecting; },
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              if (run) continue;
+              const token = { cancelled: false };
+              run = token;
+              (async () => {
+                resetDeck();
+                await sleep(700);
+                if (token.cancelled) return;
+                let tick = 0;
+                while (!token.cancelled) {
+                  const frontIdx = order[0];
+                  const front = cards[frontIdx];
+                  const inner = front.querySelector<HTMLElement>('.sc-inner');
+                  const dir = dirs[tick % dirs.length];
+                  const btn = dir === 'add' ? btnAdd : btnSkip;
+
+                  inner?.classList.add('is-' + dir); // nudge to the side + stamp
+                  btn?.classList.add('is-hit');
+                  await sleep(1050);
+                  if (token.cancelled) return;
+                  inner?.classList.add('is-fly'); // glide off screen
+                  await sleep(650);
+                  if (token.cancelled) return;
+                  btn?.classList.remove('is-hit');
+
+                  // Invisible reset: snap the flown card to the back of the deck
+                  // with transitions off, so there's no flash across the screen.
+                  front.classList.add('no-tr');
+                  inner?.classList.add('no-tr');
+                  inner?.classList.remove('is-add', 'is-skip', 'is-fly');
+                  order = [...order.slice(1), frontIdx];
+                  layout();
+                  void front.offsetWidth; // force reflow so the reset isn't animated
+                  front.classList.remove('no-tr');
+                  inner?.classList.remove('no-tr');
+
+                  tick++;
+                  await sleep(1400);
+                  if (token.cancelled) return;
+                }
+              })();
+            } else if (run) {
+              run.cancelled = true;
+              run = null;
+              resetDeck();
+            }
+          }
+        },
         { threshold: 0.2 }
       );
       io.observe(hero);
-      const waitVisible = async () => { while (!visible) await sleep(300); };
-
-      (async () => {
-        // Alternate-ish add/skip pattern per card, matching the data order.
-        const dirs = ['add', 'skip', 'add', 'add', 'skip'];
-        let tick = 0;
-        await sleep(700);
-        while (true) {
-          await waitVisible();
-          const frontIdx = order[0];
-          const front = cards[frontIdx];
-          const inner = front.querySelector<HTMLElement>('.sc-inner');
-          const dir = dirs[tick % dirs.length];
-          const btn = dir === 'add' ? btnAdd : btnSkip;
-
-          inner?.classList.add('is-' + dir); // nudge to the side + stamp (held)
-          btn?.classList.add('is-hit');
-          await sleep(1050);
-          inner?.classList.add('is-fly'); // glide off screen
-          await sleep(650);
-          btn?.classList.remove('is-hit');
-
-          // Invisible reset: with transitions off, snap the inner back to
-          // center and drop the card straight to the back of the deck (where
-          // layout() makes it opacity 0). No fade, no flash across the screen.
-          front.classList.add('no-tr');
-          inner?.classList.add('no-tr');
-          inner?.classList.remove('is-add', 'is-skip', 'is-fly');
-          order = [...order.slice(1), frontIdx];
-          layout();
-          void front.offsetWidth; // force reflow so the reset isn't animated
-          front.classList.remove('no-tr');
-          inner?.classList.remove('no-tr');
-
-          tick++;
-          await sleep(1400);
-        }
-      })();
     }
-  }
+  });
 </script>
