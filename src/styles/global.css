@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* PumpDeck brand tokens — mirror the app: periwinkle-blue primary with a
+/* Slots brand tokens — mirror the app: periwinkle-blue primary with a
    flame-orange accent. Tweak here and the whole site follows. */
 @theme {
   --color-brand-50: #eff6ff;
