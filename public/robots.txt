@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pumpdeck.app/sitemap-index.xml
+Sitemap: https://slotsworkout.app/sitemap-index.xml
