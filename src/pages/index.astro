@@ -52,6 +52,20 @@ const faqs = [
     a: 'Yes. You can manage or cancel a subscription anytime from your App Store account settings, and you keep access until the end of your current billing period.',
   },
 ];
+
+// The 8 muscle groups and the individual muscles each breaks into — drives the
+// "down to 28" muscle library section. Maps live in /public/maps.
+const muscleGroups = [
+  { slug: 'chest', name: 'Chest', muscles: ['Upper Chest', 'Mid Chest', 'Lower Chest'] },
+  { slug: 'back', name: 'Back', muscles: ['Lats', 'Upper Back', 'Traps', 'Lower Back'] },
+  { slug: 'shoulders', name: 'Shoulders', muscles: ['Front Delt', 'Side Delt', 'Rear Delt'] },
+  { slug: 'legs', name: 'Legs', muscles: ['Quadriceps', 'Hamstrings', 'Glutes', 'Abductors', 'Adductors', 'Calves', 'Shins'] },
+  { slug: 'core', name: 'Core', muscles: ['Upper Abs', 'Lower Abs', 'Obliques'] },
+  { slug: 'biceps', name: 'Biceps', muscles: ['Long Head', 'Short Head'] },
+  { slug: 'triceps', name: 'Triceps', muscles: ['Lateral Head', 'Long Head', 'Medial Head'] },
+  { slug: 'forearms', name: 'Forearms', muscles: ['Brachioradialis', 'Extensors', 'Flexors'] },
+];
+const muscleCount = muscleGroups.reduce((n, g) => n + g.muscles.length, 0);
 ---
 
 <Layout>
@@ -107,6 +121,52 @@ const faqs = [
 
   <!-- Product tour -->
   <Tour />
+
+  <!-- Muscle library — how specific you can get with muscle slots -->
+  <section class="mx-auto max-w-6xl px-5 py-20">
+    <div class="max-w-2xl lg:mx-auto lg:text-center">
+      <p class="text-sm font-semibold text-flame-500">Every muscle</p>
+      <h2 class="mt-2 text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+        Get as specific as you want — down to {muscleCount} muscles
+      </h2>
+      <p class="mt-4 text-base text-ink-soft sm:text-lg">
+        Build around a whole group like Legs, or get granular: Upper Chest, the
+        three triceps heads, or rear delts on their own. {muscleCount} muscles in
+        all — add your own, too, and see at a glance that nothing slips through
+        the cracks.
+      </p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-2 items-start gap-4 sm:grid-cols-4">
+      {
+        muscleGroups.map((g) => (
+          <details class="group/m rounded-2xl bg-slate-50 ring-1 ring-slate-100 transition-colors open:ring-brand-200 hover:bg-slate-100/70">
+            <summary class="flex cursor-pointer list-none flex-col items-center gap-2 p-5 marker:hidden [&::-webkit-details-marker]:hidden">
+              <img src={`/maps/${g.slug}.svg`} alt={g.name} class="h-20 w-auto" />
+              <p class="font-bold">{g.name}</p>
+              <p class="flex items-center gap-1 text-sm font-semibold text-ink-soft">
+                {g.muscles.length} muscles
+                <svg
+                  viewBox="0 0 24 24"
+                  class="size-4 text-slate-400 transition-transform duration-200 group-open/m:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                >
+                  <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </p>
+            </summary>
+            <ul class="space-y-1.5 px-5 pb-5 text-center text-sm font-medium text-ink-soft">
+              {g.muscles.map((m) => (
+                <li>{m}</li>
+              ))}
+            </ul>
+          </details>
+        ))
+      }
+    </div>
+  </section>
 
   <!-- FAQ -->
   <section id="faq" class="bg-slate-50">
