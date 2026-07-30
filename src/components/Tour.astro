@@ -18,15 +18,16 @@ const discoverCards = [
     <div id="setup" class="mx-auto max-w-3xl scroll-mt-24 lg:text-center">
       <p class="text-sm font-semibold text-flame-500">1 · Build</p>
       <h2 class="mt-2 text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-        Build your program around <span class="text-brand-600">variations</span>
-        and <span class="text-indigo-500">muscles</span>
+        Build your program around <span class="text-brand-600">muscles</span>
+        and <span class="text-indigo-500">variations</span>
       </h2>
       <p class="mt-4 text-base text-ink-soft sm:text-lg">
-        Every other app locks each day into fixed exercises. Slots lets you
-        add a whole <strong>variation</strong> — every way to do a movement
-        grouped as one, like the barbell, dumbbell, and machine versions of a
-        chest press — or an entire <strong>muscle</strong>. You're never tied to
-        a single exercise.
+        Every other app locks each day into fixed exercises. Slots lets you add a
+        whole <strong>muscle</strong> to a slot — then hit it with any exercise
+        you want when you train. Want more focus? Narrow a slot to a specific
+        <strong>variation</strong> — every way to do one movement grouped as one,
+        like the barbell, dumbbell, and machine versions of a chest press. You're
+        never tied to a single exercise.
       </p>
     </div>
 
@@ -34,14 +35,14 @@ const discoverCards = [
       <!-- A push day being built from variation & muscle slots -->
       <div class="bx-demo mx-auto max-w-sm rounded-2xl bg-white p-5 shadow-lg ring-1 ring-slate-100">
         <p class="font-bold">Monday · Push</p>
-        <p class="mt-0.5 text-xs text-slate-400">Built from variations &amp; muscles</p>
+        <p class="mt-0.5 text-xs text-slate-400">Built from muscles &amp; variations</p>
 
         <div class="mt-3 space-y-2.5">
           {
             [
-              { name: 'Chest Press', kind: 'Variation', color: 'text-brand-600', map: 'chest', count: 5 },
-              { name: 'Overhead Press', kind: 'Variation', color: 'text-brand-600', map: 'shoulders', count: 4 },
-              { name: 'Triceps', kind: 'Muscle', color: 'text-indigo-500', map: 'triceps', count: 8 },
+              { name: 'Chest', kind: 'Muscle', color: 'text-brand-600', map: 'chest', count: 23 },
+              { name: 'Triceps', kind: 'Muscle', color: 'text-brand-600', map: 'triceps', count: 12 },
+              { name: 'Overhead Press', kind: 'Variation', color: 'text-indigo-500', map: 'shoulders', count: 4 },
             ].map((s) => (
               <div class="bx-slot flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-2.5">
                 <SlotThumb map={s.map} mode={s.kind === 'Variation' ? 'variation' : 'muscle'} />
@@ -60,7 +61,7 @@ const discoverCards = [
 
         <div class="mt-2.5 flex items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-slate-200 py-2.5 text-sm font-semibold text-slate-400">
           <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14" stroke-linecap="round" /></svg>
-          Add a variation or muscle
+          Add a muscle or variation
         </div>
       </div>
     </div>
@@ -74,13 +75,13 @@ const discoverCards = [
       <div class="max-w-2xl lg:mx-auto lg:text-center">
         <p class="text-sm font-semibold text-flame-500">2 · Add</p>
         <h2 class="mt-2 text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-          Add exercises to your <span class="text-brand-600">variations</span>
-          and <span class="text-indigo-500">muscles</span>
+          Add exercises to your <span class="text-brand-600">muscles</span>
+          and <span class="text-indigo-500">variations</span>
         </h2>
         <p class="mt-4 text-base text-ink-soft sm:text-lg">
-          Build your own custom exercise — add a video, tag the muscle, and file
-          it under a variation. Or pull one in from another Slots user — two
-          ways:
+          Build your own custom exercise — add a video, tag the muscle, and
+          (optionally) group it under a variation. Or pull one in from another
+          Slots user — two ways:
         </p>
       </div>
     </div>
@@ -192,11 +193,11 @@ const discoverCards = [
       <p class="text-sm font-semibold text-flame-500">3 · Train</p>
       <h2 class="mt-2 text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
         Pick your exercise from each
-        <span class="text-brand-600">variation</span> and
-        <span class="text-indigo-500">muscle</span>
+        <span class="text-brand-600">muscle</span> and
+        <span class="text-indigo-500">variation</span>
       </h2>
       <p class="mt-4 text-base text-ink-soft sm:text-lg">
-        When it's time to train, just tap each variation or muscle and pick
+        When it's time to train, just tap each muscle or variation and pick
         what you're doing today — the exercises you added are
         <strong>right there waiting</strong>.
       </p>
@@ -211,9 +212,9 @@ const discoverCards = [
         <div class="mt-3 space-y-2.5">
           {
             [
-              { name: 'Chest Press', kind: 'Variation', color: 'text-brand-600', map: 'chest', count: 5, pickIndex: 1, options: ['Barbell Bench Press', 'Dumbbell Bench Press', 'Machine Press'] },
-              { name: 'Overhead Press', kind: 'Variation', color: 'text-brand-600', map: 'shoulders', count: 4, pickIndex: 1, options: ['Barbell OHP', 'Seated DB Press', 'Machine Press'] },
-              { name: 'Triceps', kind: 'Muscle', color: 'text-indigo-500', map: 'triceps', count: 8, pickIndex: 0, options: ['Rope Pushdown', 'Skull Crushers', 'Overhead Extension'] },
+              { name: 'Chest', kind: 'Muscle', color: 'text-brand-600', map: 'chest', count: 23, pickIndex: 0, options: ['Incline DB Press', 'Cable Fly', 'Machine Press'] },
+              { name: 'Triceps', kind: 'Muscle', color: 'text-brand-600', map: 'triceps', count: 12, pickIndex: 0, options: ['Rope Pushdown', 'Skull Crushers', 'Overhead Ext.'] },
+              { name: 'Overhead Press', kind: 'Variation', color: 'text-indigo-500', map: 'shoulders', count: 4, pickIndex: 1, options: ['Barbell OHP', 'Seated DB Press', 'Machine Press'] },
             ].map((s) => (
               <div class="lx-slot overflow-hidden rounded-xl bg-slate-50 ring-1 ring-transparent">
                 <div class="flex items-center gap-3 px-3 py-2.5">
