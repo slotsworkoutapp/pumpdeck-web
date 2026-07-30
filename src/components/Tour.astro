@@ -39,9 +39,9 @@ const discoverCards = [
         <div class="mt-3 space-y-2.5">
           {
             [
-              { name: 'Chest', kind: 'Muscle', color: 'text-brand-600', map: 'chest', count: 23 },
-              { name: 'Triceps', kind: 'Muscle', color: 'text-brand-600', map: 'triceps', count: 12 },
+              { name: 'Upper Chest', kind: 'Muscle', color: 'text-brand-600', map: 'chest', count: 8 },
               { name: 'Overhead Press', kind: 'Variation', color: 'text-indigo-500', map: 'shoulders', count: 4 },
+              { name: 'Triceps', kind: 'Muscle', color: 'text-brand-600', map: 'triceps', count: 12 },
             ].map((s) => (
               <div class="bx-slot flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-2.5">
                 <SlotThumb map={s.map} mode={s.kind === 'Variation' ? 'variation' : 'muscle'} />
@@ -211,9 +211,9 @@ const discoverCards = [
         <div class="mt-3 space-y-2.5">
           {
             [
-              { name: 'Chest', kind: 'Muscle', color: 'text-brand-600', map: 'chest', count: 23, pickIndex: 0, options: ['Incline DB Press', 'Cable Fly', 'Machine Press'] },
-              { name: 'Triceps', kind: 'Muscle', color: 'text-brand-600', map: 'triceps', count: 12, pickIndex: 0, options: ['Rope Pushdown', 'Skull Crushers', 'Overhead Ext.'] },
+              { name: 'Upper Chest', kind: 'Muscle', color: 'text-brand-600', map: 'chest', count: 8, pickIndex: 0, options: ['Incline DB Press', 'Incline Cable Fly', 'Low-to-High Fly'] },
               { name: 'Overhead Press', kind: 'Variation', color: 'text-indigo-500', map: 'shoulders', count: 4, pickIndex: 1, options: ['Barbell OHP', 'Seated DB Press', 'Machine Press'] },
+              { name: 'Triceps', kind: 'Muscle', color: 'text-brand-600', map: 'triceps', count: 12, pickIndex: 0, options: ['Rope Pushdown', 'Skull Crushers', 'Overhead Ext.'] },
             ].map((s) => (
               <div class="lx-slot overflow-hidden rounded-xl bg-slate-50 ring-1 ring-transparent">
                 <div class="flex items-center gap-3 px-3 py-2.5">
