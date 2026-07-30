@@ -19,8 +19,9 @@
   --color-ink: #0b1220;
   --color-ink-soft: #475569;
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "SF Pro Text",
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "SF Pro Text",
     "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -30,4 +31,12 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Headings + the brand wordmark wear the display face (Space Grotesk). */
+h1,
+h2,
+h3,
+.wordmark {
+  font-family: var(--font-display);
 }
