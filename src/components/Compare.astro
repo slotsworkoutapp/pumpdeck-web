@@ -196,9 +196,6 @@ const logSlots = [
   .lx-opt.is-chosen { background: #ecfdf5; }
   .lx-opt.is-chosen .lx-check { opacity: 1; }
 
-  /* Used for one frame to measure the card's tallest state. */
-  .lx-demo.is-measuring .lx-opts { transition: none; }
-
   @media (prefers-reduced-motion: reduce) {
     .lx-slot,
     .lx-name,
@@ -229,22 +226,37 @@ const logSlots = [
       });
 
     // Lock the card to its tallest state so opening a slot doesn't shove the
-    // page around — and, side by side, doesn't make one card jump against the
-    // other. Measured with transitions off, then re-measured if the width
-    // changes and the rows rewrap.
+    // page around, or make one card jump against the other side by side.
+    //
+    // Measured WITHOUT opening anything: a closed .lx-opts is max-height 0 with
+    // overflow hidden, so its scrollHeight still reports the real content
+    // height. The previous version opened a slot and measured the whole card,
+    // which meant the number depended on whatever state the animation happened
+    // to be in — and could lock in a height far taller than the card ever needs.
+    const OPTS_CAP = 140; // matches .lx-slot.is-open .lx-opts max-height
     const lockHeight = () => {
       lxDemo.style.minHeight = '';
-      lxDemo.classList.add('is-measuring');
-      const first = lxSlots[0];
-      first?.classList.add('is-open');
-      const tallest = lxDemo.getBoundingClientRect().height;
-      first?.classList.remove('is-open');
-      lxDemo.classList.remove('is-measuring');
-      lxDemo.style.minHeight = `${Math.ceil(tallest)}px`;
+      resetLog();
+      const collapsed = lxDemo.getBoundingClientRect().height;
+      if (!collapsed) return; // not laid out yet — leave it alone
+      const tallestOpts = lxSlots.reduce((max, s) => {
+        const opts = s.querySelector<HTMLElement>('.lx-opts');
+        return Math.max(max, opts ? opts.scrollHeight : 0);
+      }, 0);
+      const expansion = Math.min(tallestOpts, OPTS_CAP) + 10; // + padding-bottom
+      lxDemo.style.minHeight = `${Math.ceil(collapsed + expansion)}px`;
     };
-    lockHeight();
+
+    // After load, so webfonts have settled and the rows are their final height.
+    if (document.readyState === 'complete') lockHeight();
+    else window.addEventListener('load', lockHeight, { once: true });
+
     let resizeTimer: number;
+    let lastWidth = window.innerWidth;
     window.addEventListener('resize', () => {
+      // Mobile fires resize when the address bar hides; only width matters here.
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
       clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(lockHeight, 200);
     });
