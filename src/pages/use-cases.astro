@@ -1,0 +1,234 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SlotThumb from '../components/SlotThumb.astro';
+import PhoneShot from '../components/PhoneShot.astro';
+import { appStoreUrl, socials } from '../lib/site';
+
+const instagram = socials.find((s) => s.name === 'Instagram')?.url;
+
+// Each case is a real situation, then how you'd actually set it up. Only
+// describe things the app does today — the temptation on a page like this is to
+// drift into features that don't exist yet.
+// Deliberately NOT the homepage arguments. Machine taken, travelling, a cranky
+// shoulder and the save-to-set story are all made at length on the front page —
+// repeating them here would waste the one place we can show real setups.
+// These are the smaller things a normal workout app makes awkward.
+// Deliberately NOT the homepage arguments. Machine taken, travelling, a cranky
+// shoulder and the save-to-set story are all made at length on the front page —
+// repeating them here would waste the one place we can show real screens.
+//
+// Cases with a `shot` go full width with the phone beside the copy, alternating
+// sides. Everything else is a half-width card.
+const cases = [
+  {
+    title: 'You have ten core exercises you like',
+    situation:
+      'And you keep finding more. But planning a week normally means committing up front — this exercise on this line, that one on that line. Those are the ones you do, and the rest sit in your library unused.',
+    setup:
+      'Add Core to the slot instead. Want to hit it three times on Friday? Add three Core slots. When you train, each one opens your whole core list and you pick — three different exercises that day, decided on the day.',
+    shot: { src: '/app/workout-day.webp' },
+  },
+  {
+    title: 'Hit a muscle twice a week',
+    situation:
+      'You want lats on Wednesday and again on Saturday. Normally that means choosing two exercises, adding them to two different days, and keeping track of what you put where.',
+    setup:
+      'Open the muscle and you see every slot it has and which day each one falls on. Add a slot, pick the day, done — and the exercise is still yours to choose when you get there.',
+    shot: { src: '/app/muscle-slots.webp', flip: true },
+  },
+  {
+    title: 'You are not sure your program is balanced',
+    situation:
+      'Chest and arms always feel covered. But you could not say how many sets your rear delts or hamstrings actually get in a week, and it is the kind of thing you only notice months later.',
+    setup:
+      'Program balance lists every muscle group with the sets a week your slots give it, biggest first. Tap a group to see the individual muscles underneath.',
+    shot: { src: '/app/program-balance.webp' },
+  },
+  {
+    title: 'Your gym doesn’t have everything',
+    situation:
+      'No cable stack. No hack squat. The kettlebells live in the class studio and it is always booked. Whatever yours is missing, those exercises are not real options for you.',
+    setup:
+      'Tick what you actually have access to. Everything else disappears from every list, so what you’re choosing between is only ever what you can train with — a full gym, a garage, or nothing but bodyweight.',
+    shot: { src: '/app/equipment.webp', flip: true },
+  },
+  {
+    title: 'You do the same warm-up every single time',
+    situation:
+      'Warm-ups and stretches are the first thing to go. You write one in, do it for a month, get bored of it, and start going straight to the working sets.',
+    setup:
+      'These get slots too. Add a Legs warm-up and a Legs stretch — or three of each — and every one opens your whole list of leg warm-ups or leg stretches. A different one whenever you feel like it, none of them decided in advance.',
+  },
+  {
+    title: 'Ten minutes of mobility, never the same ten',
+    situation:
+      'You want a stretch before work or before bed. Every creator posts a different ten-minute routine, you save a few, and then you either grind the same one until you are sick of it or you do none of them.',
+    setup:
+      'Build the session out of ten Mobility slots. Every slot opens everything you have collected under Mobility, so you choose as you go — ten that feel right this morning, ten different ones tomorrow. Same ten minutes, never the same ten exercises.',
+  },
+  {
+    title: 'You want to add weight, not variety',
+    situation:
+      'Choosing freely is great until you are grinding a number up. Progress needs the same lift, week after week.',
+    setup:
+      'Pin the exercise to the slot for a few weeks. It stops asking and just shows that lift with last week’s numbers, so all you have to do is beat them. Unpin it when you want the choice back.',
+    example: {
+      day: 'Monday · Push',
+      rows: [
+        { name: 'Incline Dumbbell Press', sub: 'Pinned · 3 weeks left', map: 'chest', mode: 'exercise' },
+        { name: 'Front Delt', sub: 'Muscle · 6 exercises', map: 'shoulders' },
+        { name: 'Triceps', sub: 'Muscle · 12 exercises', map: 'triceps' },
+      ],
+    },
+  },
+  {
+    title: 'Two sessions in one day',
+    situation:
+      'Lift in the morning, conditioning after work — two separate sessions on the same day, and you want both of them to count.',
+    setup:
+      'A day can hold more than one. Keep them as alternatives you choose between, or let them rotate week to week so both get their turn.',
+  },
+  {
+    title: 'The demo video is never the one you want',
+    situation:
+      'Built-in exercises come with a generic clip, and the cue that finally made the lift click for you is in a video somewhere else.',
+    setup:
+      'Put your own video on any exercise — including the built-in ones. Your library is yours, so Bench Press can show your form, or the clip from the lifter who taught it to you.',
+  },
+  {
+    title: 'Not every day is a lifting day',
+    situation:
+      'Mobility, conditioning and cardio are real work, but no single muscle describes them.',
+    setup:
+      'Use a collection instead. Mobility, Plyometrics, Conditioning, Cardio and Power are built in, you can make your own, and each takes a slot exactly like a muscle does.',
+  },
+  {
+    title: 'You would rather not plan at all',
+    situation:
+      'You know you should follow something. You do not want to spend an evening building it.',
+    setup:
+      'Answer a few questions — days you train, how long you have, muscle or strength — and Slots builds the whole week. Change anything afterwards, or never touch it again.',
+  },
+];
+---
+
+<Layout
+  title="Use cases — Slots"
+  description="Real situations lifters run into, and how to set Slots up for each one."
+>
+  <!-- Intro -->
+  <section class="bg-slate-50">
+    <div class="mx-auto max-w-6xl px-5 py-24 lg:py-32">
+      <div class="mx-auto max-w-3xl lg:text-center">
+        <h1 class="text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          Ways to use <span class="text-brand-600">Slots</span>
+        </h1>
+        <p class="mt-4 text-base text-ink-soft sm:text-lg">
+          Small setups that are awkward in a normal workout app and take one
+          slot here — with the actual screens where we have them.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- The cases -->
+  <section class="mx-auto max-w-6xl px-5 py-24 lg:py-32">
+    <div class="grid gap-5 md:grid-cols-2">
+      {
+        cases.map((c) => (
+          <div class={`rounded-2xl bg-white p-6 ring-1 ring-slate-200 sm:p-8 ${c.shot ? 'md:col-span-2 md:grid md:grid-cols-2 md:items-center md:gap-10' : 'flex flex-col'}`}>
+            <div>
+              <h2 class="text-xl font-bold tracking-tight sm:text-2xl">{c.title}</h2>
+              <p class="mt-3 leading-relaxed text-ink-soft">{c.situation}</p>
+
+              <div class="mt-5 rounded-xl bg-brand-50 p-5 ring-1 ring-brand-100">
+                <p class="text-[11px] font-bold uppercase tracking-wide text-brand-600">
+                  In Slots
+                </p>
+                <p class="mt-1.5 leading-relaxed text-ink">{c.setup}</p>
+              </div>
+            </div>
+
+            {c.shot && (
+              <div class={`mt-8 md:mt-0 ${c.shot.flip ? 'md:order-first' : ''}`}>
+                <PhoneShot src={c.shot.src} />
+              </div>
+            )}
+
+            {c.example && (
+              <div class="mt-5 rounded-xl bg-slate-50 p-4 ring-1 ring-slate-100">
+                <p class="text-sm font-bold">{c.example.day}</p>
+                <div class="mt-2.5 space-y-2">
+                  {c.example.rows.map((r) => (
+                    <div class="flex items-center gap-3 rounded-lg bg-white px-3 py-2 ring-1 ring-slate-100">
+                      <SlotThumb map={r.map} mode={r.mode ?? 'muscle'} badge={false} />
+                      <div class="min-w-0 flex-1">
+                        <p class="truncate text-sm font-semibold">{r.name}</p>
+                        <p class="truncate text-xs font-medium text-slate-400">{r.sub}</p>
+                      </div>
+                      <span class="shrink-0 rounded-md bg-slate-50 px-2 py-1 text-xs font-bold text-slate-500 ring-1 ring-slate-200">
+                        3 × 10
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Closing call to action -->
+  <section class="bg-slate-50">
+    <div class="mx-auto max-w-6xl px-5 py-24 text-center lg:py-32">
+      <img
+        src="/app-icon.png"
+        alt=""
+        width="64"
+        height="64"
+        class="mx-auto size-16 rounded-[1.15rem] shadow-lg ring-1 ring-black/5"
+      />
+      <h2 class="mx-auto mt-6 max-w-xl text-4xl font-bold tracking-tight sm:text-4xl">
+        Finally do the exercises you save
+      </h2>
+      <p class="mx-auto mt-3 max-w-md text-base text-ink-soft sm:text-lg">
+        Your split, your muscles, your saves — in a program you'll actually
+        follow.
+      </p>
+      <div class="mt-8 flex flex-col items-center gap-3">
+        {
+          appStoreUrl ? (
+            <a
+              href={appStoreUrl}
+              class="inline-flex items-center rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white shadow-sm transition hover:opacity-90"
+            >
+              Try for free
+            </a>
+          ) : (
+            <>
+              <span class="inline-flex items-center rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white shadow-sm">
+                Coming soon to the App Store
+              </span>
+              {instagram && (
+                <p class="text-sm text-ink-soft">
+                  Follow{' '}
+                  <a
+                    href={instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-semibold text-brand-600 hover:underline"
+                  >
+                    @slotsworkout.app
+                  </a>{' '}
+                  to hear when it lands.
+                </p>
+              )}
+            </>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</Layout>

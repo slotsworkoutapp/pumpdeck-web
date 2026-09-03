@@ -1,86 +1,34 @@
 ---
-// The Slots product tour — auto-playing mockups that mirror the app.
-import SlotThumb from './SlotThumb.astro';
+// One beat: how exercises get into your muscles in the first place.
+// Building a day and picking at the gym both live in <Compare> now — showing
+// the same Monday·Push card in three separate sections read as the page
+// repeating itself.
 import SwipeHero from './SwipeHero.astro';
 
 // A distinct deck for the Discover section so it isn't a carbon copy of the hero.
 const discoverCards = [
-  { name: 'Incline Cable Fly', muscle: 'Chest', map: 'chest', variation: 'Chest Fly', user: '@mike_lifts', tint: '#1e40af', dir: 'add' },
-  { name: 'Reverse Pec Deck', muscle: 'Shoulders', map: 'shoulders', variation: 'Rear Delt', user: '@sarah.fit', tint: '#9a3412', dir: 'add' },
-  { name: 'Hack Squat', muscle: 'Legs', map: 'legs', variation: 'Squat', user: '@leg_day_leo', tint: '#065f46', dir: 'skip' },
-  { name: 'Lat Pulldown', muscle: 'Back', map: 'back', variation: 'Pulldown', user: '@mike_lifts', tint: '#3730a3', dir: 'add' },
-  { name: 'Preacher Curl', muscle: 'Biceps', map: 'biceps', variation: 'Bicep Curl', user: '@sarah.fit', tint: '#9d174d', dir: 'skip' },
+  { name: 'Gorilla Row', muscle: 'Back', map: 'back', slot: 'Lats', photo: '/exercises/gorilla-row.webp', user: '@mike_lifts', tint: '#3730a3', dir: 'add' },
+  { name: 'Landmine Single Arm Press', muscle: 'Shoulders', map: 'shoulders', slot: 'Front Delt', photo: '/exercises/landmine-press.webp', user: '@sarah.fit', tint: '#9a3412', dir: 'add' },
+  { name: 'Romanian Deadlift', muscle: 'Legs', map: 'legs', slot: 'Hamstrings', photo: '/exercises/romanian-deadlift.webp', user: '@leg_day_leo', tint: '#065f46', dir: 'skip' },
+  { name: 'Chest Supported Dumbbell Row', muscle: 'Back', map: 'back', slot: 'Upper Back', photo: '/exercises/chest-supported-row.webp', user: '@mike_lifts', tint: '#1e40af', dir: 'add' },
+  { name: 'Seated Cable Row', muscle: 'Back', map: 'back', slot: 'Lats', photo: '/exercises/seated-cable-row.webp', user: '@sarah.fit', tint: '#9d174d', dir: 'skip' },
 ];
 ---
 
-<section id="tour" class="bg-slate-50">
-  <div class="mx-auto max-w-6xl px-5 py-20">
-    <div id="setup" class="mx-auto max-w-3xl scroll-mt-24 lg:text-center">
-      <p class="text-sm font-semibold text-flame-500">1 · Build</p>
-      <h2 class="mt-2 text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-        Build your program around <span class="text-brand-600">muscles</span>
-        and <span class="text-indigo-500">variations</span>
-      </h2>
-      <p class="mt-4 text-base text-ink-soft sm:text-lg">
-        Every other app locks each day into fixed exercises. Slots lets you add a
-        <strong>muscle</strong> to a slot — then hit it with any exercise you want
-        when you train. Want more focus? Instead of a muscle like Upper Chest,
-        narrow a slot to a <strong>variation</strong> — a pressing variation or a
-        fly variation. You're never tied to a single exercise.
-      </p>
-    </div>
-
-    <div class="mt-12">
-      <!-- A push day being built from variation & muscle slots -->
-      <div class="bx-demo mx-auto max-w-sm rounded-2xl bg-white p-5 shadow-lg ring-1 ring-slate-100">
-        <p class="font-bold">Monday · Push</p>
-        <p class="mt-0.5 text-xs text-slate-400">Built from muscles &amp; variations</p>
-
-        <div class="mt-3 space-y-2.5">
-          {
-            [
-              { name: 'Upper Chest', kind: 'Muscle', color: 'text-brand-600', map: 'chest', count: 8 },
-              { name: 'Overhead Press', kind: 'Variation', color: 'text-indigo-500', map: 'shoulders', count: 4 },
-              { name: 'Triceps', kind: 'Muscle', color: 'text-brand-600', map: 'triceps', count: 12 },
-            ].map((s) => (
-              <div class="bx-slot flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-2.5">
-                <SlotThumb map={s.map} mode={s.kind === 'Variation' ? 'variation' : 'muscle'} />
-                <div class="flex-1">
-                  <p class="text-sm font-semibold">{s.name}</p>
-                  <p class="text-xs font-medium">
-                    <span class={s.color}>{s.kind}</span>
-                    <span class="text-slate-400"> · {s.count} exercises</span>
-                  </p>
-                </div>
-                <span class="rounded-md bg-white px-2 py-1 text-xs font-bold text-slate-500 ring-1 ring-slate-200">3 × 10</span>
-              </div>
-            ))
-          }
-        </div>
-
-        <div class="mt-2.5 flex items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-slate-200 py-2.5 text-sm font-semibold text-slate-400">
-          <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14" stroke-linecap="round" /></svg>
-          Add a muscle or variation
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- How do I add an exercise? — on white -->
-<section class="bg-white">
-  <div class="mx-auto max-w-6xl px-5 py-20">
+<section id="tour" class="bg-white">
+  <div class="mx-auto max-w-6xl px-5 py-24 lg:py-32">
     <div id="features" class="scroll-mt-24">
-      <div class="max-w-2xl lg:mx-auto lg:text-center">
-        <p class="text-sm font-semibold text-flame-500">2 · Add</p>
-        <h2 class="mt-2 text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-          Add exercises to your <span class="text-brand-600">muscles</span>
-          and <span class="text-indigo-500">variations</span>
+      <div class="mx-auto max-w-2xl lg:text-center">
+        <h2 class="text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          Give each <span class="text-brand-600">muscle</span> the exercises you
+          actually want to do
         </h2>
         <p class="mt-4 text-base text-ink-soft sm:text-lg">
-          Build your own custom exercise — add a video, tag the muscle, and
-          (optionally) group it under a variation. Or pull one in from another
-          Slots user — two ways:
+          Nearly 200 come built in.
+          <strong>Stop adding exercises manually</strong> — pull a finished one
+          from another Slots user, with the video, muscle and equipment already
+          filled in. Two ways:
         </p>
       </div>
     </div>
@@ -125,14 +73,14 @@ const discoverCards = [
               <div class="mt-2.5 grid grid-cols-2 gap-2">
                 {
                   [
-                    { name: 'Cable Crunch on Lat Pulldown', map: 'core', bg: '#eef2ff', added: true },
-                    { name: 'Incline Dumbbell Press', map: 'chest', bg: '#eff6ff', added: false },
-                    { name: 'Cable Lateral Raise', map: 'shoulders', bg: '#fff7ed', added: true },
-                    { name: 'Bulgarian Split Squat', map: 'legs', bg: '#ecfdf5', added: false },
+                    { name: 'Leg Extension', photo: '/exercises/leg-extension.webp', added: true },
+                    { name: 'Incline Dumbbell Press', photo: '/exercises/incline-db-press.webp', added: false },
+                    { name: 'Face Pull', photo: '/exercises/face-pull.webp', added: true },
+                    { name: 'Preacher Curl', photo: '/exercises/preacher-curl.webp', added: false },
                   ].map((ex) => (
                     <div class="overflow-hidden rounded-lg bg-slate-50 ring-1 ring-slate-100">
-                      <div class="relative grid aspect-[4/5] place-items-center" style={`background:${ex.bg}`}>
-                        <img src={`/maps/${ex.map}.svg`} alt="" class="h-[78%] w-auto" />
+                      <div class="relative aspect-[4/5] overflow-hidden bg-slate-200">
+                        <img src={ex.photo} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
                         <span class="absolute left-1.5 top-1.5 flex items-center gap-0.5 rounded-md bg-black/45 px-1.5 py-0.5 text-[9px] font-bold text-white">
                           <svg viewBox="0 0 24 24" class="size-2.5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14" stroke-linecap="round" stroke-linejoin="round" /></svg>
                           1
@@ -186,84 +134,6 @@ const discoverCards = [
 </section>
 
 <!-- How do I log a workout? — the payoff, on gray -->
-<section class="bg-slate-50">
-  <div class="mx-auto max-w-6xl px-5 py-20">
-    <div class="max-w-2xl lg:mx-auto lg:text-center">
-      <p class="text-sm font-semibold text-flame-500">3 · Train</p>
-      <h2 class="mt-2 text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-        Pick your exercise from each
-        <span class="text-brand-600">muscle</span> and
-        <span class="text-indigo-500">variation</span>
-      </h2>
-      <p class="mt-4 text-base text-ink-soft sm:text-lg">
-        When it's time to train, just tap each muscle or variation and pick
-        what you're doing today — the exercises you added are
-        <strong>right there waiting</strong>.
-      </p>
-    </div>
-
-    <!-- Log demo: the same push day, now each slot gets tapped + an exercise picked -->
-    <div class="mt-12">
-      <div class="lx-demo mx-auto max-w-sm rounded-2xl bg-white p-5 shadow-lg ring-1 ring-slate-100">
-        <p class="font-bold">Monday · Push</p>
-        <p class="mt-0.5 text-xs text-slate-400">Tap a slot — pick today's exercise</p>
-
-        <div class="mt-3 space-y-2.5">
-          {
-            [
-              { name: 'Upper Chest', kind: 'Muscle', color: 'text-brand-600', map: 'chest', count: 8, pickIndex: 0, options: ['Incline DB Press', 'Incline Cable Fly', 'Low-to-High Fly'] },
-              { name: 'Overhead Press', kind: 'Variation', color: 'text-indigo-500', map: 'shoulders', count: 4, pickIndex: 1, options: ['Barbell OHP', 'Seated DB Press', 'Machine Press'] },
-              { name: 'Triceps', kind: 'Muscle', color: 'text-brand-600', map: 'triceps', count: 12, pickIndex: 0, options: ['Rope Pushdown', 'Skull Crushers', 'Overhead Ext.'] },
-            ].map((s) => (
-              <div class="lx-slot overflow-hidden rounded-xl bg-slate-50 ring-1 ring-transparent">
-                <div class="flex items-center gap-3 px-3 py-2.5">
-                  <div class="relative size-12 shrink-0">
-                    <div class="lx-thumb-def absolute inset-0">
-                      <SlotThumb map={s.map} mode={s.kind === 'Variation' ? 'variation' : 'muscle'} />
-                    </div>
-                    <div class="lx-thumb-pick absolute inset-0">
-                      <SlotThumb map={s.map} mode="exercise" />
-                    </div>
-                  </div>
-                  <div class="min-w-0 flex-1">
-                    <!-- top line: variation/muscle name → picked exercise -->
-                    <div class="relative">
-                      <p class="lx-name text-sm font-semibold">{s.name}</p>
-                      <p class="lx-pickname absolute inset-0 flex items-center gap-1 text-sm font-semibold text-ink">
-                        <svg viewBox="0 0 24 24" class="size-3.5 shrink-0 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                        {s.options[s.pickIndex]}
-                      </p>
-                    </div>
-                    <!-- sub line: kind → the variation/muscle it belongs to -->
-                    <div class="relative">
-                      <p class="lx-kind text-xs font-medium">
-                        <span class={s.color}>{s.kind}</span>
-                        <span class="text-slate-400"> · {s.count} exercises</span>
-                      </p>
-                      <p class="lx-anchor absolute inset-0 text-xs font-medium text-slate-400">{s.name} · {s.kind}</p>
-                    </div>
-                  </div>
-                  <span class="rounded-md bg-white px-2 py-1 text-xs font-bold text-slate-500 ring-1 ring-slate-200">3 × 10</span>
-                </div>
-                <div class="lx-opts space-y-1 px-3">
-                  {
-                    s.options.map((o, i) => (
-                      <div class={`lx-opt flex items-center gap-2 rounded-lg bg-white px-2.5 py-1.5 ring-1 ring-slate-100 ${i === s.pickIndex ? 'lx-pickopt' : ''}`}>
-                        <svg viewBox="0 0 24 24" class="size-3.5 shrink-0 text-brand-600" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10" stroke-linecap="round" /></svg>
-                        <span class="flex-1 text-xs font-semibold">{o}</span>
-                        <svg class="lx-check size-3.5 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                      </div>
-                    ))
-                  }
-                </div>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <style>
   /* Phone frame — the bezel PNG overlays a white app screen inset to its
@@ -304,174 +174,5 @@ const discoverCards = [
     flex-shrink: 0;
   }
 
-  /* "Build your program" demo — variation & muscle slots drop into the day. */
-  .bx-slot {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-  .bx-slot.is-in {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* Log demo — tap a slot (highlight), its exercise options expand, one is
-     selected, then it collapses and the pick replaces the Variation/Muscle
-     label. Mirrors the same three slots from the build card above. */
-  .lx-slot {
-    transition: box-shadow 0.3s ease, background-color 0.3s ease;
-  }
-  .lx-slot.is-open {
-    box-shadow: inset 0 0 0 2px #3b82f6;
-  }
-  .lx-slot.is-picked {
-    box-shadow: inset 0 0 0 1px #e2e8f0;
-  }
-  /* On pick: the exercise name takes the top line, the variation/muscle it
-     belongs to drops to the smaller sub line — both cross-fade. */
-  .lx-name,
-  .lx-pickname,
-  .lx-kind,
-  .lx-anchor {
-    transition: opacity 0.3s ease;
-  }
-  .lx-pickname,
-  .lx-anchor { opacity: 0; }
-  .lx-slot.is-picked .lx-name { opacity: 0; }
-  .lx-slot.is-picked .lx-pickname { opacity: 1; }
-  .lx-slot.is-picked .lx-kind { opacity: 0; }
-  .lx-slot.is-picked .lx-anchor { opacity: 1; }
-  /* Thumbnail swaps from the variation/muscle to the picked exercise's image. */
-  .lx-thumb-def,
-  .lx-thumb-pick { transition: opacity 0.3s ease; }
-  .lx-thumb-pick { opacity: 0; }
-  .lx-slot.is-picked .lx-thumb-def { opacity: 0; }
-  .lx-slot.is-picked .lx-thumb-pick { opacity: 1; }
-  /* The options list expands only while the slot is open. */
-  .lx-opts {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    padding-bottom: 0;
-    transition: max-height 0.4s ease, opacity 0.35s ease, padding 0.4s ease;
-  }
-  .lx-slot.is-open .lx-opts {
-    max-height: 140px;
-    opacity: 1;
-    padding-bottom: 0.625rem;
-  }
-  /* The chosen option checks off green. */
-  .lx-check { opacity: 0; transition: opacity 0.2s ease; }
-  .lx-opt.is-chosen { background: #ecfdf5; }
-  .lx-opt.is-chosen .lx-check { opacity: 1; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .bx-slot,
-    .lx-slot,
-    .lx-name,
-    .lx-pickname,
-    .lx-kind,
-    .lx-anchor,
-    .lx-opts,
-    .lx-check,
-    .lx-thumb-def,
-    .lx-thumb-pick {
-      transition: none;
-    }
-  }
 </style>
 
-<script>
-  const root = document.getElementById('tour');
-  if (root) {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-    // Drive an animation only while `el` is on screen. `reset` puts the demo
-    // back to its start state; `cycle(token)` runs ONE pass (checking
-    // token.cancelled after each await to bail early). Entering view starts a
-    // fresh run from the top; leaving cancels it and resets — so a demo always
-    // plays from the beginning when the user scrolls to it.
-    function driveWhenVisible(
-      el: Element | null,
-      reset: () => void,
-      cycle: (token: { cancelled: boolean }) => Promise<void>
-    ) {
-      if (!el) return;
-      let run: { cancelled: boolean } | null = null;
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) {
-              if (run) continue; // already playing
-              const token = { cancelled: false };
-              run = token;
-              (async () => {
-                reset();
-                while (!token.cancelled) {
-                  await cycle(token);
-                  if (token.cancelled) break;
-                }
-              })();
-            } else if (run) {
-              run.cancelled = true;
-              run = null;
-              reset();
-            }
-          }
-        },
-        { threshold: 0.2 }
-      );
-      io.observe(el);
-    }
-
-    const bxDemo = root.querySelector<HTMLElement>('.bx-demo');
-    const bxSlots = bxDemo ? [...bxDemo.querySelectorAll<HTMLElement>('.bx-slot')] : [];
-    // The log section lives outside #tour, so query the document for it.
-    const lxDemo = document.querySelector<HTMLElement>('.lx-demo');
-    const lxSlots = lxDemo ? [...lxDemo.querySelectorAll<HTMLElement>('.lx-slot')] : [];
-
-    const resetBuild = () => bxSlots.forEach((s) => s.classList.remove('is-in'));
-    const resetLog = () =>
-      lxSlots.forEach((s) => {
-        s.classList.remove('is-open', 'is-picked');
-        s.querySelectorAll<HTMLElement>('.lx-opt').forEach((o) => o.classList.remove('is-chosen'));
-      });
-
-    if (reduce) {
-      // Static: build day fully assembled; log day shows each slot's pick made.
-      bxSlots.forEach((s) => s.classList.add('is-in'));
-      lxSlots.forEach((s) => {
-        s.classList.add('is-picked');
-        s.querySelector<HTMLElement>('.lx-pickopt')?.classList.add('is-chosen');
-      });
-    } else {
-      // Build demo: each variation/muscle slot drops into the day, one by one.
-      driveWhenVisible(bxDemo, resetBuild, async (t) => {
-        resetBuild();
-        await sleep(700); if (t.cancelled) return;
-        for (const s of bxSlots) {
-          s.classList.add('is-in');
-          await sleep(500); if (t.cancelled) return;
-        }
-        await sleep(3200);
-      });
-
-      // Log demo: each slot gets tapped, its options open, one is picked.
-      driveWhenVisible(lxDemo, resetLog, async (t) => {
-        resetLog();
-        await sleep(900); if (t.cancelled) return;
-        for (const s of lxSlots) {
-          s.classList.add('is-open');                       // tap → options expand
-          await sleep(1300); if (t.cancelled) return;
-          s.querySelector<HTMLElement>('.lx-pickopt')?.classList.add('is-chosen'); // select
-          await sleep(1300); if (t.cancelled) return;
-          s.classList.add('is-picked');                     // pick replaces the label
-          s.classList.remove('is-open');                    // options collapse
-          await sleep(950); if (t.cancelled) return;
-        }
-        await sleep(3200);
-      });
-    }
-  }
-</script>

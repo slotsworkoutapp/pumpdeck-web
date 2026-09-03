@@ -1,28 +1,16 @@
 ---
 // Slot thumbnail, a fixed square that mirrors the app:
-//   mode="variation" → 2×2 grid of the variation's exercises (placeholder
-//                      tiles until real images) + a mini muscle-map badge.
-//   mode="muscle"    → the muscle map (the slot IS a whole muscle).
-//   mode="exercise"  → a single picked exercise's image (placeholder dumbbell
-//                      until a real image) + a mini muscle-map badge.
-const { map, mode = 'variation' } = Astro.props;
+//   mode="muscle"   → the muscle map (the slot IS a muscle).
+//   mode="exercise" → a single picked exercise's image (placeholder dumbbell
+//                     until a real image) + a mini muscle-map badge.
+//   mode="unknown"  → nothing chosen yet, for the "making it up" comparison.
+// `badge` draws the little corner muscle map. Off for the "usual way" card:
+// a normal workout app doesn't tell you which muscle a lift is for.
+const { map, mode = 'muscle', badge = true } = Astro.props;
 const dumbbell = 'M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10';
 ---
 
 <div class="relative size-12 shrink-0 overflow-hidden rounded-lg bg-white ring-1 ring-slate-200">
-  {
-    mode === 'variation' && (
-      <div class="grid h-full w-full grid-cols-2 grid-rows-2 gap-px bg-slate-200">
-        {[0, 1, 2, 3].map(() => (
-          <div class="grid place-items-center bg-white">
-            <svg viewBox="0 0 24 24" class="size-3 text-slate-300" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d={dumbbell} stroke-linecap="round" />
-            </svg>
-          </div>
-        ))}
-      </div>
-    )
-  }
   {
     mode === 'muscle' && (
       <div class="grid h-full w-full place-items-center bg-slate-50">
@@ -31,19 +19,26 @@ const dumbbell = 'M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10';
     )
   }
   {
-    mode === 'exercise' && (
-      <div class="grid h-full w-full place-items-center bg-slate-100">
-        <svg viewBox="0 0 24 24" class="size-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d={dumbbell} stroke-linecap="round" />
-        </svg>
+    mode === 'unknown' && (
+      <div class="grid h-full w-full place-items-center bg-slate-50">
+        <span class="text-lg font-bold text-slate-300">?</span>
       </div>
     )
   }
   {
-    (mode === 'variation' || mode === 'exercise') && (
-      <span class="absolute bottom-0 right-0 grid size-5 place-items-center rounded-tl-md bg-white shadow-sm ring-1 ring-slate-100">
-        <img src={`/maps/${map}.svg`} alt="" class="h-3.5 w-auto" />
-      </span>
+    mode === 'exercise' && (
+      <>
+        <div class="grid h-full w-full place-items-center bg-slate-100">
+          <svg viewBox="0 0 24 24" class="size-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d={dumbbell} stroke-linecap="round" />
+          </svg>
+        </div>
+        {badge && (
+          <span class="absolute bottom-0 right-0 grid size-5 place-items-center rounded-tl-md bg-white shadow-sm ring-1 ring-slate-100">
+            <img src={`/maps/${map}.svg`} alt="" class="h-3.5 w-auto" />
+          </span>
+        )}
+      </>
     )
   }
 </div>

@@ -1,0 +1,122 @@
+---
+// The evidence behind the answer — rendered INSIDE the persona section, because
+// the question, the answer and the proof are one unit. Which pairs show is
+// decided by the answer: a follower is hurt by a plan that won't bend, while
+// someone who decides at the gym has no plan to bend and is hurt by coverage,
+// recall and the blank screen.
+//
+// Copy is lifted from the internal slide deck.
+import { DEFAULT_PERSONA } from '../lib/personas';
+
+const pairs = [
+  {
+    when: 'follower hybrid',
+    problem: 'The machine you need is taken.',
+    problemSub: 'Your program says one exact lift — so you wait, skip it, or awkwardly improvise.',
+    solution: 'Grab whatever’s open.',
+    solutionSub: 'The slot is the muscle, not the machine. Do any exercise that hits it and keep moving.',
+  },
+  {
+    when: 'follower hybrid',
+    problem: 'You have 5 favorites. The program fits 1.',
+    problemSub: 'A fixed plan pins specific lifts. Your other go-tos never make the cut.',
+    solution: 'Just pick any of them.',
+    solutionSub: 'One muscle slot holds all your favorites — do whichever you feel like that day.',
+  },
+  {
+    when: 'follower hybrid',
+    problem: 'Cranky shoulder? The plan doesn’t care.',
+    problemSub: 'A fixed program demands the exact lift no matter how you feel that day — so you grind through it, or bail.',
+    solution: 'You know your body better than your program.',
+    solutionSub: 'Tweaked, tired, or just not feeling a lift? Pick one that works today — same muscle, same gains, no guilt.',
+  },
+  {
+    when: 'follower',
+    problem: 'You travel — every gym is different.',
+    problemSub: 'Most apps make you regenerate a whole new workout… and now you’re not sure you hit every muscle this week.',
+    solution: 'Same program, any gym.',
+    solutionSub: 'Pick whatever that gym has for each muscle. No regenerating — your weekly coverage never breaks.',
+  },
+  {
+    when: 'follower',
+    problem: 'You’re stuck swapping lifts in and out.',
+    problemSub: 'Swap the new one in. Remember what it replaced. Miss the old one, swap it back. Every lift you like turns into admin.',
+    solution: 'Nothing has to come out.',
+    solutionSub: 'They all live under the same muscle. New one today, your old favorite Thursday — no swapping, nothing lost.',
+  },
+  {
+    when: 'follower',
+    problem: 'You finished the program. Now what?',
+    problemSub: 'It ends, and you’re back to square one picking a new one.',
+    solution: 'It never runs out.',
+    solutionSub: 'Built on muscles, so it keeps going — just keep picking fresh exercises.',
+  },
+  {
+    when: 'winger hybrid',
+    problem: 'Some muscles go weeks without a set.',
+    problemSub: 'Deciding on the day means drifting toward what you like. Chest and arms get hit every week — rear delts, hamstrings and calves quietly stop happening, and nothing tells you.',
+    solution: 'Coverage is the default.',
+    solutionSub: 'Built around muscles, so every one gets its work — nothing slips through the cracks.',
+  },
+  {
+    when: 'winger hybrid',
+    problem: 'You reach for the same lifts anyway.',
+    problemSub: 'Deciding on the spot sounds free, but you default to whatever you did last time — the ones you can remember standing in a busy gym.',
+    solution: 'The slot remembers for you.',
+    solutionSub: 'Every exercise you’ve ever added sits under its muscle, waiting. Pick the one you feel like, not the one you happened to recall.',
+  },
+  {
+    when: 'winger hybrid',
+    problem: 'Every session starts on a blank screen.',
+    problemSub: 'Nothing is holding the shape of your week. You show up and think of something, or repeat whatever you did last time.',
+    solution: 'Your week already has a shape.',
+    solutionSub: 'Open the day and the muscles are waiting. You still pick every exercise — you just don’t start from nothing.',
+  },
+  {
+    when: 'winger',
+    problem: 'What weight did you lift last week?',
+    problemSub: 'Getting stronger means beating last week by a little. Nothing written down means you’re guessing — so you do the same numbers for months and never notice.',
+    solution: 'Last week’s numbers, right there.',
+    solutionSub: 'Every set shows what you did last time. Add a rep or five pounds and you know it actually counted.',
+  },
+];
+---
+
+<div class="mt-5 grid gap-5 md:grid-cols-2" data-persona-reveal data-persona-gated>
+      {
+        pairs.map((p) => (
+          <div
+            class="overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200"
+            data-when={p.when}
+            hidden={!p.when.split(' ').includes(DEFAULT_PERSONA)}
+          >
+            <div class="bg-rose-50 p-5">
+              <div class="flex gap-3">
+                <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-rose-600 text-white">
+                  <svg viewBox="0 0 24 24" class="size-3" fill="none" stroke="currentColor" stroke-width="3.4">
+                    <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round" />
+                  </svg>
+                </span>
+                <div>
+                  <p class="font-bold leading-snug text-rose-900">{p.problem}</p>
+                  <p class="mt-1.5 text-sm leading-relaxed text-rose-900/70">{p.problemSub}</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-emerald-50 p-5">
+              <div class="flex gap-3">
+                <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-emerald-600 text-white">
+                  <svg viewBox="0 0 24 24" class="size-3" fill="none" stroke="currentColor" stroke-width="3.4">
+                    <path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+                <div>
+                  <p class="font-bold leading-snug text-emerald-900">{p.solution}</p>
+                  <p class="mt-1.5 text-sm leading-relaxed text-emerald-900/70">{p.solutionSub}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>

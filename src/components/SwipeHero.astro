@@ -4,11 +4,11 @@
 // loop; static fallback under reduced motion. Reusable — pass `cards` to vary
 // the deck and `maxWidth` to size the phone.
 const defaultCards = [
-  { name: 'Dumbbell Bench Press', muscle: 'Chest', map: 'chest', variation: 'Chest Press', user: '@mike_lifts', tint: '#1e40af', dir: 'add' },
-  { name: 'Cable Lateral Raise', muscle: 'Shoulders', map: 'shoulders', variation: 'Lateral Raise', user: '@sarah.fit', tint: '#9a3412', dir: 'skip' },
-  { name: 'Bulgarian Split Squat', muscle: 'Legs', map: 'legs', variation: 'Split Squat', user: '@leg_day_leo', tint: '#065f46', dir: 'add' },
-  { name: 'Chest-Supported Row', muscle: 'Back', map: 'back', variation: 'Row', user: '@mike_lifts', tint: '#3730a3', dir: 'add' },
-  { name: 'Incline Hammer Curl', muscle: 'Biceps', map: 'biceps', variation: 'Bicep Curl', user: '@sarah.fit', tint: '#9d174d', dir: 'skip' },
+  { name: 'Bulgarian Split Squat', muscle: 'Legs', map: 'legs', slot: 'Quadriceps', photo: '/exercises/bulgarian-split-squat.webp', user: '@leg_day_leo', tint: '#065f46', dir: 'add' },
+  { name: 'Seated Dumbbell Shoulder Press', muscle: 'Shoulders', map: 'shoulders', slot: 'Front Delt', photo: '/exercises/seated-db-shoulder-press.webp', user: '@sarah.fit', tint: '#9a3412', dir: 'skip' },
+  { name: 'Preacher Curl', muscle: 'Biceps', map: 'biceps', slot: 'Biceps', photo: '/exercises/preacher-curl.webp', user: '@mike_lifts', tint: '#9d174d', dir: 'add' },
+  { name: 'Face Pull', muscle: 'Shoulders', map: 'shoulders', slot: 'Rear Delt', photo: '/exercises/face-pull.webp', user: '@sarah.fit', tint: '#3730a3', dir: 'add' },
+  { name: 'Leg Extension', muscle: 'Legs', map: 'legs', slot: 'Quadriceps', photo: '/exercises/leg-extension.webp', user: '@leg_day_leo', tint: '#1e40af', dir: 'skip' },
 ];
 const { cards = defaultCards, maxWidth = '320px' } = Astro.props;
 ---
@@ -31,11 +31,8 @@ const { cards = defaultCards, maxWidth = '320px' } = Astro.props;
           <div class="sc-inner">
             <span class="sc-stamp sc-stamp-add">Add</span>
             <span class="sc-stamp sc-stamp-skip">Skip</span>
-            <div
-              class="sc-media"
-              style={`background-image: linear-gradient(150deg, rgba(255,255,255,0.14), rgba(0,0,0,0.28)); background-color:${c.tint};`}
-            >
-              <img src={`/maps/${c.map}.svg`} alt="" class="sc-watermark" />
+            <div class="sc-media" style={`background-color:${c.tint};`}>
+              <img src={c.photo} alt="" class="sc-photo" loading="lazy" decoding="async" />
               <span class="sc-badge">
                 <img src={`/maps/${c.map}.svg`} alt={c.muscle} />
               </span>
@@ -55,7 +52,7 @@ const { cards = defaultCards, maxWidth = '320px' } = Astro.props;
                 <svg viewBox="0 0 24 24" class="sc-joins-icon" fill="currentColor">
                   <path d="M12 3 2 8l10 5 10-5-10-5zM2 12l10 5 10-5M2 16l10 5 10-5" />
                 </svg>
-                <span>Joins {c.variation}</span>
+                <span>Joins your {c.slot} slot</span>
               </div>
             </div>
           </div>
@@ -189,15 +186,12 @@ const { cards = defaultCards, maxWidth = '320px' } = Astro.props;
     background-position: center;
   }
   /* Faint muscle silhouette filling the "video", like a thumbnail. */
-  .sc-watermark {
+  .sc-photo {
     position: absolute;
-    left: 50%;
-    top: 46%;
-    height: 78%;
-    width: auto;
-    transform: translate(-50%, -50%);
-    filter: brightness(0) invert(1);
-    opacity: 0.16;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   /* Crisp muscle-map badge in the corner, like the app. */
   .sc-badge {

@@ -1,35 +1,34 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import PersonaPicker from '../components/PersonaPicker.astro';
+import Compare from '../components/Compare.astro';
+import SaveJourney from '../components/SaveJourney.astro';
 import Tour from '../components/Tour.astro';
-import SwipeHero from '../components/SwipeHero.astro';
+import HeroCollage from '../components/HeroCollage.astro';
+import { appStoreUrl, socials } from '../lib/site';
 
-// Replace with your real App Store URL once the app is live.
-const appStoreUrl = '#';
+const instagram = socials.find((s) => s.name === 'Instagram')?.url;
 
 const faqs = [
   {
     q: 'Briefly, what does this app actually do?',
-    a: "Slots lets you build a weekly program around muscles and movements instead of fixed exercises. Add a muscle to a slot, then pick the exact exercise when you train. Want more focus? Narrow a slot to a specific variation (a movement like “Chest Press”) or pin one exact exercise.",
+    a: 'Slots lets you build a weekly program around muscles instead of fixed exercises. Add a muscle to a slot, then pick the exact exercise when you train — or pin one exact exercise if you’d rather.',
   },
   {
     q: 'What makes Slots different from other fitness apps?',
-    a: 'Most apps lock every day into fixed exercises. Slots lets you add a muscle to your program — or narrow a slot to a specific variation (every version of a movement) — then pick the exact exercise when you train. So you can grab a free machine, try something new, or beat boredom without ever rebuilding your week.',
+    a: 'Most apps lock every day into fixed exercises. Slots holds the muscle instead, and you pick the exact exercise when you train. So you can grab a free machine, try something new, or beat boredom without ever rebuilding your week.',
   },
   {
     q: 'What does it mean to build around a muscle?',
-    a: "Instead of pinning an exact exercise, you add a muscle — like Chest or Triceps — to a slot. When you train, you pick any exercise that hits it: grab whatever machine’s open, try something new, or repeat a favorite. Your program covers the muscle; the exact exercise is up to you that day.",
-  },
-  {
-    q: 'What’s a variation, exactly?',
-    a: 'A variation is every version of the same movement grouped together — barbell, dumbbell, and machine bench press are all one “Chest Press.” When you want a slot focused on one movement rather than a muscle, add a variation and pick whichever version you feel like on the day.',
+    a: 'Instead of pinning an exact exercise, you add a muscle — like Chest or Triceps — to a slot. When you train, you pick any exercise that hits it: grab whatever machine’s open, try something new, or repeat a favorite. Your program covers the muscle; the exact exercise is up to you that day.',
   },
   {
     q: 'Can I just pin a specific exercise?',
-    a: 'Of course. A slot can be a muscle, a specific variation, or one exact exercise — pin your favorite lift and it stays put, or leave it open and choose when you train. It’s your call, slot by slot.',
+    a: 'Of course. A slot can hold a muscle or one exact exercise — pin your favorite lift and it stays put, or leave it open and choose when you train. It’s your call, slot by slot.',
   },
   {
     q: 'Does the app come with exercises, or do I add them all myself?',
-    a: 'Slots ships with 150+ built-in exercises — the most common movements lifters do for each muscle.',
+    a: 'Slots ships with nearly 200 built-in exercises — the most common movements lifters do for each muscle. You can edit any of them, put your own video on one, or build your own from scratch.',
   },
   {
     q: 'Do I have to build my own program?',
@@ -54,12 +53,13 @@ const faqs = [
 ];
 
 // The 8 muscle groups and the individual muscles each breaks into — drives the
-// "down to 28" muscle library section. Maps live in /public/maps.
+// muscle library section. Mirrors the app's built-in catalog; maps live in
+// /public/maps. Keep in step with content-snapshot.json when muscles are added.
 const muscleGroups = [
   { slug: 'chest', name: 'Chest', muscles: ['Upper Chest', 'Mid Chest', 'Lower Chest'] },
   { slug: 'back', name: 'Back', muscles: ['Lats', 'Upper Back', 'Traps', 'Lower Back'] },
   { slug: 'shoulders', name: 'Shoulders', muscles: ['Front Delt', 'Side Delt', 'Rear Delt'] },
-  { slug: 'legs', name: 'Legs', muscles: ['Quadriceps', 'Hamstrings', 'Glutes', 'Abductors', 'Adductors', 'Calves', 'Shins'] },
+  { slug: 'legs', name: 'Legs', muscles: ['Quadriceps', 'Hamstrings', 'Glutes', 'Hip Flexors', 'Abductors', 'Adductors', 'Calves', 'Shins'] },
   { slug: 'core', name: 'Core', muscles: ['Upper Abs', 'Lower Abs', 'Obliques'] },
   { slug: 'biceps', name: 'Biceps', muscles: ['Long Head', 'Short Head'] },
   { slug: 'triceps', name: 'Triceps', muscles: ['Lateral Head', 'Long Head', 'Medial Head'] },
@@ -70,9 +70,11 @@ const muscleCount = muscleGroups.reduce((n, g) => n + g.muscles.length, 0);
 
 <Layout>
   <!-- Hero -->
-  <section class="relative overflow-hidden">
+  <section class="relative isolate overflow-hidden">
+    <HeroCollage />
     <div
-      class="relative mx-auto flex max-w-3xl flex-col items-center px-5 py-20 text-center lg:py-24"
+      class="relative mx-auto flex min-h-[34rem] max-w-3xl flex-col items-center justify-center px-5 py-24 text-center"
+      style="min-height: calc(100svh - 4.5rem)"
     >
       <h1
         class="text-[3.1rem] font-bold leading-[1.03] tracking-tight text-ink sm:text-[4rem] sm:leading-[0.98] lg:text-[5rem]"
@@ -82,55 +84,60 @@ const muscleCount = muscleGroups.reduce((n, g) => n + g.muscles.length, 0);
 
       <p class="mt-6 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg">
         You save them on TikTok, Instagram, and YouTube — then they die in a
-        folder you never open.
-        <span class="font-semibold text-brand-600">One swipe</span>, and an
+        folder you never open. With Slots,
+        <span class="font-semibold text-brand-600">one swipe</span> and an
         exercise you want to try is in your program.
       </p>
 
-      <div id="download" class="mt-8 flex flex-wrap items-center justify-center gap-4">
-        <a
-          href={appStoreUrl}
-          class="inline-block transition hover:opacity-85"
-          aria-label="Download on the App Store"
-        >
-          <img
-            src="/app-store-badge.svg"
-            alt="Download on the App Store"
-            width="180"
-            height="60"
-            class="h-[54px] w-auto"
-          />
-        </a>
+      <div id="download" class="mt-8 flex scroll-mt-24 flex-col items-center gap-3">
+        {
+          appStoreUrl ? (
+            <a
+              href={appStoreUrl}
+              class="inline-block transition hover:opacity-85"
+              aria-label="Download on the App Store"
+            >
+              <img
+                src="/app-store-badge.svg"
+                alt="Download on the App Store"
+                width="180"
+                height="60"
+                class="h-[54px] w-auto"
+              />
+            </a>
+          ) : (
+            <>
+              <span class="inline-flex items-center rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white shadow-sm">
+                Coming soon to the App Store
+              </span>
+            </>
+          )
+        }
       </div>
-
-      <!-- Swipe-to-add discover deck -->
-      <div class="mt-10">
-        <SwipeHero />
-      </div>
-
-      <!-- Scroll cue into the big idea -->
-      <a href="#setup" class="mt-12 flex flex-col items-center gap-2 text-slate-400 transition hover:text-ink">
-        <span class="text-sm font-semibold">See the big idea</span>
-        <svg viewBox="0 0 24 24" class="size-5 animate-bounce" fill="none" stroke="currentColor" stroke-width="2.2">
-          <path d="M12 5v14M6 13l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </a>
 
     </div>
   </section>
 
-  <!-- Product tour -->
+  <!-- The big idea first: the question below leans on knowing what a slot is -->
+  <Compare />
+
+  <!-- Product tour: build → add → train -->
   <Tour />
 
+  <!-- Who's reading. Everything below tunes to the answer. -->
+  <PersonaPicker />
+
+  <!-- Why that matters for the exercises you save: the whole save-to-set gauntlet -->
+  <SaveJourney />
+
   <!-- Muscle library — how specific you can get with muscle slots -->
-  <section class="mx-auto max-w-6xl px-5 py-20">
+  <section class="mx-auto max-w-6xl px-5 py-24 lg:py-32">
     <div class="max-w-2xl lg:mx-auto lg:text-center">
-      <p class="text-sm font-semibold text-flame-500">Every muscle</p>
-      <h2 class="mt-2 text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+      <h2 class="text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
         Get as specific as you want — down to {muscleCount} muscles
       </h2>
       <p class="mt-4 text-base text-ink-soft sm:text-lg">
-        Keep a slot broad — a whole group like Chest — or get more specific with
+        Keep a slot broad — a whole group like Chest — or get specific with
         Upper, Mid, or Lower Chest. All {muscleCount} are built in, and you can
         add your own.
       </p>
@@ -165,11 +172,17 @@ const muscleCount = muscleGroups.reduce((n, g) => n + g.muscles.length, 0);
         ))
       }
     </div>
+
+    <p class="mx-auto mt-8 max-w-2xl text-center text-sm text-ink-soft">
+      Plus collections — Mobility, Plyometrics, Conditioning, Cardio and Power —
+      for the work no single muscle describes. They take a slot just like a
+      muscle does.
+    </p>
   </section>
 
   <!-- FAQ -->
   <section id="faq" class="bg-slate-50">
-    <div class="mx-auto max-w-3xl px-5 py-20">
+    <div class="mx-auto max-w-3xl px-5 py-24 lg:py-32">
     <h2 class="text-4xl font-bold tracking-tight sm:text-4xl">
       Frequently asked questions
     </h2>
@@ -208,7 +221,7 @@ const muscleCount = muscleGroups.reduce((n, g) => n + g.muscles.length, 0);
   </section>
 
   <!-- Closing call to action -->
-  <section class="mx-auto max-w-6xl px-5 pt-20 pb-24 text-center">
+  <section class="mx-auto max-w-6xl px-5 pt-24 pb-32 lg:pt-32 text-center">
     <img
       src="/app-icon.png"
       alt=""
@@ -223,13 +236,37 @@ const muscleCount = muscleGroups.reduce((n, g) => n + g.muscles.length, 0);
       Your split, your muscles, your saves — in a program you'll actually
       follow.
     </p>
-    <div class="mt-8 flex justify-center">
-      <a
-        href={appStoreUrl}
-        class="inline-flex items-center rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white shadow-sm transition hover:opacity-90"
-      >
-        Try for free
-      </a>
+    <div class="mt-8 flex flex-col items-center gap-3">
+      {
+        appStoreUrl ? (
+          <a
+            href={appStoreUrl}
+            class="inline-flex items-center rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white shadow-sm transition hover:opacity-90"
+          >
+            Try for free
+          </a>
+        ) : (
+          <>
+            <span class="inline-flex items-center rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white shadow-sm">
+              Coming soon to the App Store
+            </span>
+            {instagram && (
+              <p class="text-sm text-ink-soft">
+                Follow{' '}
+                <a
+                  href={instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-semibold text-brand-600 hover:underline"
+                >
+                  @slotsworkout.app
+                </a>{' '}
+                to hear when it lands.
+              </p>
+            )}
+          </>
+        )
+      }
     </div>
   </section>
 </Layout>

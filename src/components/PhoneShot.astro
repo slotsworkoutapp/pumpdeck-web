@@ -1,0 +1,51 @@
+---
+// A real app screenshot inside the device bezel. The frame PNG has a
+// transparent screen cutout; the inset below is measured from the asset and
+// matches the one Tour and SwipeHero use, so every phone on the site lines up.
+//
+// The bezel is 1350x2760 and its cutout is very close to the 0.46 aspect an
+// iPhone screenshot already has, so shots drop in without distortion.
+const { src, alt = '', maxWidth = '260px' } = Astro.props;
+---
+
+<div class="ps" style={`max-width:${maxWidth}`}>
+  <div class="ps-screen">
+    <img src={src} alt={alt} loading="lazy" decoding="async" />
+  </div>
+  <img class="ps-bezel" src="/phone-frame.png" alt="" aria-hidden="true" />
+</div>
+
+<style>
+  .ps {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    aspect-ratio: 1350 / 2760;
+  }
+  .ps-bezel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+    filter: drop-shadow(0 22px 36px rgba(15, 23, 42, 0.28));
+  }
+  .ps-screen {
+    position: absolute;
+    top: 2.5%;
+    bottom: 2.5%;
+    left: 5.35%;
+    right: 5.4%;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 11% / 5.5%;
+    background: #ffffff;
+  }
+  .ps-screen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+</style>

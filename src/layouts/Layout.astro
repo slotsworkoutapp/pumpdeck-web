@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { appStoreUrl, socials, supportEmail } from '../lib/site';
 
 interface Props {
   title?: string;
@@ -61,12 +62,52 @@ const year = new Date().getFullYear();
           <span class="wordmark text-3xl uppercase tracking-tight">Slots</span>
         </a>
 
-        <a
-          href="#download"
-          class="shrink-0 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
-        >
-          Try for free
-        </a>
+        <!-- Desktop nav -->
+        <div class="hidden shrink-0 items-center gap-6 sm:flex">
+          <a
+            href="/use-cases"
+            class="text-sm font-semibold text-ink-soft transition hover:text-ink"
+          >
+            Use cases
+          </a>
+          <a
+            href="/#download"
+            class="rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
+          >
+            {appStoreUrl ? 'Try for free' : 'Coming soon'}
+          </a>
+        </div>
+
+        <!-- Mobile nav. A <details> rather than a scripted panel, so it still
+             opens with no JavaScript; the script below only handles closing. -->
+        <details class="nav-menu relative shrink-0 sm:hidden">
+          <summary
+            class="grid size-11 cursor-pointer place-items-center rounded-full text-ink ring-1 ring-slate-200 transition hover:bg-slate-50"
+            aria-label="Menu"
+          >
+            <svg class="nav-open size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
+            </svg>
+            <svg class="nav-close size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round" />
+            </svg>
+          </summary>
+
+          <div class="absolute right-0 top-full z-50 mt-2 w-56 rounded-2xl bg-white p-2 shadow-xl ring-1 ring-slate-200">
+            <a
+              href="/use-cases"
+              class="block rounded-xl px-4 py-3 text-sm font-semibold text-ink transition hover:bg-slate-50"
+            >
+              Use cases
+            </a>
+            <a
+              href="/#download"
+              class="mt-1 block rounded-xl bg-ink px-4 py-3 text-center text-sm font-semibold text-white transition hover:opacity-90"
+            >
+              {appStoreUrl ? 'Try for free' : 'Coming soon'}
+            </a>
+          </div>
+        </details>
       </div>
     </header>
 
@@ -89,12 +130,54 @@ const year = new Date().getFullYear();
           Slots
         </div>
         <nav class="flex flex-wrap gap-x-6 gap-y-2">
-          <a class="transition hover:text-ink" href="mailto:support@slotsworkout.app">Contact</a>
+          <a class="transition hover:text-ink" href="/use-cases">Use cases</a>
+          <a class="transition hover:text-ink" href={`mailto:${supportEmail}`}>Contact</a>
           <a class="transition hover:text-ink" href="/privacy">Privacy</a>
           <a class="transition hover:text-ink" href="/terms">Terms</a>
+          {
+            socials.map((s) => (
+              <a
+                class="transition hover:text-ink"
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {s.name}
+              </a>
+            ))
+          }
         </nav>
         <p>&copy; {year} Slots. All rights reserved.</p>
       </div>
     </footer>
+    <style>
+      /* Kill the default disclosure triangle and swap the icon when open. */
+      .nav-menu > summary {
+        list-style: none;
+      }
+      .nav-menu > summary::-webkit-details-marker {
+        display: none;
+      }
+      .nav-menu[open] .nav-open,
+      .nav-menu:not([open]) .nav-close {
+        display: none;
+      }
+    </style>
+
+    <script>
+      // Close the mobile menu on any of the usual exits. Opening needs no JS —
+      // that is what <details> is for.
+      const nav = document.querySelector<HTMLDetailsElement>('.nav-menu');
+      if (nav) {
+        const close = () => nav.removeAttribute('open');
+        nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+        document.addEventListener('click', (e) => {
+          if (nav.open && !nav.contains(e.target as Node)) close();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') close();
+        });
+      }
+    </script>
   </body>
 </html>
