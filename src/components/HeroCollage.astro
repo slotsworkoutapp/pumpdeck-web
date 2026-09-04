@@ -93,6 +93,15 @@ const columnItems = Array.from({ length: COLUMNS }, (_, col) =>
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
+    /* End every column on the same line.
+       The columns have different tile heights and different start offsets — on
+       purpose, it is what makes this a collage — but that also means their tile
+       EDGES land at different heights. Fading the wash out over them left a
+       ragged bottom where one column still showed a photo and its neighbour had
+       already hit a gap. Masking the whole grid makes them all disappear
+       together, whatever the tile boundaries are doing. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 48%, transparent 72%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 48%, transparent 72%);
   }
   .hc-col {
     transform: translateY(var(--start));
@@ -139,30 +148,67 @@ const columnItems = Array.from({ length: COLUMNS }, (_, col) =>
     opacity: 0.88;
   }
 
-  /* Keeps the headline readable over the middle while the edges stay lively,
-     and fades the whole thing out into the section above and below. */
+  /* Same treatment as the app's Get Started screen: blur the photos, wash them
+     white, and lay a little accent over the top. Sharp photographs behind a
+     5rem headline is a fight the type loses, and the collage only has to say
+     "lifters, exercises, phones" from across a room.
+
+     backdrop-filter rather than filter on the collage itself: filter would make
+     the animating columns its own containing block and blur them per frame,
+     while a backdrop blur is one composited pass over whatever is behind. */
   .hc-scrim {
     position: absolute;
     inset: 0;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
     background:
-      /* Solid white right through the headline, then a long fade out — the
-         copy has to win, the collage is only ever atmosphere. */
+      /* Near-solid ground under the copy, which sits centred. */
       radial-gradient(
-        72% 58% at 50% 42%,
+        74% 60% at 50% 46%,
         rgb(255 255 255 / 1) 0%,
-        rgb(255 255 255 / 1) 42%,
-        rgb(255 255 255 / 0.9) 62%,
-        rgb(255 255 255 / 0.5) 82%,
+        rgb(255 255 255 / 1) 38%,
+        rgb(255 255 255 / 0.7) 64%,
         rgb(255 255 255 / 0) 100%
       ),
-      /* A light veil over everything else, so even the outer columns sit back. */
+      /* Lifts the whole field, and lands on solid white so the section below
+         starts on the same colour it ends on. */
       linear-gradient(
         to bottom,
-        rgb(255 255 255 / 0.94) 0%,
-        rgb(255 255 255 / 0.28) 20%,
-        rgb(255 255 255 / 0.28) 70%,
+        rgb(255 255 255 / 0.42) 0%,
+        rgb(255 255 255 / 0.55) 52%,
         rgb(255 255 255 / 1) 100%
-      );
+      ),
+      /* The cool cast the app landing has, so the two match. */
+      linear-gradient(rgb(37 99 235 / 0.08), rgb(37 99 235 / 0.08));
+  }
+
+  /* Phones get three taller columns instead of four.
+     At four, a ~390px screen showed about twenty tiles at once — a texture of
+     thumbnails rather than photographs you can read. Three at ~145px wide with
+     taller tiles puts around nine in view, which is what the app's Get Started
+     screen shows. Desktop is unchanged; four works there because the viewport
+     is wide enough for the tiles to be large already.
+
+     The fourth column is hidden rather than not rendered — the markup is built
+     at build time and cannot know the viewport. And aspect-ratio is overridden
+     directly rather than through --aspect, because that var is set inline per
+     column and inline styles win over the stylesheet. */
+  @media (max-width: 640px) {
+    .hc-bleed {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .hc-col:nth-child(4) {
+      display: none;
+    }
+    .hc-tile {
+      aspect-ratio: 1 / 1.8;
+    }
+    .hc-col:nth-child(2) .hc-tile {
+      aspect-ratio: 1 / 2.05;
+    }
+    .hc-col:nth-child(3) .hc-tile {
+      aspect-ratio: 1 / 1.9;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
