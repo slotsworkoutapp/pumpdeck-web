@@ -13,6 +13,8 @@ export const DEFAULT_PERSONA: PersonaId = 'hybrid';
 
 export interface CompareRow {
   name: string;
+  /** Real photo for the thumbnail; absent on the "making it up" rows. */
+  photo?: string;
   /** Only the "making it up" rows carry one; a fixed-exercise day is just lifts. */
   sub?: string;
   /** Muscle map for the thumbnail; omitted when there's no exercise yet. */
@@ -39,9 +41,9 @@ export interface Persona {
 }
 
 const fixedRows: CompareRow[] = [
-  { name: 'Incline Dumbbell Press', map: 'chest' },
-  { name: 'Machine Shoulder Press', map: 'shoulders' },
-  { name: 'Rope Pushdown', map: 'triceps' },
+  { name: 'Incline Dumbbell Press', map: 'chest', photo: '/lifts/incline-dumbbell-press.webp' },
+  { name: 'Machine Shoulder Press', map: 'shoulders', photo: '/lifts/machine-shoulder-press.webp' },
+  { name: 'Rope Pushdown', map: 'triceps', photo: '/lifts/rope-pushdown.webp' },
 ];
 
 const followerBranch = {

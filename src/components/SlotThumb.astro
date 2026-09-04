@@ -1,18 +1,41 @@
 ---
 // Slot thumbnail, a fixed square that mirrors the app:
-//   mode="muscle"   → the muscle map (the slot IS a muscle).
-//   mode="exercise" → a single picked exercise's image (placeholder dumbbell
-//                     until a real image) + a mini muscle-map badge.
+//   mode="muscle"   → a MUSCLE slot. When `photos` are supplied it draws the
+//                     app's 2x2 collage of the exercises that slot can resolve
+//                     to, with the muscle map as a corner badge. With no photos
+//                     it falls back to the muscle map filling the tile.
+//   mode="exercise" → a picked exercise. Draws `photo` when there is one and
+//                     falls back to the dumbbell glyph when there isn't.
 //   mode="unknown"  → nothing chosen yet, for the "making it up" comparison.
-// `badge` draws the little corner muscle map. Off for the "usual way" card:
-// a normal workout app doesn't tell you which muscle a lift is for.
-const { map, mode = 'muscle', badge = true } = Astro.props;
+//
+// Fewer than four photos is a real state, not a bug: the app fills the empty
+// quadrants with the same dumbbell glyph rather than reflowing the grid, so a
+// slot with three images still reads as a four-up collage.
+const { map, mode = 'muscle', badge = true, photo, photos = [] } = Astro.props;
 const dumbbell = 'M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10';
+const quadrants = [0, 1, 2, 3].map((i) => photos[i] ?? null);
 ---
 
 <div class="relative size-12 shrink-0 overflow-hidden rounded-lg bg-white ring-1 ring-slate-200">
   {
-    mode === 'muscle' && (
+    mode === 'muscle' && photos.length > 0 && (
+      <div class="grid h-full w-full grid-cols-2 grid-rows-2 gap-px bg-slate-200">
+        {quadrants.map((src) =>
+          src ? (
+            <img src={src} alt="" loading="lazy" decoding="async" class="h-full w-full object-cover" />
+          ) : (
+            <div class="grid place-items-center bg-white">
+              <svg viewBox="0 0 24 24" class="size-3 text-slate-300" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d={dumbbell} stroke-linecap="round" />
+              </svg>
+            </div>
+          )
+        )}
+      </div>
+    )
+  }
+  {
+    mode === 'muscle' && photos.length === 0 && (
       <div class="grid h-full w-full place-items-center bg-slate-50">
         <img src={`/maps/${map}.svg`} alt="" class="h-9 w-auto" />
       </div>
@@ -27,18 +50,24 @@ const dumbbell = 'M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10';
   }
   {
     mode === 'exercise' && (
-      <>
+      photo ? (
+        <img src={photo} alt="" loading="lazy" decoding="async" class="h-full w-full object-cover" />
+      ) : (
         <div class="grid h-full w-full place-items-center bg-slate-100">
           <svg viewBox="0 0 24 24" class="size-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d={dumbbell} stroke-linecap="round" />
           </svg>
         </div>
-        {badge && (
-          <span class="absolute bottom-0 right-0 grid size-5 place-items-center rounded-tl-md bg-white shadow-sm ring-1 ring-slate-100">
-            <img src={`/maps/${map}.svg`} alt="" class="h-3.5 w-auto" />
-          </span>
-        )}
-      </>
+      )
+    )
+  }
+  {
+    // The muscle map sits in the corner whenever the tile itself is showing
+    // exercises rather than the map.
+    badge && (mode === 'exercise' || (mode === 'muscle' && photos.length > 0)) && (
+      <span class="absolute bottom-0 right-0 grid size-5 place-items-center rounded-tl-md bg-white shadow-sm ring-1 ring-slate-100">
+        <img src={`/maps/${map}.svg`} alt="" class="h-3.5 w-auto" />
+      </span>
     )
   }
 </div>

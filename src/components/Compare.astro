@@ -10,9 +10,46 @@ import { personas, DEFAULT_PERSONA } from '../lib/personas';
 
 // The three muscles, with what you've added under each.
 const logSlots = [
-  { name: 'Upper Chest', map: 'chest', count: 8, pickIndex: 0, options: ['Incline DB Press', 'Incline Cable Fly', 'Low-to-High Fly'] },
-  { name: 'Front Delt', map: 'shoulders', count: 6, pickIndex: 1, options: ['Barbell OHP', 'Seated DB Press', 'Machine Press'] },
-  { name: 'Triceps', map: 'triceps', count: 12, pickIndex: 0, options: ['Rope Pushdown', 'Skull Crushers', 'Overhead Ext.'] },
+  {
+    name: 'Upper Chest', map: 'chest', count: 8, pickIndex: 0,
+    collage: [
+      '/lifts/incline-dumbbell-press.webp',
+      '/lifts/incline-cable-fly.webp',
+      '/lifts/incline-barbell-press.webp',
+      '/lifts/dips.webp',
+    ],
+    options: [
+      { name: 'Incline DB Press', photo: '/lifts/incline-dumbbell-press.webp' },
+      { name: 'Incline Cable Fly', photo: '/lifts/incline-cable-fly.webp' },
+      { name: 'Incline Barbell Press', photo: '/lifts/incline-barbell-press.webp' },
+    ],
+  },
+  {
+    name: 'Front Delt', map: 'shoulders', count: 6, pickIndex: 1,
+    collage: [
+      '/lifts/barbell-overhead-press.webp',
+      '/lifts/seated-dumbbell-press.webp',
+      '/lifts/machine-shoulder-press.webp',
+    ],
+    options: [
+      { name: 'Barbell OHP', photo: '/lifts/barbell-overhead-press.webp' },
+      { name: 'Seated DB Press', photo: '/lifts/seated-dumbbell-press.webp' },
+      { name: 'Machine Press', photo: '/lifts/machine-shoulder-press.webp' },
+    ],
+  },
+  {
+    name: 'Triceps', map: 'triceps', count: 12, pickIndex: 0,
+    collage: [
+      '/lifts/rope-pushdown.webp',
+      '/lifts/skull-crusher.webp',
+      '/lifts/overhead-cable-extension.webp',
+    ],
+    options: [
+      { name: 'Rope Pushdown', photo: '/lifts/rope-pushdown.webp' },
+      { name: 'Skull Crushers', photo: '/lifts/skull-crusher.webp' },
+      { name: 'Overhead Ext.', photo: '/lifts/overhead-cable-extension.webp' },
+    ],
+  },
 ];
 ---
 
@@ -51,7 +88,7 @@ const logSlots = [
                 <div class="mt-3 space-y-2.5">
                   {persona.compareRows.map((r) => (
                     <div class="flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-2.5 ring-1 ring-slate-100">
-                      <SlotThumb map={r.map} mode={r.map ? 'exercise' : 'unknown'} badge={false} />
+                      <SlotThumb map={r.map} mode={r.map ? 'exercise' : 'unknown'} badge={false} photo={r.photo} />
                       <div class="min-w-0 flex-1">
                         <p class="truncate text-sm font-semibold">{r.name}</p>
                         {r.sub && (
@@ -99,10 +136,10 @@ const logSlots = [
                   <div class="flex items-center gap-3 px-3 py-2.5">
                     <div class="relative size-12 shrink-0">
                       <div class="lx-thumb-def absolute inset-0">
-                        <SlotThumb map={s.map} />
+                        <SlotThumb map={s.map} photos={s.collage} />
                       </div>
                       <div class="lx-thumb-pick absolute inset-0">
-                        <SlotThumb map={s.map} mode="exercise" />
+                        <SlotThumb map={s.map} mode="exercise" photo={s.options[s.pickIndex].photo} />
                       </div>
                     </div>
                     <div class="min-w-0 flex-1">
@@ -111,7 +148,7 @@ const logSlots = [
                         <p class="lx-name truncate text-sm font-semibold">{s.name}</p>
                         <p class="lx-pickname absolute inset-0 flex items-center gap-1 text-sm font-semibold text-ink">
                           <svg viewBox="0 0 24 24" class="size-3.5 shrink-0 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                          <span class="truncate">{s.options[s.pickIndex]}</span>
+                          <span class="truncate">{s.options[s.pickIndex].name}</span>
                         </p>
                       </div>
                       <!-- sub line: the slot kind → the muscle it belongs to -->
@@ -128,9 +165,15 @@ const logSlots = [
                   <div class="lx-opts space-y-1 px-3">
                     {
                       s.options.map((o, i) => (
-                        <div class={`lx-opt flex items-center gap-2 rounded-lg bg-white px-2.5 py-1.5 ring-1 ring-slate-100 ${i === s.pickIndex ? 'lx-pickopt' : ''}`}>
-                          <svg viewBox="0 0 24 24" class="size-3.5 shrink-0 text-brand-600" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10" stroke-linecap="round" /></svg>
-                          <span class="flex-1 text-xs font-semibold">{o}</span>
+                        <div class={`lx-opt flex items-center gap-2 rounded-lg bg-white px-2 py-1.5 ring-1 ring-slate-100 ${i === s.pickIndex ? 'lx-pickopt' : ''}`}>
+                          <img
+                            src={o.photo}
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            class="size-6 shrink-0 rounded-md object-cover ring-1 ring-slate-200"
+                          />
+                          <span class="flex-1 text-xs font-semibold">{o.name}</span>
                           <svg class="lx-check size-3.5 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
                         </div>
                       ))
