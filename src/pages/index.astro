@@ -52,19 +52,52 @@ const faqs = [
   },
 ];
 
-// The 8 muscle groups and the individual muscles each breaks into — drives the
-// muscle library section. Mirrors the app's built-in catalog; maps live in
-// /public/maps. Keep in step with content-snapshot.json when muscles are added.
+// The 8 muscle groups, their muscles, and the weekly sets an example program
+// gives each — the Program balance screen, on the web. Colours are the app's
+// own defaults from Muscle.swift, so a group is the same colour in both.
+//
+// Forearms sit at 3 on purpose. The section is not "look how many muscles we
+// have", it is "you can see the one you are neglecting" — which needs
+// something visibly thin to point at.
 const muscleGroups = [
-  { slug: 'chest', name: 'Chest', muscles: ['Upper Chest', 'Mid Chest', 'Lower Chest'] },
-  { slug: 'back', name: 'Back', muscles: ['Lats', 'Upper Back', 'Traps', 'Lower Back'] },
-  { slug: 'shoulders', name: 'Shoulders', muscles: ['Front Delt', 'Side Delt', 'Rear Delt'] },
-  { slug: 'legs', name: 'Legs', muscles: ['Quadriceps', 'Hamstrings', 'Glutes', 'Hip Flexors', 'Abductors', 'Adductors', 'Calves', 'Shins'] },
-  { slug: 'core', name: 'Core', muscles: ['Upper Abs', 'Lower Abs', 'Obliques'] },
-  { slug: 'biceps', name: 'Biceps', muscles: ['Long Head', 'Short Head'] },
-  { slug: 'triceps', name: 'Triceps', muscles: ['Lateral Head', 'Long Head', 'Medial Head'] },
-  { slug: 'forearms', name: 'Forearms', muscles: ['Brachioradialis', 'Extensors', 'Flexors'] },
-];
+  { slug: 'back', name: 'Back', color: '#2563EB', muscles: [
+    { name: 'Lats', sets: 6 }, { name: 'Upper Back', sets: 6 },
+    { name: 'Traps', sets: 6 }, { name: 'Lower Back', sets: 6 },
+  ] },
+  { slug: 'legs', name: 'Legs', color: '#16A34A', muscles: [
+    { name: 'Quadriceps', sets: 8 }, { name: 'Glutes', sets: 6 },
+    { name: 'Hamstrings', sets: 4 }, { name: 'Abductors', sets: 2 },
+    { name: 'Adductors', sets: 2 }, { name: 'Calves', sets: 2 },
+    { name: 'Hip Flexors', sets: 0 }, { name: 'Shins', sets: 0 },
+  ] },
+  { slug: 'shoulders', name: 'Shoulders', color: '#7C3AED', muscles: [
+    { name: 'Front Delt', sets: 8 }, { name: 'Side Delt', sets: 8 },
+    { name: 'Rear Delt', sets: 2 },
+  ] },
+  { slug: 'chest', name: 'Chest', color: '#DC2626', muscles: [
+    { name: 'Upper Chest', sets: 4 }, { name: 'Mid Chest', sets: 5 },
+    { name: 'Lower Chest', sets: 3 },
+  ] },
+  { slug: 'core', name: 'Core', color: '#CA8A04', muscles: [
+    { name: 'Upper Abs', sets: 5 }, { name: 'Lower Abs', sets: 4 },
+    { name: 'Obliques', sets: 3 },
+  ] },
+  { slug: 'triceps', name: 'Triceps', color: '#DB2777', muscles: [
+    { name: 'Lateral Head', sets: 3 }, { name: 'Long Head', sets: 3 },
+    { name: 'Medial Head', sets: 3 },
+  ] },
+  { slug: 'biceps', name: 'Biceps', color: '#EA580C', muscles: [
+    { name: 'Long Head', sets: 5 }, { name: 'Short Head', sets: 4 },
+  ] },
+  { slug: 'forearms', name: 'Forearms', color: '#0891B2', muscles: [
+    { name: 'Brachioradialis', sets: 1 }, { name: 'Extensors', sets: 1 },
+    { name: 'Flexors', sets: 1 },
+  ] },
+].map((g) => ({ ...g, sets: g.muscles.reduce((n, m) => n + m.sets, 0) }));
+
+const thinnest = muscleGroups.reduce((a, b) => (b.sets < a.sets ? b : a));
+
+const SETS_PER_ROW = 20;
 const muscleCount = muscleGroups.reduce((n, g) => n + g.muscles.length, 0);
 ---
 
@@ -130,42 +163,91 @@ const muscleCount = muscleGroups.reduce((n, g) => n + g.muscles.length, 0);
   <!-- Why that matters for the exercises you save: the whole save-to-set gauntlet -->
   <SaveJourney />
 
-  <!-- Muscle library — how specific you can get with muscle slots -->
+  <!-- Program balance, on the web: the muscles, and which one is thin -->
   <section class="mx-auto max-w-6xl px-5 py-24 lg:py-32">
-    <div class="max-w-2xl lg:mx-auto lg:text-center">
+    <div class="mx-auto max-w-3xl lg:text-center">
       <h2 class="text-4xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-        Get as specific as you want — down to {muscleCount} muscles
+        See the muscle you're neglecting
       </h2>
       <p class="mt-4 text-base text-ink-soft sm:text-lg">
-        Keep a slot broad — a whole group like Chest — or get specific with
-        Upper, Mid, or Lower Chest. All {muscleCount} are built in, and you can
-        add your own.
+        Slots counts the sets your week gives every muscle group, biggest
+        first. Open one and you see the muscles underneath it — so a thin rear
+        delt, or hamstrings getting half what your quads get, is something you
+        can look at rather than something you never find out. Adding a slot for
+        it is one tap.
       </p>
     </div>
 
-    <div class="mt-12 grid grid-cols-2 items-start gap-4 sm:grid-cols-4">
+    <div class="mx-auto mt-12 max-w-3xl overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200">
       {
         muscleGroups.map((g) => (
-          <details class="group/m rounded-2xl bg-slate-50 ring-1 ring-slate-100 transition-colors open:ring-brand-200 hover:bg-slate-100/70">
-            <summary class="flex cursor-pointer list-none flex-col items-center gap-2 p-5 marker:hidden [&::-webkit-details-marker]:hidden">
-              <img src={`/maps/${g.slug}.svg`} alt={g.name} class="h-20 w-auto" />
-              <p class="font-bold">{g.name}</p>
-              <p class="flex items-center gap-1 text-sm font-semibold text-ink-soft">
-                {g.muscles.length} muscles
+          <details class="group/m border-b border-slate-100 last:border-0">
+            <summary class="flex cursor-pointer list-none flex-col gap-2.5 p-5 marker:hidden hover:bg-slate-50 [&::-webkit-details-marker]:hidden">
+              <div class="flex items-center gap-3">
+                <img src={`/maps/${g.slug}.svg`} alt="" class="h-9 w-auto shrink-0" />
+                <div class="min-w-0 flex-1">
+                  <p class="font-bold leading-tight">{g.name}</p>
+                  <p class="text-sm text-ink-soft">{g.sets} sets a week</p>
+                </div>
+                {g.slug === thinnest.slug && (
+                  <span class="shrink-0 rounded-full bg-brand-50 px-3 py-1.5 text-xs font-bold text-brand-600 ring-1 ring-brand-200">
+                    + Add a slot
+                  </span>
+                )}
                 <svg
                   viewBox="0 0 24 24"
-                  class="size-4 text-slate-400 transition-transform duration-200 group-open/m:rotate-180"
+                  class="size-4 shrink-0 text-slate-400 transition-transform duration-200 group-open/m:rotate-180"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2.4"
                 >
                   <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-              </p>
+              </div>
+
+              {/* One square per set, the way the app draws it — a bar would
+                  hide that these are countable things you can add one of.
+                  A fixed 20-column grid rather than flex-wrap, so the row
+                  breaks where the app breaks it instead of wherever the
+                  viewport happens to run out. */}
+              <div
+                class="grid gap-1"
+                style={`grid-template-columns: repeat(${SETS_PER_ROW}, minmax(0, 1fr))`}
+                aria-hidden="true"
+              >
+                {Array.from({ length: Math.max(SETS_PER_ROW, g.sets) }).map((_, i) => (
+                  <span
+                    class="aspect-square rounded-[22%]"
+                    style={`background:${i < g.sets ? g.color : '#e2e8f0'}`}
+                  />
+                ))}
+              </div>
             </summary>
-            <ul class="space-y-1.5 px-5 pb-5 text-center text-sm font-medium text-ink-soft">
+
+            <ul class="space-y-3 border-t border-slate-100 bg-slate-50/60 px-5 py-4">
               {g.muscles.map((m) => (
-                <li>{m}</li>
+                <li>
+                  <div class="flex items-baseline justify-between gap-3">
+                    <span class="text-sm font-semibold text-ink">{m.name}</span>
+                    <span class="shrink-0 text-xs text-ink-soft">
+                      {m.sets === 0
+                        ? 'No sets'
+                        : `${m.sets} set${m.sets === 1 ? '' : 's'} a week`}
+                    </span>
+                  </div>
+                  <div
+                    class="mt-1.5 grid gap-1"
+                    style={`grid-template-columns: repeat(${SETS_PER_ROW}, minmax(0, 1fr))`}
+                    aria-hidden="true"
+                  >
+                    {Array.from({ length: Math.max(SETS_PER_ROW, m.sets) }).map((_, i) => (
+                      <span
+                        class="aspect-square rounded-[22%]"
+                        style={`background:${i < m.sets ? g.color : '#e2e8f0'}`}
+                      />
+                    ))}
+                  </div>
+                </li>
               ))}
             </ul>
           </details>
@@ -173,10 +255,13 @@ const muscleCount = muscleGroups.reduce((n, g) => n + g.muscles.length, 0);
       }
     </div>
 
-    <p class="mx-auto mt-8 max-w-2xl text-center text-sm text-ink-soft">
-      Plus collections — Mobility, Plyometrics, Conditioning, Cardio and Power —
-      for the work no single muscle describes. They take a slot just like a
-      muscle does.
+    <p class="mx-auto mt-6 max-w-3xl text-sm text-ink-soft lg:text-center">
+      All {muscleCount} muscles are built in, and you can add your own — plus
+      collections for the work no single muscle describes: Mobility,
+      Plyometrics, Conditioning, Cardio and Power. This is <strong>Program
+      balance</strong>, the sets your week plans. <strong>Your Week</strong>
+      shows what you actually logged, and counts the assisting work the big
+      lifts do.
     </p>
   </section>
 
