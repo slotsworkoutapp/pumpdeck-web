@@ -19,6 +19,12 @@ const instagram = socials.find((s) => s.name === 'Instagram')?.url;
 //
 // Cases with a `shot` go full width with the phone beside the copy, alternating
 // sides. Everything else is a half-width card.
+//
+// There is deliberately NO equipment case. "Tell the app what you own and it
+// hides the rest" is the configure-it-up-front model Slots replaces, and it
+// implies your equipment is fixed when the whole premise is that it changes —
+// the machine is taken, it is a different gym, you are travelling. The setting
+// exists; promoting it as a use case argues against the product.
 const cases = [
   {
     title: 'You have ten core exercises you like',
@@ -43,14 +49,6 @@ const cases = [
     setup:
       'Program balance lists every muscle group with the sets a week your slots give it, biggest first. Tap a group to see the individual muscles underneath.',
     shot: { src: '/app/program-balance.webp' },
-  },
-  {
-    title: 'Your gym doesn’t have everything',
-    situation:
-      'No cable stack. No hack squat. The kettlebells live in the class studio and it is always booked. Whatever yours is missing, those exercises are not real options for you.',
-    setup:
-      'Tick what you actually have access to. Everything else disappears from every list, so what you’re choosing between is only ever what you can train with — a full gym, a garage, or nothing but bodyweight.',
-    shot: { src: '/app/equipment.webp', flip: true },
   },
   {
     title: 'You do the same warm-up every single time',
